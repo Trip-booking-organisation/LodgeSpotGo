@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\LodgeSpotGo.Application\LodgeSpotGo.Application.csproj" />
+      <ProjectReference Include="..\LodgeSpotGo.Core\LodgeSpotGo.Core.csproj" />
     </ItemGroup>
 
 </Project>

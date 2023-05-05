@@ -13,10 +13,4 @@
       </Content>
     </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\LodgeSpotGo.Application\LodgeSpotGo.Application.csproj" />
-      <ProjectReference Include="..\LodgeSpotGo.Core\LodgeSpotGo.Core.csproj" />
-      <ProjectReference Include="..\LodgeSpotGo.Infrastructure\LodgeSpotGo.Infrastructure.csproj" />
-    </ItemGroup>
-
 </Project>

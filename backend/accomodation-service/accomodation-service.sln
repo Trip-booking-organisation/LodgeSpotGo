@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LodgeSpotGo.Infrastructure"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LodgeSpotGo.Core", "LodgeSpotGo.Core\LodgeSpotGo.Core.csproj", "{BE0F7262-B019-41D8-BA2E-1BA5E00C63CE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LodgeSpotGo.Application", "LodgeSpotGo.Application\LodgeSpotGo.Application.csproj", "{DEA77157-1A4F-44F9-B19E-D06B55438BB3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{BE0F7262-B019-41D8-BA2E-1BA5E00C63CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BE0F7262-B019-41D8-BA2E-1BA5E00C63CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BE0F7262-B019-41D8-BA2E-1BA5E00C63CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEA77157-1A4F-44F9-B19E-D06B55438BB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEA77157-1A4F-44F9-B19E-D06B55438BB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEA77157-1A4F-44F9-B19E-D06B55438BB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEA77157-1A4F-44F9-B19E-D06B55438BB3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
