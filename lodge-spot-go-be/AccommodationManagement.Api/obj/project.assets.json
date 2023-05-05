@@ -460,19 +460,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Djordje\\.nuget\\packages\\": {}
+    "C:\\Users\\djord\\.nuget\\packages\\": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\LodgeSpotGo\\lodge-spot-go-be\\AccommodationManagement.Api\\AccommodationManagement.Api.csproj",
+      "projectUniqueName": "D:\\LodgeSpotGo\\lodge-spot-go-be\\AccommodationManagement.Api\\AccommodationManagement.Api.csproj",
       "projectName": "AccommodationManagement.Api",
-      "projectPath": "C:\\LodgeSpotGo\\lodge-spot-go-be\\AccommodationManagement.Api\\AccommodationManagement.Api.csproj",
-      "packagesPath": "C:\\Users\\Djordje\\.nuget\\packages\\",
-      "outputPath": "C:\\LodgeSpotGo\\lodge-spot-go-be\\AccommodationManagement.Api\\obj\\",
+      "projectPath": "D:\\LodgeSpotGo\\lodge-spot-go-be\\AccommodationManagement.Api\\AccommodationManagement.Api.csproj",
+      "packagesPath": "C:\\Users\\djord\\.nuget\\packages\\",
+      "outputPath": "D:\\LodgeSpotGo\\lodge-spot-go-be\\AccommodationManagement.Api\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+      ],
       "configFilePaths": [
-        "C:\\Users\\Djordje\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\djord\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net7.0"

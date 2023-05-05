@@ -70,7 +70,8 @@ ScaffoldingReadMe.txt
 
 # StyleCop
 StyleCopReport.xml
-
+AccommodationManagement.Api/bin
+AccommodationManagement.Api/obj
 # Files built by Visual Studio
 *_i.c
 *_p.c
