@@ -8,24 +8,66 @@ services:
     entrypoint: [ "/opt/keycloak/bin/kc.sh", "start-dev" ]
     ports:
       - "28080:8080"
-  mongo:
-    image: mongo
-    restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo-data:/data/db
   mongo-express:
     image: mongo-express
+    container_name: mongo-express
     restart: always
     ports:
-      - "27018:8081"
+      - "28018:8081"
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: root
       ME_CONFIG_MONGODB_ADMINPASSWORD: example
-      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
+      ME_CONFIG_MONGODB_URL: mongodb://lodge1312:lodge420@accommodation-db:27017/
+  accommodation-db:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: lodge1312
+      MONGO_INITDB_ROOT_PASSWORD: lodge420
+      MONGO_INITDB_DATABASE: accommodation-db
+    ports:
+      - "27017:27017"
+    volumes:
+      - accommodation-db-data:/data/db
+  reservation-db:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: lodge1312
+      MONGO_INITDB_ROOT_PASSWORD: lodge420
+      MONGO_INITDB_DATABASE: reservation-db
+    ports:
+      - "27018:27017"
+    volumes:
+      - reservation-db-data:/data/db
+  user-db:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: lodge1312
+      MONGO_INITDB_ROOT_PASSWORD: lodge420
+      MONGO_INITDB_DATABASE: user-db
+    ports:
+      - "27019:27017"
+    volumes:
+      - user-db-data:/data/db
+  search-db:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: lodge1312
+      MONGO_INITDB_ROOT_PASSWORD: lodge420
+      MONGO_INITDB_DATABASE: search-db
+    ports:
+      - "27100:27017"
+    volumes:
+      - search-db-data:/data/db
 volumes:
-  mongo-data:
+  accommodation-db-data:
+    driver: local
+  reservation-db-data:
+    driver: local
+  user-db-data:
+    driver: local
+  search-db-data:
+    driver: local

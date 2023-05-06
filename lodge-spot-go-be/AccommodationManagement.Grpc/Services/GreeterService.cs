@@ -1,5 +1,4 @@
 using Grpc.Core;
-using AccommodationManagement.Grpc;
 
 namespace AccommodationManagement.Grpc.Services;
 
