@@ -29,6 +29,7 @@ services:
       - "27017:27017"
     volumes:
       - accommodation-db-data:/data/db
+      - ../entrypoint-initdb.d:/docker-entrypoint-initdb.d
   reservation-db:
     image: mongo
     restart: always
@@ -40,6 +41,7 @@ services:
       - "27018:27017"
     volumes:
       - reservation-db-data:/data/db
+      - ../entrypoint-initdb.d:/docker-entrypoint-initdb.d
   user-db:
     image: mongo
     restart: always
@@ -51,6 +53,7 @@ services:
       - "27019:27017"
     volumes:
       - user-db-data:/data/db
+      - ../entrypoint-initdb.d:/docker-entrypoint-initdb.d
   search-db:
     image: mongo
     restart: always
@@ -62,6 +65,7 @@ services:
       - "27100:27017"
     volumes:
       - search-db-data:/data/db
+      - ../entrypoint-initdb.d:/docker-entrypoint-initdb.d
 volumes:
   accommodation-db-data:
     driver: local
