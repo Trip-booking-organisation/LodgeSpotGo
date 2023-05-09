@@ -8,14 +8,15 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.5" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+        <Protobuf Include="Routes\greet.proto" GrpcServices="Server" />
+        <Protobuf Include="Dto\accommodation.proto" GrpcServices="None" />
+        <Protobuf Include="Routes\routes.proto" GrpcServices="Server" />
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="..\..\..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
+        <PackageReference Include="Grpc.AspNetCore" Version="2.49.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Grpc.JsonTranscoding" Version="7.0.5" />
+        <PackageReference Include="Microsoft.AspNetCore.Grpc.Swagger" Version="0.3.5" />
     </ItemGroup>
 
     <ItemGroup>

@@ -1,0 +1,19 @@
+﻿syntax = "proto3";
+import "google/api/annotations.proto";
+import "Dto/accommodation.proto";
+option csharp_namespace = "JetSetGo.AccommodationManagement.Grpc";
+package routes;
+
+service AccommodationApp {
+  rpc GetAccommodationList(GetAccommodationListRequest) returns (GetBookListResponse){
+    option (google.api.http) = {
+      get: "/api/v1/accommodations"
+    };
+  }
+  rpc CreateAccommodation(CreateAccommodationRequest) returns (CreateAccommodationResponse){
+    option (google.api.http) = {
+      post: "/api/v1/accommodations",
+      body: "accommodation"
+    };
+  }
+}
