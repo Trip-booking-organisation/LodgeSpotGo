@@ -1,19 +1,29 @@
 ﻿syntax = "proto3";
 option csharp_namespace = "JetSetGo.AccommodationManagement.Grpc";
-
+message AddressDto {
+  string city = 1;
+  string country = 2;
+  string street = 3;
+}
+message PhotoDto {
+  string photo = 1;
+}
 message AccommodationDto {
-  string name = 1;
-  string location = 2;
-  string amenities = 3;
-  int32 max_guests = 4;
+  string id = 1;
+  string name = 2;
+  AddressDto location = 3;
+  repeated string amenities = 4;
+  int32 max_guests = 5;
+  int32 min_guests = 6;
+  repeated PhotoDto photos = 7;
 }
 message GetAccommodationListRequest {}
 
-message GetBookListResponse { repeated AccommodationDto accommodations = 1; }
+message GetAccommodationListResponse { repeated AccommodationDto accommodations = 1; }
 
 message CreateAccommodationRequest {
     AccommodationDto accommodation = 1;
 }
 message CreateAccommodationResponse {
-  string created = 1;
+  string createdId = 1;
 }

@@ -5,7 +5,7 @@ option csharp_namespace = "JetSetGo.AccommodationManagement.Grpc";
 package routes;
 
 service AccommodationApp {
-  rpc GetAccommodationList(GetAccommodationListRequest) returns (GetBookListResponse){
+  rpc GetAccommodationList(GetAccommodationListRequest) returns (GetAccommodationListResponse){
     option (google.api.http) = {
       get: "/api/v1/accommodations"
     };

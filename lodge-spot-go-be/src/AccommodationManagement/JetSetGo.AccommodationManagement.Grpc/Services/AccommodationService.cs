@@ -1,4 +1,9 @@
-﻿using Grpc.Core;
+﻿using AutoMapper;
+using Grpc.Core;
+using JetSetGo.AccommodationManagement.Application.Common.Persistence;
+using JetSetGo.AccommodationManagement.Domain.Accommodation;
+using JetSetGo.AccommodationManagement.Domain.Accommodation.Enum;
+using JetSetGo.AccommodationManagement.Domain.Accommodation.ValueObjects;
 using MediatR;
 
 namespace JetSetGo.AccommodationManagement.Grpc.Services;
@@ -6,32 +11,50 @@ namespace JetSetGo.AccommodationManagement.Grpc.Services;
 public class AccommodationService : AccommodationApp.AccommodationAppBase
 {
     private readonly ILogger<AccommodationService> _logger;
-    private readonly ISender _sender;
+    private readonly IAccommodationRepository _repository;
+    private readonly IMapper _mapper;
 
-    public AccommodationService(ILogger<AccommodationService> logger, ISender sender)
+    public AccommodationService(ILogger<AccommodationService> logger, IAccommodationRepository repository, IMapper mapper)
     {
         _logger = logger;
-        _sender = sender;
+        _repository = repository;
+        _mapper = mapper;
     }
-    public override  Task<GetBookListResponse> GetAccommodationList(GetAccommodationListRequest request, ServerCallContext context)
+    public override async  Task<GetAccommodationListResponse> GetAccommodationList(GetAccommodationListRequest request, ServerCallContext context)
     {
-        var response = new GetBookListResponse();
-        response.Accommodations.Add(new AccommodationDto
-        {
-            Amenities = "iva",
-            Location = "iva",
-            Name = "iva",
-            MaxGuests = 2
-        });
-        return Task.FromResult(response);
+        var list = new GetAccommodationListResponse();
+        var accommodations = await _repository.GetAllAsync();
+        _logger.LogInformation(@"List {}",accommodations.ToString());
+        var responseList = accommodations.Select(accommodation => _mapper.Map<AccommodationDto>(accommodation)).ToList();
+        responseList.ForEach(dto => list.Accommodations.Add(dto));
+        return list;
     }
     
     public override Task<CreateAccommodationResponse> CreateAccommodation(CreateAccommodationRequest request, ServerCallContext context)
     {
-        _logger.LogInformation(@"Success {request.Accommodation}",request.Accommodation );
+        _logger.LogInformation(@"Request {request.Accommodation}",request.Accommodation);
+        var accommodation = new Accommodation
+        {
+            Name = request.Accommodation.Name,
+            Address = new Address
+            {
+                City = request.Accommodation.Location.City,
+                Country = request.Accommodation.Location.Country,
+                Street = request.Accommodation.Location.Street
+            },
+            Amenities = request.Accommodation.Amenities.ToList(),
+            MaxGuests = request.Accommodation.MaxGuests,
+            MinGuests = request.Accommodation.MinGuests,
+            Photos = request.Accommodation.Photos
+                .Select(x => new AccommodationPhoto
+            {
+                Photo = x.Photo
+            }).ToList()
+        };
+        _repository.CreateAsync(accommodation);
         return Task.FromResult(new CreateAccommodationResponse
         {
-            Created = "true"
+            CreatedId = Guid.NewGuid().ToString()
         });
     }
 }
