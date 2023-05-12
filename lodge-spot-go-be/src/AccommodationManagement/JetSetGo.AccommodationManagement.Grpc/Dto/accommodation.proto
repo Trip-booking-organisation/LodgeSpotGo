@@ -11,11 +11,19 @@ message PhotoDto {
 message AccommodationDto {
   string id = 1;
   string name = 2;
-  AddressDto location = 3;
+  AddressDto address = 3;
   repeated string amenities = 4;
   int32 max_guests = 5;
   int32 min_guests = 6;
   repeated PhotoDto photos = 7;
+}
+message AccommodationResponse {
+  string id = 1;
+  string name = 2;
+  AddressDto address = 3;
+  repeated string amenities = 4;
+  int32 max_guests = 5;
+  int32 min_guests = 6;
 }
 message GetAccommodationListRequest {}
 
@@ -27,3 +35,6 @@ message CreateAccommodationRequest {
 message CreateAccommodationResponse {
   string createdId = 1;
 }
+message GetAccommodationRequest {string id = 1;}
+
+message GetAccommodationResponse {AccommodationResponse accommodation = 1;}

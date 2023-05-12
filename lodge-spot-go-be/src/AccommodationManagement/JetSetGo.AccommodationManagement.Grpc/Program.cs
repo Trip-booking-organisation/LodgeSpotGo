@@ -2,6 +2,8 @@ using JetSetGo.AccommodationManagement.Application;
 using JetSetGo.AccommodationManagement.Grpc;
 using JetSetGo.AccommodationManagement.Grpc.Services;
 using JetSetGo.AccommodationManagement.Infrastructure;
+using Keycloak.AuthServices.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +13,13 @@ var builder = WebApplication.CreateBuilder(args);
         .AddApplication()
         .AddInfrastructure(builder.Configuration)
         .AddAPresentation();
+    var authenticationOptions = new KeycloakAuthenticationOptions
+    {
+        AuthServerUrl = "http://localhost:8080/",
+        Realm = "jet-set-go",
+        Resource = "jet-set-go",
+    };
+    //builder.Services.AddKeycloakAuthentication(authenticationOptions);
     builder.Services.AddGrpcSwagger().AddSwaggerGen(c =>
     {
         c.SwaggerDoc("v1",new OpenApiInfo
@@ -19,6 +28,31 @@ var builder = WebApplication.CreateBuilder(args);
             Version= "v1",
             Description = "Accommodation Management Microservice"
         });
+        c.CustomSchemaIds(type => type.ToString());
+        var securityScheme = new OpenApiSecurityScheme
+        {
+            Name = "KEYCLOAK",
+            Type = SecuritySchemeType.OAuth2,
+            In = ParameterLocation.Header,
+            BearerFormat = "JWT",
+            Scheme = "bearer",
+            Flows = new OpenApiOAuthFlows
+            {
+                AuthorizationCode = new OpenApiOAuthFlow
+                {
+                    AuthorizationUrl = new Uri(builder.Configuration["Keycloak:AuthorizationUrl"]!),
+                    TokenUrl = new Uri(builder.Configuration["Keycloak:TokenUrl"]!),
+                    Scopes = new Dictionary<string, string> { }
+                }
+            },
+            Reference = new OpenApiReference
+            {
+                Id = JwtBearerDefaults.AuthenticationScheme,
+                Type = ReferenceType.SecurityScheme
+            }
+        };
+        c.AddSecurityDefinition(securityScheme.Reference.Id, securityScheme);
+        c.AddSecurityRequirement(new OpenApiSecurityRequirement{{securityScheme, new string[] { }}});
     });
 }
 

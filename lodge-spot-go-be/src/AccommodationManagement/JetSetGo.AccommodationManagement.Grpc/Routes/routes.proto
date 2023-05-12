@@ -16,4 +16,6 @@ service AccommodationApp {
       body: "accommodation"
     };
   }
+  rpc GetAccommodation(GetAccommodationRequest) returns (GetAccommodationResponse){
+  }
 }
