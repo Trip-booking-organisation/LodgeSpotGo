@@ -1,0 +1,6 @@
+version: "3.8"
+services: 
+  accommodation:
+    image: accommodation
+    container_name: accommodation
+    build: ../

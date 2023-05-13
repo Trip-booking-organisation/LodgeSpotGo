@@ -1,5 +1,9 @@
 ﻿syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
 option csharp_namespace = "JetSetGo.AccommodationManagement.Grpc";
+
 message AddressDto {
   string city = 1;
   string country = 2;
@@ -8,6 +12,17 @@ message AddressDto {
 message PhotoDto {
   string photo = 1;
 }
+
+message DateRangeDto {
+  google.protobuf.Timestamp from = 1;
+  google.protobuf.Timestamp to = 2;
+}
+
+message SpecialPriceDto {
+  DateRangeDto dateRange = 1;
+  double price = 2;
+}
+
 message AccommodationDto {
   string id = 1;
   string name = 2;
@@ -16,6 +31,7 @@ message AccommodationDto {
   int32 max_guests = 5;
   int32 min_guests = 6;
   repeated PhotoDto photos = 7;
+  repeated SpecialPriceDto specialPrices = 8;
 }
 message AccommodationResponse {
   string id = 1;
@@ -34,6 +50,11 @@ message CreateAccommodationRequest {
 }
 message CreateAccommodationResponse {
   string createdId = 1;
+}
+message SearchRequest{
+  string numberOfGuests = 1;
+  string country = 2;
+  string city = 3;
 }
 message GetAccommodationRequest {string id = 1;}
 
