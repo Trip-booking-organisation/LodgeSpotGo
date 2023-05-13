@@ -1,0 +1,14 @@
+﻿@mixin center-element {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin main-page {
+  padding-top: 12rem;
+  text-align: center;
+}
+
+.content {
+  @include center-element
+}

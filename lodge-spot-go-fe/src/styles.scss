@@ -1,1 +1,212 @@
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '@angular/material' as mat;
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$lodge-spot-go-fe-primary: mat.define-palette(mat.$indigo-palette);
+$lodge-spot-go-fe-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$lodge-spot-go-fe-warn: mat.define-palette(mat.$red-palette);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$lodge-spot-go-fe-theme: mat.define-light-theme((
+  color: (
+    primary: $lodge-spot-go-fe-primary,
+    accent: $lodge-spot-go-fe-accent,
+    warn: $lodge-spot-go-fe-warn,
+  )
+));
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include mat.all-component-themes($lodge-spot-go-fe-theme);
+
 /* You can add global styles to this file, and also import other style files */
+@import "sass/variables";
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville&display=swap');
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: 'Libre Baskerville', serif;
+}
+
+body {
+  overflow-x: hidden;
+  background: $white-color;
+  cursor: url('/assets/images/globe_cursor.png'), auto;
+}
+
+.cursor {
+  cursor: url('/assets/images/globe_cursor.png'), auto;
+}
+
+a {
+  text-decoration: none;
+}
+
+li {
+  list-style: none;
+  cursor: pointer;
+}
+
+.section {
+  padding: 4rem 0 2rem;
+}
+
+.container-main {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.icon {
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+}
+
+.grid {
+  display: grid;
+  align-items: center;
+}
+
+.none {
+  display: none;
+}
+
+.btn {
+  padding: .7rem 1.5rem;
+  background: $primary-color;
+  border: none;
+  outline: none;
+  border-radius: 3rem;
+  cursor: pointer;
+  color: $white-color;
+
+  a {
+    color: $white-color;
+    font-weight: 500;
+  }
+
+  &:hover {
+    background: $hover-color;
+  }
+}
+
+.btn-delete-lg {
+  padding: .7rem 1.5rem;
+  background: $warning-trans;
+  border: none;
+  outline: none;
+  border-radius: 3rem;
+  cursor: pointer;
+  color: $white-color;
+
+  a {
+    color: $white-color;
+    font-weight: 500;
+  }
+
+  &:hover {
+    background: black;
+  }
+}
+
+.btn-delete {
+  padding: .5rem 1.2rem;
+  background: $warning-trans;
+  border: none;
+  outline: none;
+  border-radius: 3rem;
+  cursor: pointer;
+  color: $white-color;
+
+  a {
+    color: $white-color;
+    font-weight: 500;
+  }
+
+  &:hover {
+    background: $hover-color;
+  }
+}
+
+img, video {
+  width: 100%;
+  height: auto;
+}
+
+input {
+  font-size: 100%;
+  color: $gray-text;
+}
+
+p {
+  font-size: 13px;
+  color: $gray-text;
+  line-height: 22px;
+}
+
+h4 {
+  padding: 1rem 0;
+  font-weight: 700;
+  color: $black-color;
+}
+
+h2 {
+  font-size: 25px;
+  padding: 1rem 0;
+  color: $black-color;
+}
+
+@media screen and (min-width: 1024px) {
+  p {
+    font-size: 18px;
+    line-height: 25px;
+  }
+  h4 {
+    font-size: 24px;
+  }
+  h2 {
+    font-size: 30px;
+  }
+  .section {
+    padding: 6rem 0 4rem;
+  }
+
+  .container-main {
+    width: 100%;
+    margin: auto;
+  }
+}
+
+::selection {
+  background: rgba(222, 184, 135, 0.51);
+  color: $black-color;
+}
+
+::-webkit-scrollbar {
+  width: 11px;
+  background: $gray-background;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 11px;
+  background: $primary-color;
+}
