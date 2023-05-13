@@ -11,6 +11,7 @@
         <Protobuf Include="Routes\greet.proto" GrpcServices="Server" />
         <Protobuf Include="Dto\search.proto" GrpcServices="None" />
         <Protobuf Include="Routes\routes.proto" GrpcServices="Server" />
+        <Protobuf Include="Routes\search_reservation.proto" GrpcServices="Client" />
         <Protobuf Include="Routes\search_accommodation.proto" GrpcServices="Client">
           <GrpcServices>Client</GrpcServices>
           <Access>Public</Access>

@@ -1,18 +1,15 @@
-﻿using AutoMapper;
-using Grpc.Net.Client;
+﻿using Grpc.Net.Client;
 
 namespace LodgeSpotGo.SearchAndFilter.Grpc.Clients.SearchAccommodationClient;
 
 public class SearchAccommodationClient : ISearchAccommodationClient
 {
     private readonly IConfiguration _configuration;
-    private readonly IMapper _mapper;
     private readonly ILogger<SearchAccommodationClient> _logger;
 
-    public SearchAccommodationClient(IConfiguration configuration, IMapper mapper, ILogger<SearchAccommodationClient> logger)
+    public SearchAccommodationClient(IConfiguration configuration, ILogger<SearchAccommodationClient> logger)
     {
         _configuration = configuration;
-        _mapper = mapper;
         _logger = logger;
     }
     public GetAccommodationListResponse SearchAccommodation(SearchRequest request)

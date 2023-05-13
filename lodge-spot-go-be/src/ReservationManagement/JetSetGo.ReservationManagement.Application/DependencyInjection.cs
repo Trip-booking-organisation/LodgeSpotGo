@@ -1,7 +1,7 @@
-﻿using JetSetGo.AccommodationManagement.Application.Mapping;
+﻿using JetSetGo.ReservationManagement.Application.Mapping;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace JetSetGo.AccommodationManagement.Application;
+namespace JetSetGo.ReservationManagement.Application;
 
 public static class DependencyInjection
 {

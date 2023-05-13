@@ -1,0 +1,11 @@
+﻿syntax = "proto3";
+import "google/api/annotations.proto";
+import "Dto/reservation.proto";
+option csharp_namespace = "JetSetGo.ReservationManagement.Grpc";
+service SearchReservationApp{
+  rpc SearchReservations(ReservationSearchRequest) returns (GetReservationListResponse){
+    option(google.api.http) = {
+      get: "/api/v1/search-reservation/{startDate}/{endDate}"
+    };
+  }
+}

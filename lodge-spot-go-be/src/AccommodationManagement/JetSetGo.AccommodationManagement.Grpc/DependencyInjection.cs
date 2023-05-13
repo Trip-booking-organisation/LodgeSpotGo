@@ -1,4 +1,5 @@
 ﻿using JetSetGo.AccommodationManagement.Grpc.Mapping;
+using JetSetGo.AccommodationManagement.Grpc.Mapping.MappingToGrpcResponse;
 
 namespace JetSetGo.AccommodationManagement.Grpc;
 

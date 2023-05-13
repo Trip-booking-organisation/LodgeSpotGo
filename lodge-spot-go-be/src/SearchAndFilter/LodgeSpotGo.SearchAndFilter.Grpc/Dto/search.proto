@@ -33,3 +33,4 @@ message SearchRequest{
 message GetAccommodationListResponse {
   repeated AccommodationDto accommodations = 1;
 }
+

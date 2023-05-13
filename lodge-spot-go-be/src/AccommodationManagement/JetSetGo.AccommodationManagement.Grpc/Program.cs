@@ -2,7 +2,6 @@ using JetSetGo.AccommodationManagement.Application;
 using JetSetGo.AccommodationManagement.Grpc;
 using JetSetGo.AccommodationManagement.Grpc.Services;
 using JetSetGo.AccommodationManagement.Infrastructure;
-using LodgeSpotGo.SearchAndFilter.Grpc;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);

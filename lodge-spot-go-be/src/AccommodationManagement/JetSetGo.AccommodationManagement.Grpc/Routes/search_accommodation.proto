@@ -1,7 +1,7 @@
 ﻿syntax = "proto3";
 import "google/api/annotations.proto";
 import "Dto/accommodation.proto";
-option csharp_namespace = "LodgeSpotGo.SearchAndFilter.Grpc";
+option csharp_namespace = "JetSetGo.AccommodationManagement.Grpc";
 
 service SearchAccommodationApp{
   rpc SearchAccommodations(SearchRequest) returns (GetAccommodationListResponse){

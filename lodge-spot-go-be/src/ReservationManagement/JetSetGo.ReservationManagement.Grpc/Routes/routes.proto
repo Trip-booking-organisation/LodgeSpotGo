@@ -1,13 +1,11 @@
 ﻿syntax = "proto3";
-
 import "google/api/annotations.proto";
 import "Dto/reservation.proto";
-
 option csharp_namespace = "JetSetGo.ReservationManagement.Grpc";
 package routes;
 
 service ReservationApp{
-  rpc GetReservationList(GetResrvationListRequest) returns (GetResrvationListResponse){
+  rpc GetReservationList(GetReservationListRequest) returns (GetReservationListResponse){
     option (google.api.http)={
       get: "/api/v1/reservations"
     };

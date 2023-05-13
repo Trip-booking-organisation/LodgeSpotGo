@@ -1,4 +1,5 @@
 ﻿using JetSetGo.ReservationManagement.Application.Common.Persistence;
+using JetSetGo.ReservationManagement.Application.SearchReservations;
 using JetSetGo.ReservationManagement.Domain.Reservation;
 using JetSetGo.ReservationManagement.Infrastructure.Persistence.Settings;
 using Microsoft.Extensions.Options;
@@ -25,4 +26,10 @@ public class ReservationRepository : IReservationRepository
     {
         await _reservationCollection.InsertOneAsync(reservation);
     }
+
+    public async Task<List<Reservation>> SearchReservations(SearchReservationsQuery request) =>
+        await _reservationCollection.Find(x =>
+                x.DateRange.From.CompareTo(request.StartDate) <= 0
+                && x.DateRange.To.CompareTo(request.EndDate) >= 0)
+            .ToListAsync();
 }

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using JetSetGo.AccommodationManagement.Application.SearchAccommodation;
 
-namespace JetSetGo.AccommodationManagement.Grpc.Mapping;
+namespace JetSetGo.AccommodationManagement.Grpc.Mapping.MappingToGrpcResponse;
 
 public class MappingToGrpcResponse : IMappingToGrpcResponse
 {

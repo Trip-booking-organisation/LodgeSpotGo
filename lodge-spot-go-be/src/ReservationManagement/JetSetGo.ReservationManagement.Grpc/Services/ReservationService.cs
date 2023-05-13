@@ -20,9 +20,9 @@ public class ReservationService : ReservationApp.ReservationAppBase
         _mapper = mapper;
     }
 
-    public override async Task<GetResrvationListResponse> GetReservationList(GetResrvationListRequest request, ServerCallContext context)
+    public override async Task<GetReservationListResponse> GetReservationList(GetReservationListRequest request, ServerCallContext context)
     {
-        var list = new GetResrvationListResponse();
+        var list = new GetReservationListResponse();
         var reservations = await _reservationRepository.GetAllAsync();
         _logger.LogInformation(@"List {}", reservations.ToString());
         var respoinseList = reservations.Select(res => _mapper.Map<ReadReservationDto>(res)).ToList();
@@ -36,7 +36,7 @@ public class ReservationService : ReservationApp.ReservationAppBase
         var reservation = new Reservation
         {
             Id = new Guid(),
-            AccommodationId = Guid.Parse(request.Reservation.AccommodatoinId),
+            AccommodationId = Guid.Parse(request.Reservation.AccommodationId),
             DateRange = new DateRange
             {
                 From = request.Reservation.DateRange.From.ToDateTime(),

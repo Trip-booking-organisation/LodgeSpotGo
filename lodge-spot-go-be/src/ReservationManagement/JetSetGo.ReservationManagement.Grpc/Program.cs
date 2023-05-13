@@ -1,3 +1,4 @@
+using JetSetGo.ReservationManagement.Application;
 using JetSetGo.ReservationManagement.Grpc;
 using JetSetGo.ReservationManagement.Grpc.Services;
 using JetSetGo.ReservationManagement.Infrastructure;
@@ -8,7 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddGrpc().AddJsonTranscoding();
     builder.Services
         .AddInfrastructure(builder.Configuration)
-        .AddPresentation();
+        .AddPresentation()
+        .AddApplication();
     builder.Services.AddGrpcSwagger().AddSwaggerGen(c =>
     {
         c.SwaggerDoc("v1",new OpenApiInfo
@@ -32,6 +34,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 app.MapGrpcService<GreeterService>();
 app.MapGrpcService<ReservationService>();
+app.MapGrpcService<SearchReservationService>();
 app.MapGet("/",
     () =>
         "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");

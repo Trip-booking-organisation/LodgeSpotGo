@@ -9,22 +9,26 @@ message DateRangeDto {
 
 message ReadReservationDto{
   string id = 1;
-  string accommodatoinId = 2;
+  string accommodationId = 2;
   DateRangeDto dateRange =3;
 }
 
 message CreateReservationDto{
-  string accommodatoinId = 1;
+  string accommodationId = 1;
   DateRangeDto dateRange =2;
 }
 
-message GetResrvationListRequest{}
+message GetReservationListRequest{}
 
-message GetResrvationListResponse{repeated ReadReservationDto reservations = 1;}
+message GetReservationListResponse{repeated ReadReservationDto reservations = 1;}
 
 message CreateReservationRequest{
     CreateReservationDto reservation = 1;
 }
 message CreateReservationResponse {
   string createdId = 1;
+}
+message ReservationSearchRequest{
+  google.protobuf.Timestamp startDate = 1;
+  google.protobuf.Timestamp endDate = 2;
 }
