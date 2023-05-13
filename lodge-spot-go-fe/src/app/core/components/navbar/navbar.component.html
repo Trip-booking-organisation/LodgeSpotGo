@@ -1,0 +1,58 @@
+<div class="navbar flex">
+  <div class="navbar-one flex">
+    <div (click)="navigateHome()" class="navigate-home" matTooltip="Navigate Home">
+      <mat-icon class="icon">airplanemode_active</mat-icon>
+    </div>
+    <div class="none flex">
+      <li class="flex">
+        <mat-icon>vibration</mat-icon>
+        Support
+      </li>
+      <li class="flex">
+        <mat-icon>language</mat-icon>
+        Languages
+      </li>
+    </div>
+    <div class="gap__ flex">
+      <a *ngIf="(user$ | async)" (click)="goToAccountPage()">Account</a>
+      <a *ngIf="!(user$ | async)" (click)="login()">Log In</a>
+      <a *ngIf="(user$ | async)" (click)="logout()">Log out</a>
+    </div>
+  </div>
+  <div [class]="addBackground">
+    <div class="logo-div">
+      <img ngSrc="assets/air-company-logo.png" priority="priority" class="logo" alt="plane-logo" height="256" width="256"/>
+    </div>
+    <div [class]="activeClass">
+      <ul class="menu flex" *ngIf="!(user$ | async)">
+        <li (click)="navigate(data.routerLink)" class="list-item"
+            *ngFor="let data of navDataNoRegister">
+          {{data.label}}
+        </li>
+      </ul>
+      <div *ngIf="(user$ | async);let user">
+      <ul class="menu flex" *ngIf="user.roles.includes('guest')">
+        <li (click)="navigate(data.routerLink)" class="list-item"
+            *ngFor="let data of navDataGuest">
+          {{data.label}}
+        </li>
+      </ul>
+      <ul class="menu flex" *ngIf="user.roles.includes('host')">
+        <li (click)="navigate(data.routerLink)" class="list-item"
+            *ngFor="let data of navDataHost">
+          {{data.label}}
+        </li>
+      </ul>
+      </div>
+      <button class="btn btn-one flex">
+        Contact
+      </button>
+    </div>
+    <button class="btn btn-two flex">
+      Contact
+    </button>
+    <div class="toggle-icon" (click)="showNavBar()">
+      <mat-icon class="icon">menu</mat-icon>
+    </div>
+  </div>
+</div>
