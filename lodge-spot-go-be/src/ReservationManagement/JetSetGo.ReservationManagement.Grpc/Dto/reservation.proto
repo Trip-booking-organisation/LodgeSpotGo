@@ -32,3 +32,5 @@ message ReservationSearchRequest{
   google.protobuf.Timestamp startDate = 1;
   google.protobuf.Timestamp endDate = 2;
 }
+message CancelReservationRequest{ string id = 1; }
+message CancelReservationResponse{ bool success = 1; }

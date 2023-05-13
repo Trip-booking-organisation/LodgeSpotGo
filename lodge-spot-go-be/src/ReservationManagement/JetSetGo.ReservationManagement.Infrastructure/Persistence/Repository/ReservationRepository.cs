@@ -1,11 +1,10 @@
-﻿using JetSetGo.ReservationManagement.Application.Common.Persistence;
+﻿using JetSetGo.ReservationManagement.Application.CancelReservation;
+using JetSetGo.ReservationManagement.Application.Common.Persistence;
 using JetSetGo.ReservationManagement.Application.SearchReservations;
 using JetSetGo.ReservationManagement.Domain.Reservation;
 using JetSetGo.ReservationManagement.Infrastructure.Persistence.Settings;
 using Microsoft.Extensions.Options;
-using MongoDB.Driver;
 namespace JetSetGo.ReservationManagement.Infrastructure.Persistence.Repository;
-using Microsoft.Extensions;
 using MongoDB.Driver;
 
 public class ReservationRepository : IReservationRepository
@@ -32,4 +31,10 @@ public class ReservationRepository : IReservationRepository
                 x.DateRange.From.CompareTo(request.StartDate) <= 0
                 && x.DateRange.To.CompareTo(request.EndDate) >= 0)
             .ToListAsync();
+
+    public async Task CancelReservation(CancelReservationCommand request) =>
+       await _reservationCollection.DeleteOneAsync(x => x.Id == request.Id);
+
+    public async Task<Reservation> GetById(Guid id,CancellationToken cancellationToken= default) =>
+        await _reservationCollection.Find(x => x.Id == id).FirstOrDefaultAsync(cancellationToken);
 }

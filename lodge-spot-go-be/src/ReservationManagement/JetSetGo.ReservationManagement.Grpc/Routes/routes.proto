@@ -17,4 +17,9 @@ service ReservationApp{
       body: "reservation"
     };
   }
+  rpc CancelReservation(CancelReservationRequest) returns(CancelReservationResponse){
+    option(google.api.http) = {
+      delete : "/api/v1/reservations/{id}",
+    };
+  }
 }
