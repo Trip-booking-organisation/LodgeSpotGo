@@ -36,3 +36,9 @@ message ReservationSearchRequest{
 }
 message CancelReservationRequest{ string id = 1; }
 message CancelReservationResponse{ bool success = 1; }
+message UpdateReservationStatus{
+  string id = 1;
+  string status = 2;
+}
+message UpdateReservationStatusRequest{ UpdateReservationStatus reservation = 1;}
+message UpdateReservationStatusResponse{ bool success = 1;}

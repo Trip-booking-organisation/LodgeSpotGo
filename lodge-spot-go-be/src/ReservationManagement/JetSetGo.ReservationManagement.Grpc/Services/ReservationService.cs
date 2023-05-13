@@ -2,6 +2,7 @@
 using Grpc.Core;
 using JetSetGo.ReservationManagement.Application.CancelReservation;
 using JetSetGo.ReservationManagement.Application.Common.Persistence;
+using JetSetGo.ReservationManagement.Application.UpdateReservationStatus;
 using JetSetGo.ReservationManagement.Domain.Reservation;
 using JetSetGo.ReservationManagement.Domain.Reservation.Enums;
 using JetSetGo.ReservationManagement.Domain.Reservation.ValueObjects;
@@ -74,5 +75,12 @@ public class ReservationService : ReservationApp.ReservationAppBase
         var result = await _sender.Send(cancelRequest);
         _logger.LogInformation(@"------------------Cancel reservation status : {}",result.ToString());
        return _mapper.Map<CancelReservationResponse>(result);
+    }
+
+    public override async Task<UpdateReservationStatusResponse> UpdateReservation(UpdateReservationStatusRequest request, ServerCallContext context)
+    {
+        var command = _mapper.Map<UpdateReservationStatusCommand>(request.Reservation);
+        var result = await _sender.Send(command);
+        return _mapper.Map<UpdateReservationStatusResponse>(result);
     }
 }

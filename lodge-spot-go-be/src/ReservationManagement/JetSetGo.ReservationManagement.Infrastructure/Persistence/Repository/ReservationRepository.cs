@@ -43,4 +43,17 @@ public class ReservationRepository : IReservationRepository
 
     public async Task<Reservation> GetById(Guid id,CancellationToken cancellationToken= default) =>
         await _reservationCollection.Find(x => x.Id == id).FirstOrDefaultAsync(cancellationToken);
+
+    public async Task UpdateReservationStatus(Reservation reservation)
+    {
+        var filter = Builders<Reservation>.Filter.Eq(r => r.Id, reservation.Id);
+        var update = Builders<Reservation>.Update
+            .Set(r => r.ReservationStatus, reservation.ReservationStatus);
+        await _reservationCollection.UpdateOneAsync(filter,update);
+    }
+
+    public async Task<List<Reservation>> GetByAccommodationId(Reservation reservation) =>
+        await _reservationCollection.Find(x =>
+            x.AccommodationId == reservation.AccommodationId
+            && x.Id != reservation.Id).ToListAsync();
 }

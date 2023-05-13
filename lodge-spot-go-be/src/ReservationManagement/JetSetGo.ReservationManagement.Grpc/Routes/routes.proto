@@ -22,4 +22,11 @@ service ReservationApp{
       delete : "/api/v1/reservations/{id}",
     };
   }
+
+  rpc UpdateReservation(UpdateReservationStatusRequest) returns(UpdateReservationStatusResponse){
+    option(google.api.http) = {
+      put : "/api/v1/reservations",
+      body: "reservation"
+    };
+  }
 }
