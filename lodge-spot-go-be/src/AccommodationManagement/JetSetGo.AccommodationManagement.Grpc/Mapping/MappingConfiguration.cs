@@ -11,7 +11,7 @@ public class MappingConfiguration : Profile
     public MappingConfiguration()
     {
         CreateMap<Accommodation, AccommodationDto>()
-            .ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.Address))
+            .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))
             .ForMember(dest => dest.Photos, opt => opt.MapFrom(src => src.Photos))
             .ForMember(dest => dest.SpecialPrices, opt => opt.MapFrom(src => src.SpecalPrices));
         

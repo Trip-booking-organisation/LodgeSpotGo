@@ -1,6 +1,7 @@
 import {APP_INITIALIZER, NgModule} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import {CoreModule} from "./core/core.module";
@@ -10,10 +11,14 @@ import {initializeKeycloak} from "./core/keycloak/init-keycloak";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {CommonModule} from "@angular/common";
 import {HomeModule} from "./pages/home/home.module";
+import {AccommodationCreateModule} from "./pages/accommodation-create/accommodation-create.module"
+
+import {MatInputModule} from "@angular/material/input";
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -23,7 +28,8 @@ import {HomeModule} from "./pages/home/home.module";
     HttpClientModule,
     BrowserAnimationsModule,
     CommonModule,
-    HomeModule
+    HomeModule,
+    MatInputModule
   ],
   providers: [{
     provide: APP_INITIALIZER,
