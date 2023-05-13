@@ -7,7 +7,14 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Google.Protobuf" Version="3.23.0" />
       <PackageReference Include="MediatR" Version="12.0.1" />
+    </ItemGroup>
+    
+    
+
+    <ItemGroup>
+      <ProjectReference Include="..\JetSetGo.ReservationManagement.Domain\JetSetGo.ReservationManagement.Domain.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,0 +1,30 @@
+﻿syntax = "proto3";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "JetSetGo.ReservationManagement.Grpc";
+message DateRangeDto {
+  google.protobuf.Timestamp from = 1;
+  google.protobuf.Timestamp to = 2;
+}
+
+message ReadReservationDto{
+  string id = 1;
+  string accommodatoinId = 2;
+  DateRangeDto dateRange =3;
+}
+
+message CreateReservationDto{
+  string accommodatoinId = 1;
+  DateRangeDto dateRange =2;
+}
+
+message GetResrvationListRequest{}
+
+message GetResrvationListResponse{repeated ReadReservationDto reservations = 1;}
+
+message CreateReservationRequest{
+    CreateReservationDto reservation = 1;
+}
+message CreateReservationResponse {
+  string createdId = 1;
+}

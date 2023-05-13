@@ -3,6 +3,7 @@
   <component name="UserContentModel">
     <attachedFolders>
       <Path>../../LodgeSpotGo</Path>
+      <Path>../docker</Path>
       <Path>accommodation-management</Path>
     </attachedFolders>
     <explicitIncludes />
