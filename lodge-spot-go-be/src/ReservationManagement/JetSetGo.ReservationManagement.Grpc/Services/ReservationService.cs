@@ -3,6 +3,7 @@ using Grpc.Core;
 using JetSetGo.ReservationManagement.Application.CancelReservation;
 using JetSetGo.ReservationManagement.Application.Common.Persistence;
 using JetSetGo.ReservationManagement.Domain.Reservation;
+using JetSetGo.ReservationManagement.Domain.Reservation.Enums;
 using JetSetGo.ReservationManagement.Domain.Reservation.ValueObjects;
 using MediatR;
 
@@ -46,7 +47,9 @@ public class ReservationService : ReservationApp.ReservationAppBase
             {
                 From = request.Reservation.DateRange.From.ToDateTime(),
                 To = request.Reservation.DateRange.To.ToDateTime()
-            }
+            },
+            ReservationStatus = MapStringToEnum(request.Reservation.Status),
+            Deleted = false
         };
         _reservationRepository.CreateAsync(reservation);
         return Task.FromResult(new CreateReservationResponse
@@ -54,17 +57,17 @@ public class ReservationService : ReservationApp.ReservationAppBase
             CreatedId = reservation.Id.ToString()
         });
     }
-    /*public override async Task<CancelReservationResponse> CancelReservation(CancelReservationRequest request, ServerCallContext context)
+
+    private static ReservationStatus MapStringToEnum(string reservationStatus)
     {
-       
-    }*/
-    /*public override  Task<CancelReservationResponse> CancelReservation(CancelReservationRequest request, ServerCallContext context)
-    {
-        var cancelRequest =  _mapper.Map<CancelReservationCommand>(request);
-        /*var result = await _sender.Send(cancelRequest);
-        _logger.LogInformation(@"------------------Cancel reservation status : {}",result.ToString());
-        _mapper.Map<CancelReservationResponse>(result);#1#
-    }*/
+        return reservationStatus switch
+        {
+            "Confirmed" => ReservationStatus.Confirmed,
+            "Refused" => ReservationStatus.Refused,
+            _ => ReservationStatus.Waiting
+        };
+    }
+
     public override async Task<CancelReservationResponse> CancelReservation(CancelReservationRequest request, ServerCallContext context)
     {
         var cancelRequest =  _mapper.Map<CancelReservationCommand>(request);

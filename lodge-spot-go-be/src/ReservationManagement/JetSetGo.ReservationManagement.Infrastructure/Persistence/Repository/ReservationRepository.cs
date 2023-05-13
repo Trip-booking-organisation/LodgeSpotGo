@@ -32,8 +32,14 @@ public class ReservationRepository : IReservationRepository
                 && x.DateRange.To.CompareTo(request.EndDate) >= 0)
             .ToListAsync();
 
-    public async Task CancelReservation(CancelReservationCommand request) =>
-       await _reservationCollection.DeleteOneAsync(x => x.Id == request.Id);
+    public async Task CancelReservation(Reservation request)
+    {
+        var filter = Builders<Reservation>.Filter.Eq(r => r.Id, request.Id);
+        var update = Builders<Reservation>.Update
+            .Set(r => r.Deleted, true);
+        await _reservationCollection.UpdateOneAsync(filter,update);
+
+    }
 
     public async Task<Reservation> GetById(Guid id,CancellationToken cancellationToken= default) =>
         await _reservationCollection.Find(x => x.Id == id).FirstOrDefaultAsync(cancellationToken);

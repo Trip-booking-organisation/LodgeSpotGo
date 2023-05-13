@@ -9,6 +9,6 @@ public interface IReservationRepository
     Task<List<Reservation>> GetAllAsync(CancellationToken cancellationToken = default);
     Task  CreateAsync(Reservation reservation);
     Task<List<Reservation>> SearchReservations(SearchReservationsQuery request);
-    Task CancelReservation(CancelReservationCommand request);
+    Task CancelReservation(Reservation request);
     Task<Reservation> GetById(Guid id,CancellationToken cancellationToken);
 }

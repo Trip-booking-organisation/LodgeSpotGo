@@ -11,11 +11,13 @@ message ReadReservationDto{
   string id = 1;
   string accommodationId = 2;
   DateRangeDto dateRange =3;
+  string status = 4;
 }
 
 message CreateReservationDto{
   string accommodationId = 1;
   DateRangeDto dateRange =2;
+  string status = 4;
 }
 
 message GetReservationListRequest{}
