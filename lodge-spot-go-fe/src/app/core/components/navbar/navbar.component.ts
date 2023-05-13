@@ -26,9 +26,15 @@ export class NavbarComponent implements OnInit {
   }
   ngOnInit(): void {
     this.authService.getUserObservable().subscribe(
-      value => console.log(value)
+      value => {
+        console.log(value)
+      }
     )
-    this.goToHomePage();
+    this.authService.getTokenObservable().subscribe(token => {
+      console.log("value")
+      console.log(token)
+    })
+    //this.goToHomePage();
   }
   login(): void {
     this.authService.login();

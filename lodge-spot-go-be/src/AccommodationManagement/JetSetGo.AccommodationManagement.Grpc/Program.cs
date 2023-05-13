@@ -18,7 +18,7 @@ var builder = WebApplication.CreateBuilder(args);
     {
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
         options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-
+    
     }).AddJwtBearer(o =>
     {
         o.Authority = builder.Configuration["Jwt:Authority"];
@@ -29,18 +29,29 @@ var builder = WebApplication.CreateBuilder(args);
             OnAuthenticationFailed = c =>
             {
                 c.NoResult();
-
+    
                 c.Response.StatusCode = 500;
                 c.Response.ContentType = "text/plain";
-
+    
                 return c.Response.WriteAsync(builder.Environment.IsDevelopment() 
                     ? c.Exception.ToString() 
                     : "An error occured processing your authentication.");
             }
         };
     });
+    //builder.Services.AddKeycloakAuthentication(builder.Configuration, KeycloakAuthenticationOptions.Section);
     builder.Services.AddAuthorization();
-    // builder.Services.AddKeycloakAuthorization(builder.Configuration, KeycloakAuthenticationOptions.Section);
+    //builder.Services.AddKeycloakAuthorization(builder.Configuration, KeycloakAuthenticationOptions.Section);
+    builder.Services
+        .AddCors(options =>
+        {
+            options.AddPolicy("AllowOrigin",
+                b =>
+                    b.AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .WithExposedHeaders("Grpc-Status", "Grpc-Message", "Grpc-Encoding", "Grpc-Accept-Encoding"));
+        });
     builder.Services.AddGrpcSwagger().AddSwaggerGen(c =>
     {
         c.SwaggerDoc("v1",new OpenApiInfo
@@ -79,6 +90,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 var app = builder.Build();
 {
+    app.UseRouting();
     app.UseSwagger().UseSwaggerUI(c =>
     {
         c.OAuthClientId(builder.Configuration["Jwt:ClientId"]);
