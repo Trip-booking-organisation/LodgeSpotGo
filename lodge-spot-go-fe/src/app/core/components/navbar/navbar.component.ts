@@ -3,8 +3,8 @@ import {noRegisterUserNavData} from "./data/no-register-user-nav-data";
 import {hostNavData} from "./data/host-nav-data";
 import {guestNavData} from "./data/guest-nav-data";
 import {Router} from "@angular/router";
-import {AuthService} from "../keycloak/auth.service";
-import {User} from "../keycloak/user";
+import {AuthService} from "../../keycloak/auth.service";
+import {User} from "../../keycloak/user";
 import {Observable} from "rxjs";
 import {environment} from "../../../../environments/environment.development";
 

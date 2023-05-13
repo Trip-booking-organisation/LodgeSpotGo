@@ -5,6 +5,7 @@ using JetSetGo.AccommodationManagement.Domain.Accommodation;
 using JetSetGo.AccommodationManagement.Domain.Accommodation.Enum;
 using JetSetGo.AccommodationManagement.Domain.Accommodation.ValueObjects;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 
 namespace JetSetGo.AccommodationManagement.Grpc.Services;
 
@@ -20,7 +21,7 @@ public class AccommodationService : AccommodationApp.AccommodationAppBase
         _repository = repository;
         _mapper = mapper;
     }
-    
+    [Authorize(Roles = "guest")]
     public override async  Task<GetAccommodationListResponse> GetAccommodationList(GetAccommodationListRequest request, ServerCallContext context)
     {
         var list = new GetAccommodationListResponse();
