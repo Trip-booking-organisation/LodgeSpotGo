@@ -50,7 +50,8 @@ public class ReservationService : ReservationApp.ReservationAppBase
                 To = request.Reservation.DateRange.To.ToDateTime()
             },
             ReservationStatus = MapStringToEnum(request.Reservation.Status),
-            Deleted = false
+            Deleted = false,
+            NumberOfGuests = request.Reservation.NumberOfGuests
         };
         _reservationRepository.CreateAsync(reservation);
         return Task.FromResult(new CreateReservationResponse
