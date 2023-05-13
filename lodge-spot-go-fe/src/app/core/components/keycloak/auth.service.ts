@@ -56,4 +56,8 @@ export class AuthService {
   logout() {
     this.keycloak.logout().then(() => this.router.navigate(['']));
   }
+
+  register() {
+    this.keycloak.register()
+  }
 }

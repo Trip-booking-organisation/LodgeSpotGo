@@ -14,9 +14,33 @@ var builder = WebApplication.CreateBuilder(args);
         .AddApplication()
         .AddInfrastructure(builder.Configuration)
         .AddAPresentation();
-    builder.Services.AddKeycloakAuthentication(builder.Configuration, KeycloakAuthenticationOptions.Section);
+    builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+    }).AddJwtBearer(o =>
+    {
+        o.Authority = builder.Configuration["Jwt:Authority"];
+        o.Audience = builder.Configuration["Jwt:Audience"];
+        o.RequireHttpsMetadata = false;
+        o.Events = new JwtBearerEvents
+        {
+            OnAuthenticationFailed = c =>
+            {
+                c.NoResult();
+
+                c.Response.StatusCode = 500;
+                c.Response.ContentType = "text/plain";
+
+                return c.Response.WriteAsync(builder.Environment.IsDevelopment() 
+                    ? c.Exception.ToString() 
+                    : "An error occured processing your authentication.");
+            }
+        };
+    });
     builder.Services.AddAuthorization();
-    builder.Services.AddKeycloakAuthorization(builder.Configuration, KeycloakAuthenticationOptions.Section);
+    // builder.Services.AddKeycloakAuthorization(builder.Configuration, KeycloakAuthenticationOptions.Section);
     builder.Services.AddGrpcSwagger().AddSwaggerGen(c =>
     {
         c.SwaggerDoc("v1",new OpenApiInfo
@@ -57,12 +81,16 @@ var app = builder.Build();
 {
     app.UseSwagger().UseSwaggerUI(c =>
     {
+        c.OAuthClientId(builder.Configuration["Jwt:ClientId"]);
+        c.OAuthClientSecret(builder.Configuration["Jwt:ClientSecret"]);
+        c.OAuthRealm(builder.Configuration["Jwt:Realm"]);
+        c.OAuthAppName("KEYCLOAK");
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "AccommodationManagementMicroservice v1");
     });
     app.MapGrpcService<GreeterService>().RequireAuthorization();
     app.MapGrpcService<AccommodationService>();
-    app.UseAuthorization();
     app.UseAuthentication();
+    app.UseAuthorization();
     app.MapGet("/",
         () =>
             "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
