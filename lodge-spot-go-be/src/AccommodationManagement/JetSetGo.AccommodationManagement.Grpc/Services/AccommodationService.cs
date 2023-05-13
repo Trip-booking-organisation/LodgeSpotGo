@@ -21,7 +21,7 @@ public class AccommodationService : AccommodationApp.AccommodationAppBase
         _repository = repository;
         _mapper = mapper;
     }
-    [Authorize(Roles = "guest")]
+    /*[Authorize(Roles = "guest")]*/
     public override async  Task<GetAccommodationListResponse> GetAccommodationList(GetAccommodationListRequest request, ServerCallContext context)
     {
         var list = new GetAccommodationListResponse();
