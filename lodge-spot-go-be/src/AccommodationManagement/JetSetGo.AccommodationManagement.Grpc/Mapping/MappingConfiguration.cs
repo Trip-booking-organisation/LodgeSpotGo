@@ -23,6 +23,7 @@ public class MappingConfiguration : Profile
             .ForMember(dest => dest.To,
                 opt => opt.MapFrom(src => Timestamp.FromDateTime(src.To)));
 
+        
         CreateMap<Address, AddressDto>();
         
         CreateMap<AccommodationPhoto, PhotoDto>();

@@ -20,6 +20,7 @@ public class AccommodationService : AccommodationApp.AccommodationAppBase
         _repository = repository;
         _mapper = mapper;
     }
+    
     public override async  Task<GetAccommodationListResponse> GetAccommodationList(GetAccommodationListRequest request, ServerCallContext context)
     {
         var list = new GetAccommodationListResponse();
@@ -39,9 +40,9 @@ public class AccommodationService : AccommodationApp.AccommodationAppBase
             Name = request.Accommodation.Name,
             Address = new Address
             {
-                City = request.Accommodation.Location.City,
-                Country = request.Accommodation.Location.Country,
-                Street = request.Accommodation.Location.Street
+                City = request.Accommodation.Address.City,
+                Country = request.Accommodation.Address.Country,
+                Street = request.Accommodation.Address.Street
             },
             Amenities = request.Accommodation.Amenities.ToList(),
             MaxGuests = request.Accommodation.MaxGuests,
@@ -68,5 +69,13 @@ public class AccommodationService : AccommodationApp.AccommodationAppBase
         {
             CreatedId = Guid.NewGuid().ToString()
         });
+    }
+
+    public override async Task<GetAccommodationResponse> GetAccommodation(GetAccommodationRequest request, ServerCallContext context)
+    {
+        _logger.LogInformation(@"Request {}",request.Id);
+        var accommodation = await _repository.GetAsync(Guid.Parse(request.Id));
+        var response = _mapper.Map<GetAccommodationResponse>(accommodation);
+        return response;
     }
 }
