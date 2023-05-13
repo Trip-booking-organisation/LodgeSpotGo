@@ -8,17 +8,32 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Protobuf Include="Protos\greet.proto" GrpcServices="Server" />
+        <Protobuf Include="Protos\greet.proto" GrpcServices="Server"/>
+        <Protobuf Include="Dto\reservation.proto" GrpcServices="Server"/>
+        <Protobuf Include="Routes\routes.proto" GrpcServices="Server" />
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="Google.Protobuf" Version="3.23.0" />
         <PackageReference Include="Grpc.AspNetCore" Version="2.49.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AutoMapper" Version="12.0.1" />
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+        <PackageReference Include="Grpc.AspNetCore" Version="2.49.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Grpc.JsonTranscoding" Version="7.0.5" />
+        <PackageReference Include="Microsoft.AspNetCore.Grpc.Swagger" Version="0.3.5" />
     </ItemGroup>
 
     <ItemGroup>
       <Content Include="..\..\..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\JetSetGo.ReservationManagement.Infrastructure\JetSetGo.ReservationManagement.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>
