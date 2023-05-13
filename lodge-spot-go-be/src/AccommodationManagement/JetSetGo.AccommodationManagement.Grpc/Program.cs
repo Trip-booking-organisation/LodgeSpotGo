@@ -3,6 +3,7 @@ using JetSetGo.AccommodationManagement.Grpc;
 using JetSetGo.AccommodationManagement.Grpc.Services;
 using JetSetGo.AccommodationManagement.Infrastructure;
 using Keycloak.AuthServices.Authentication;
+using Keycloak.AuthServices.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 
@@ -13,13 +14,9 @@ var builder = WebApplication.CreateBuilder(args);
         .AddApplication()
         .AddInfrastructure(builder.Configuration)
         .AddAPresentation();
-    var authenticationOptions = new KeycloakAuthenticationOptions
-    {
-        AuthServerUrl = "http://localhost:8080/",
-        Realm = "jet-set-go",
-        Resource = "jet-set-go",
-    };
-    //builder.Services.AddKeycloakAuthentication(authenticationOptions);
+    builder.Services.AddKeycloakAuthentication(builder.Configuration, KeycloakAuthenticationOptions.Section);
+    builder.Services.AddAuthorization();
+    builder.Services.AddKeycloakAuthorization(builder.Configuration, KeycloakAuthenticationOptions.Section);
     builder.Services.AddGrpcSwagger().AddSwaggerGen(c =>
     {
         c.SwaggerDoc("v1",new OpenApiInfo
@@ -40,8 +37,8 @@ var builder = WebApplication.CreateBuilder(args);
             {
                 AuthorizationCode = new OpenApiOAuthFlow
                 {
-                    AuthorizationUrl = new Uri(builder.Configuration["Keycloak:AuthorizationUrl"]!),
-                    TokenUrl = new Uri(builder.Configuration["Keycloak:TokenUrl"]!),
+                    AuthorizationUrl = new Uri(builder.Configuration["Jwt:AuthorizationUrl"]!),
+                    TokenUrl = new Uri(builder.Configuration["Jwt:TokenUrl"]!),
                     Scopes = new Dictionary<string, string> { }
                 }
             },
@@ -62,8 +59,10 @@ var app = builder.Build();
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "AccommodationManagementMicroservice v1");
     });
-    app.MapGrpcService<GreeterService>();
+    app.MapGrpcService<GreeterService>().RequireAuthorization();
     app.MapGrpcService<AccommodationService>();
+    app.UseAuthorization();
+    app.UseAuthentication();
     app.MapGet("/",
         () =>
             "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");

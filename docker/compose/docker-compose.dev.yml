@@ -1,11 +1,28 @@
 ﻿version: '3.8'
 services:
+  keycloak-db:
+    image: postgres
+    restart: always
+    ports:
+      - "5431:5432"
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin1312
+      POSTGRES_DB: keycloak
+      POSTGRES_SCHEMA: keycloak
+    volumes:
+      - keycloak-db-data:/var/lib/postgresql/data
   keycloak:
-    image: quay.io/keycloak/keycloak:21.0.1
+    image: quay.io/keycloak/keycloak:21.1.1
     container_name: keycloak
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://keycloak-db:5432/keycloak
+      KC_DB_USERNAME: admin
+      KC_DB_PASSWORD: admin1312
+      KC_FEATURES: declarative-user-profile
     entrypoint: [ "/opt/keycloak/bin/kc.sh", "start-dev" ]
     ports:
       - "8080:8080"
@@ -75,4 +92,6 @@ volumes:
   user-db-data:
     driver: local
   search-db-data:
+    driver: local
+  keycloak-db-data:
     driver: local
