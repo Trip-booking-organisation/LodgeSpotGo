@@ -11,11 +11,20 @@
         <Protobuf Include="Routes\greet.proto" GrpcServices="Server" />
         <Protobuf Include="Dto\accommodation.proto" GrpcServices="None" />
         <Protobuf Include="Routes\routes.proto" GrpcServices="Server" />
+        <Protobuf Include="Routes\search_accommodation.proto" GrpcServices="Server">
+          <GrpcServices>Server</GrpcServices>
+          <Access>Public</Access>
+          <ProtoCompile>True</ProtoCompile>
+          <CompileOutputs>True</CompileOutputs>
+          <OutputDir>obj\Debug\net7.0\</OutputDir>
+          <Generator>MSBuild:Compile</Generator>
+        </Protobuf>
     </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="AutoMapper" Version="12.0.1" />
         <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+        <PackageReference Include="Google.Protobuf" Version="3.23.0" />
         <PackageReference Include="Grpc.AspNetCore" Version="2.49.0" />
         <PackageReference Include="Keycloak.AuthServices.Authentication" Version="1.5.1" />
         <PackageReference Include="Keycloak.AuthServices.Authorization" Version="1.5.1" />

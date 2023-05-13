@@ -101,6 +101,7 @@ var app = builder.Build();
     });
     app.MapGrpcService<GreeterService>().RequireAuthorization();
     app.MapGrpcService<AccommodationService>();
+    app.MapGrpcService<SearchAccommodationService>();
     app.UseAuthentication();
     app.UseAuthorization();
     app.MapGet("/",

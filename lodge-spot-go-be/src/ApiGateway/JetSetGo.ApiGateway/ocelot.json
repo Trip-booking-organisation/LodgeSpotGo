@@ -1,5 +1,15 @@
 ﻿{
   "Routes": [
-    "Downs"
+    {
+      "DownstreamPathTemplate": "/api/v1/accommodations",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7132
+        }
+      ],
+      "UpstreamPathTemplate": ""
+    }
   ]
 }
