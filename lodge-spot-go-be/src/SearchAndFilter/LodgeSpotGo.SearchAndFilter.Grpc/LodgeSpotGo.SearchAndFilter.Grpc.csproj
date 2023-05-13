@@ -9,10 +9,10 @@
 
     <ItemGroup>
         <Protobuf Include="Routes\greet.proto" GrpcServices="Server" />
-        <Protobuf Include="Dto\accommodation.proto" GrpcServices="None" />
+        <Protobuf Include="Dto\search.proto" GrpcServices="None" />
         <Protobuf Include="Routes\routes.proto" GrpcServices="Server" />
-        <Protobuf Include="Routes\search_accommodation.proto" GrpcServices="Server">
-          <GrpcServices>Server</GrpcServices>
+        <Protobuf Include="Routes\search_accommodation.proto" GrpcServices="Client">
+          <GrpcServices>Client</GrpcServices>
           <Access>Public</Access>
           <ProtoCompile>True</ProtoCompile>
           <CompileOutputs>True</CompileOutputs>
@@ -25,13 +25,28 @@
         <PackageReference Include="AutoMapper" Version="12.0.1" />
         <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
         <PackageReference Include="Grpc.AspNetCore" Version="2.49.0" />
+        <PackageReference Include="Grpc.Net.Client" Version="2.53.0" />
+        <PackageReference Include="Grpc.Tools" Version="2.54.0">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="Microsoft.AspNetCore.Grpc.JsonTranscoding" Version="7.0.5" />
         <PackageReference Include="Microsoft.AspNetCore.Grpc.Swagger" Version="0.3.5" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\JetSetGo.AccommodationManagement.Application\JetSetGo.AccommodationManagement.Application.csproj" />
-      <ProjectReference Include="..\JetSetGo.AccommodationManagement.Infrastructure\JetSetGo.AccommodationManagement.Infrastructure.csproj" />
+      <Content Include="..\..\..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\JetSetGo.SearchAndFilter.Application\JetSetGo.SearchAndFilter.Application.csproj" />
+      <ProjectReference Include="..\JetSetGo.SearchAndFilter.Domain\JetSetGo.SearchAndFilter.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Dto\Responses" />
     </ItemGroup>
 
 </Project>

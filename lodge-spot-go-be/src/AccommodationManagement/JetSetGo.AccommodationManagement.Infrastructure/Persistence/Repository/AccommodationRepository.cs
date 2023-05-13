@@ -1,4 +1,5 @@
 ﻿using JetSetGo.AccommodationManagement.Application.Common.Persistence;
+using JetSetGo.AccommodationManagement.Application.SearchAccommodation;
 using JetSetGo.AccommodationManagement.Domain.Accommodation;
 using JetSetGo.AccommodationManagement.Infrastructure.Persistence.Settings;
 using Microsoft.Extensions.Options;
@@ -31,4 +32,12 @@ public class AccommodationRepository: IAccommodationRepository
 
     public async Task RemoveAsync(Guid id) =>
         await _accommodationCollection.DeleteOneAsync(x => x.Id == id);
+
+    public async Task<List<Accommodation>> SearchAccommodations(SearchAccommodationQuery request) =>
+        await _accommodationCollection.Find(x => 
+           x.Address.Country == request.Country 
+           && x.Address.City == request.City
+           && x.MaxGuests >= request.NumberOfGuests
+           && x.MinGuests <= request.NumberOfGuests)
+            .ToListAsync();
 }

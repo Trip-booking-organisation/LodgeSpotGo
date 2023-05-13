@@ -27,3 +27,8 @@ message CreateAccommodationRequest {
 message CreateAccommodationResponse {
   string createdId = 1;
 }
+message SearchRequest{
+  string numberOfGuests = 1;
+  string country = 2;
+  string city = 3;
+}

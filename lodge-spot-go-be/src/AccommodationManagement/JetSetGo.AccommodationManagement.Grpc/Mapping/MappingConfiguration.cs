@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using JetSetGo.AccommodationManagement.Application.SearchAccommodation;
 using JetSetGo.AccommodationManagement.Domain.Accommodation;
 using JetSetGo.AccommodationManagement.Domain.Accommodation.ValueObjects;
 
@@ -16,5 +17,7 @@ public class MappingConfiguration : Profile
             opt => 
                 opt.MapFrom(src => src.Photos));
         CreateMap<AccommodationPhoto, PhotoDto>();
+        CreateMap<SearchRequest, SearchAccommodationQuery>();
+        CreateMap<SearchAccommodationResponse, AccommodationDto>();
     }
 }
