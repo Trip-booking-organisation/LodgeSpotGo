@@ -2,7 +2,13 @@
   "Routes": [
     {
       "UpstreamPathTemplate": "/api/accommodations",
-      "UpstreamHttpMethod": ["GET", "POST", "PUT", "DELETE"],
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "OPTIONS"
+      ],
       "DownstreamPathTemplate": "/api/v1/accommodations",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -14,7 +20,12 @@
     },
     {
       "UpstreamPathTemplate": "/api/users",
-      "UpstreamHttpMethod": ["GET", "POST", "PUT", "DELETE"],
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
       "DownstreamPathTemplate": "/api/v1/users",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -26,7 +37,13 @@
     },
     {
       "UpstreamPathTemplate": "/api/reservations",
-      "UpstreamHttpMethod": ["GET", "POST", "PUT", "DELETE"],
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "OPTIONS"
+      ],
       "DownstreamPathTemplate": "/api/v1/reservations",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -37,8 +54,31 @@
       ]
     },
     {
+      "UpstreamPathTemplate": "/api/reservations/{id}",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "OPTIONS"
+      ],
+      "DownstreamPathTemplate": "/api/v1/reservations/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7105
+        }
+      ]
+    },
+    {
       "UpstreamPathTemplate": "/api/search",
-      "UpstreamHttpMethod": ["GET", "POST", "PUT", "DELETE"],
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
       "DownstreamPathTemplate": "/api/v1/search",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -51,5 +91,11 @@
   ],
   "GlobalConfiguration": {
     "BaseUrl": "http://localhost:5294"
+  },
+  "HttpHandlerOptions": {
+    "AllowAutoRedirect": true,
+    "UseCookieContainer": true,
+    "UseTracing": true,
+    "MaxConnectionsPerServer": 100
   }
 }

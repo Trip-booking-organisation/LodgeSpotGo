@@ -12,13 +12,13 @@ export class HomePageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.http.get('https://localhost:7132/api/v1/accommodations').subscribe({
-    //   next: (response) =>{
-    //     console.log(response);
-    //   },
-    //   error: (err) => {
-    //     console.log(err);
-    //   }
-    // });
+    this.http.get('http://localhost:5294/api/v1/accommodations').subscribe({
+      next: (response) =>{
+        console.log(response);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
   }
 }

@@ -42,6 +42,7 @@ export class AuthService {
     });
   }
   getUserObservable(): Observable<User|null> {
+    console.log(this.user$)
     return this.user$;
   }
   getToken(): string {
