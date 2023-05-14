@@ -34,4 +34,19 @@ service ReservationApp{
       get: "/api/v1/reservations/{guestId}"
     };
   }
+  rpc GetReservationsByAccommodationId(GetReservationByAccommodationRequest) returns(GetReservationByAccommodationResponse){
+    option (google.api.http)={
+      get: "/api/v1/reservations/accommodation/{accommodationId}"
+    };
+  }
+  rpc GetDeletedReservationsByGuestId(GetDeletedReservationsByGuestRequest) returns(GetDeletedReservationsByGuestResponse){
+    option (google.api.http)={
+      get: "/api/v1/reservations/deleted/{guestId}"
+    };
+  }
+  rpc DeleteReservation(DeleteReservationRequest) returns(DeleteReservationResponse){
+    option(google.api.http) = {
+      delete : "/api/v1/reservations/delete/{id}",
+    };
+  }
 }

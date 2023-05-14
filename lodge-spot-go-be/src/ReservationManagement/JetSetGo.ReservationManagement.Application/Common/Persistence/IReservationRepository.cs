@@ -14,4 +14,7 @@ public interface IReservationRepository
     Task UpdateReservationStatus(Reservation reservation);
     Task<List<Reservation>> GetByAccommodationId(Reservation reservation);
     Task<List<Reservation>> GetByGuestId(Guid guestId);
+    Task<List<Reservation>> GetReservationsByAccommodation(Guid accommodationId);
+    Task<List<Reservation>> GetDeletedByGuest(Guid guestId);
+    Task DeleteReservation(Guid requestId);
 }

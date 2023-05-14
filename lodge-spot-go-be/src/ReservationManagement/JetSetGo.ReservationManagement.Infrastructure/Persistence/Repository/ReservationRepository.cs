@@ -2,6 +2,7 @@
 using JetSetGo.ReservationManagement.Application.Common.Persistence;
 using JetSetGo.ReservationManagement.Application.SearchReservations;
 using JetSetGo.ReservationManagement.Domain.Reservation;
+using JetSetGo.ReservationManagement.Domain.Reservation.Enums;
 using JetSetGo.ReservationManagement.Infrastructure.Persistence.Settings;
 using Microsoft.Extensions.Options;
 namespace JetSetGo.ReservationManagement.Infrastructure.Persistence.Repository;
@@ -62,4 +63,23 @@ public class ReservationRepository : IReservationRepository
             x.GuestId == guestId
             && x.Deleted == false)
             .ToListAsync();
+
+    public async Task<List<Reservation>> GetReservationsByAccommodation(Guid accommodationId)=>
+        await _reservationCollection.Find(x =>
+                x.AccommodationId == accommodationId
+                && x.ReservationStatus == ReservationStatus.Waiting)
+            .ToListAsync();
+
+    public async Task<List<Reservation>> GetDeletedByGuest(Guid guestId)=>
+        await _reservationCollection.Find(x =>
+                x.GuestId == guestId
+                && x.Deleted == true)
+            .ToListAsync();
+
+    public async Task DeleteReservation(Guid requestId)
+    {
+        var filter = Builders<Reservation>.Filter.Eq(r => r.Id, requestId);
+        await _reservationCollection.DeleteOneAsync(filter);
+    }
+        
 }

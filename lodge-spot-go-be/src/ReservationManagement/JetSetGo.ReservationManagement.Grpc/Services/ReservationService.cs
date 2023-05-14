@@ -7,6 +7,7 @@ using JetSetGo.ReservationManagement.Application.UpdateReservationStatus;
 using JetSetGo.ReservationManagement.Domain.Reservation;
 using JetSetGo.ReservationManagement.Domain.Reservation.Enums;
 using JetSetGo.ReservationManagement.Domain.Reservation.ValueObjects;
+using JetSetGo.ReservationManagement.Grpc.Clients;
 using JetSetGo.ReservationManagement.Grpc.Mapping.MapToGrpcResponse;
 using MediatR;
 
@@ -21,14 +22,16 @@ public class ReservationService : ReservationApp.ReservationAppBase
     private readonly IMapToGrpcResponse _mapToGrpcResponse;
     private readonly IMapper _mapper;
     private readonly ISender _sender;
+    private readonly IGetAccommodationClient _accommodationClient;
 
-    public ReservationService(IReservationRepository reservationRepository, ILogger<ReservationService> logger, IMapper mapper, ISender sender, IMapToGrpcResponse mapToGrpcResponse)
+    public ReservationService(IReservationRepository reservationRepository, ILogger<ReservationService> logger, IMapper mapper, ISender sender, IMapToGrpcResponse mapToGrpcResponse, IGetAccommodationClient accommodationClient)
     {
         _logger = logger;
         _reservationRepository = reservationRepository;
         _mapper = mapper;
         _sender = sender;
         _mapToGrpcResponse = mapToGrpcResponse;
+        _accommodationClient = accommodationClient;
     }
 
     public override async Task<GetReservationListResponse> GetReservationList(GetReservationListRequest request, ServerCallContext context)
@@ -58,6 +61,13 @@ public class ReservationService : ReservationApp.ReservationAppBase
             NumberOfGuests = request.Reservation.NumberOfGuests,
             GuestId = Guid.Parse(request.Reservation.GuestId)
         };
+        var accommodationRequest = new GetAccommodationRequest
+        {
+            Id = request.Reservation.AccommodationId
+        };
+        var accommodationResponse = _accommodationClient.GetAccommodation(accommodationRequest);
+        if (accommodationResponse.Accommodation.AutomaticConfirmation)
+            reservation.ReservationStatus = ReservationStatus.Confirmed;
         _reservationRepository.CreateAsync(reservation);
         return Task.FromResult(new CreateReservationResponse
         {
@@ -96,5 +106,28 @@ public class ReservationService : ReservationApp.ReservationAppBase
         var response = await _sender.Send(query);
         var result = _mapToGrpcResponse.MapGetByGuestIdToGrpcResponse(response);
         return await result;
+    }
+
+    public override async Task<GetReservationByAccommodationResponse> GetReservationsByAccommodationId(GetReservationByAccommodationRequest request, ServerCallContext context)
+    {
+        var reservations = await _reservationRepository.GetReservationsByAccommodation(Guid.Parse(request.AccommodationId));
+        var result = _mapToGrpcResponse.MapGetByAccommodationToGrpcResponse(reservations);
+        return await result;
+    }
+
+    public override async Task<GetDeletedReservationsByGuestResponse> GetDeletedReservationsByGuestId(GetDeletedReservationsByGuestRequest request, ServerCallContext context)
+    {
+        var reservations = await _reservationRepository.GetDeletedByGuest(Guid.Parse(request.GuestId));
+        return  _mapToGrpcResponse.MapDeletedCountToGrpcResponse(reservations);
+        
+    }
+
+    public override async Task<DeleteReservationResponse> DeleteReservation(DeleteReservationRequest request, ServerCallContext context)
+    {
+        await _reservationRepository.DeleteReservation(Guid.Parse(request.Id));
+        return new DeleteReservationResponse
+        {
+            Success = true
+        };
     }
 }

@@ -110,4 +110,13 @@ export class ReservationComponent implements OnInit{
     console.log(dateSent)
     return Math.floor(( Date.UTC(dateSent.getFullYear(), dateSent.getMonth(), dateSent.getDate()) - Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()) ) /(1000 * 60 * 60 * 24));
   }
+
+  onDelete(reservation: IReservation ) {
+    this.reservationClient.deleteReservation(reservation.id!).subscribe({
+      next: _ =>{
+        const filter = this.reservedAccommodations.filter(r => r.reservation?.id !== reservation.id)
+        this.reservedAccommodations = [...filter]
+      }
+    })
+  }
 }

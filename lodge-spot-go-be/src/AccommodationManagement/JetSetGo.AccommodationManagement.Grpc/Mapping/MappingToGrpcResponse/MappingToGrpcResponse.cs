@@ -29,4 +29,12 @@ public class MappingToGrpcResponse : IMappingToGrpcResponse
         };
         return Task.FromResult(response);
     }
+
+    public Task<GetAccommodationsByHostResponse> MapAccommodationsToGrpcResponse(List<Accommodation> list)
+    {
+        var response = new GetAccommodationsByHostResponse();
+        var responseList = list.Select(accommodation => _mapper.Map<AccommodationDto>(accommodation)).ToList();
+        responseList.ForEach(dto => response.Accommodations.Add(dto));
+        return Task.FromResult(response);
+    }
 }

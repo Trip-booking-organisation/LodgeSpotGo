@@ -32,6 +32,8 @@ message AccommodationDto {
   int32 min_guests = 6;
   repeated string photos = 7;
   repeated SpecialPriceDto specialPrices = 8;
+  string hostId = 9;
+  bool automaticConfirmation = 10;
 }
 message AccommodationResponse {
   string id = 1;
@@ -40,6 +42,7 @@ message AccommodationResponse {
   repeated string amenities = 4;
   int32 max_guests = 5;
   int32 min_guests = 6;
+  string hostId = 7;
 }
 message GetAccommodationListRequest {}
 
@@ -57,5 +60,7 @@ message SearchRequest{
   string city = 3;
 }
 message GetAccommodationRequest {string id = 1;}
-
 message GetAccommodationResponse {AccommodationDto accommodation = 1;}
+
+message GetAccommodationsByHostRequest {string hostId = 1;}
+message GetAccommodationsByHostResponse {repeated AccommodationDto accommodations = 1;}

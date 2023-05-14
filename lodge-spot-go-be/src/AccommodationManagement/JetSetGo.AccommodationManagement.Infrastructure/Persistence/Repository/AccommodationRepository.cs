@@ -40,4 +40,9 @@ public class AccommodationRepository: IAccommodationRepository
            && x.MaxGuests >= request.NumberOfGuests
            && x.MinGuests <= request.NumberOfGuests)
             .ToListAsync();
+
+    public async Task<List<Accommodation>> GetByHost(Guid hostId) =>
+        await _accommodationCollection.Find(x =>
+                x.HostId == hostId)
+            .ToListAsync();
 }

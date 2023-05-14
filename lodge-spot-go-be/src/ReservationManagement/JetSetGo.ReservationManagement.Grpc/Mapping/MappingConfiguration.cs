@@ -29,7 +29,10 @@ public class MappingConfiguration:Profile
                     opt.MapFrom(src => src.To.ToTimestamp()));;
         CreateMap<Reservation, ReadReservationDto>().ForMember(dest => dest.DateRange,
             opt =>
-                opt.MapFrom(src => src.DateRange));
+                opt.MapFrom(src => src.DateRange))
+            .ForMember(dest => dest.Status,
+                opt => 
+                    opt.MapFrom(src => MapEnumToString(src.ReservationStatus)));
         CreateMap<ReservationSearchRequest, SearchReservationsQuery>();
         CreateMap<SearchReservationResponse, ReadReservationDto>()
             .ForMember(dest => dest.DateRange,

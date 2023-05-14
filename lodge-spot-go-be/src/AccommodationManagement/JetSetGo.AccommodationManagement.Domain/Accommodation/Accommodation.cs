@@ -12,6 +12,8 @@ public class Accommodation
     public List<AccommodationPhoto> Photos { get; set; } = null!;
     public int MaxGuests { get; set; }
     public int MinGuests { get; set; }
+    public Guid HostId { get; set; }
+    public bool AutomaticConfirmation { get; set; }
     
     public List<SpecalPrice> SpecalPrices { get; set; }
 }
