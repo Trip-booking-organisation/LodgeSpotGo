@@ -1,0 +1,43 @@
+<div class="window">
+  <div class="list">
+    <div class="accomodation" *ngFor="let acc of yourAccomodations">
+      <div class="card">
+
+        <div class="field">
+          <div class="filed-info"> Name:</div>
+          <div class="value">
+            {{acc.name}}
+          </div>
+        </div>
+        <div class="field">
+          <div class="field-info"> Address:</div>
+          <div class="value">
+            {{acc.address!.country}}
+            {{acc.address!.city}}
+            {{acc.address!.street}}
+          </div>
+
+        </div>
+        <div  *ngFor="let am of acc.amenities">
+          <div class="field">
+            <div class="filed-info"> Included:</div>
+            <div class="value">{{am}}</div>
+          </div>
+        </div>
+        <div  *ngFor="let specialPrice of acc.specialPrices">
+
+          <div class="field">
+            <div class="filed-info"> Special price:</div>
+            <div class="field-value">
+              <div class="value">from: {{specialPrice.dateRange!.from | date:'yyyy-MM-dd'}}</div>
+              <div class="value">to:{{specialPrice.dateRange!.to | date:'yyyy-MM-dd'}}</div>
+              <div class="value">{{specialPrice.price}}$</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
