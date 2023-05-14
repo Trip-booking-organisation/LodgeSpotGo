@@ -5,10 +5,13 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["src/AccommodationManagement/JetSetGo.AccommodationManagement.Grpc/JetSetGo.AccommodationManagement.Grpc.csproj", "src/AccommodationManagement/JetSetGo.AccommodationManagement.Grpc/"]
-RUN dotnet restore "src/AccommodationManagement/JetSetGo.AccommodationManagement.Grpc/JetSetGo.AccommodationManagement.Grpc.csproj"
+COPY ["JetSetGo.AccommodationManagement.Grpc/JetSetGo.AccommodationManagement.Grpc.csproj", "JetSetGo.AccommodationManagement.Grpc/"]
+COPY ["JetSetGo.AccommodationManagement.Domain/JetSetGo.AccommodationManagement.Domain.csproj", "JetSetGo.AccommodationManagement.Domain/"]
+COPY ["JetSetGo.AccommodationManagement.Application/JetSetGo.AccommodationManagement.Application.csproj", "JetSetGo.AccommodationManagement.Application/"]
+COPY ["JetSetGo.AccommodationManagement.Infrastructure/JetSetGo.AccommodationManagement.Infrastructure.csproj", "JetSetGo.AccommodationManagement.Infrastructure/"]
+RUN dotnet restore "JetSetGo.AccommodationManagement.Grpc/JetSetGo.AccommodationManagement.Grpc.csproj"
 COPY . .
-WORKDIR "/src/src/AccommodationManagement/JetSetGo.AccommodationManagement.Grpc"
+WORKDIR "/src/JetSetGo.AccommodationManagement.Grpc"
 RUN dotnet build "JetSetGo.AccommodationManagement.Grpc.csproj" -c Release -o /app/build
 
 FROM build AS publish
@@ -18,3 +21,4 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "JetSetGo.AccommodationManagement.Grpc.dll"]
+

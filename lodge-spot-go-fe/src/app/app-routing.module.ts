@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {AppComponent} from "./app.component";
 import {HomePageComponent} from "./pages/home/home.page/home.page.component";
 import {AccommodationCreateComponent} from "./pages/accommodation-create/accommodation-create/accommodation-create.component"
+import {ReservationComponent} from "./pages/reservation/reservation-guest/reservation.component";
+import {ReservationModule} from "./pages/reservation/reservation.module";
 import {
   HostsAccomodationsComponent
 } from "./pages/hosts-accomodations/hosts-accomodations/hosts-accomodations.component";
@@ -10,11 +11,15 @@ import {
 const routes: Routes = [
   {path: '', component: HomePageComponent},
   {path: 'create-accomodation', component: AccommodationCreateComponent},
-  {path:'hosts-accommodations', component:HostsAccomodationsComponent}
+  {path:'hosts-accommodations', component:HostsAccomodationsComponent},
+  {path: 'reservations', component: ReservationComponent}
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [
+    RouterModule.forRoot(routes),
+    ReservationModule
+  ],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

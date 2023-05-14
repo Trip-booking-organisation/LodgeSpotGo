@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AccommodationResponse} from "../../../shered/model/accommodationResponse";
-import {AccommodationService} from "../../../services/accommodationService";
+import {AccommodationService} from "../../../common/services/accommodationService";
 
 @Component({
   selector: 'app-hosts-accomodations',

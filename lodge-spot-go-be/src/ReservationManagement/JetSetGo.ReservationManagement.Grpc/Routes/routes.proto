@@ -29,4 +29,9 @@ service ReservationApp{
       body: "reservation"
     };
   }
+  rpc GetReservationsByGuestId(GetReservationsByGuestIdRequest) returns(GetReservationsByGuestIdResponse){
+    option (google.api.http)={
+      get: "/api/v1/reservations/{guestId}"
+    };
+  }
 }

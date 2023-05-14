@@ -29,5 +29,6 @@ public class MappingConfiguration : Profile
         CreateMap<AccommodationPhoto, PhotoDto>();
         CreateMap<SearchRequest, SearchAccommodationQuery>();
         CreateMap<SearchAccommodationResponse, AccommodationDto>();
+        CreateMap<Accommodation, GetAccommodationResponse>();
     }
 }

@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using Google.Protobuf.WellKnownTypes;
 using JetSetGo.ReservationManagement.Application.CancelReservation;
+using JetSetGo.ReservationManagement.Application.GetReservationsByGuestId;
 using JetSetGo.ReservationManagement.Application.SearchReservations;
 using JetSetGo.ReservationManagement.Application.UpdateReservationStatus;
 using JetSetGo.ReservationManagement.Domain.Reservation;
+using JetSetGo.ReservationManagement.Domain.Reservation.Enums;
 using JetSetGo.ReservationManagement.Domain.Reservation.ValueObjects;
 using ZstdSharp;
 
@@ -13,26 +15,50 @@ public class MappingConfiguration:Profile
 {
     public MappingConfiguration()
     {
-        CreateMap<Reservation, CreateReservationDto>().ForMember(dest => dest.DateRange,
+        CreateMap<Reservation, CreateReservationDto>()
+            .ForMember(dest => dest.DateRange,
             opt =>
                 opt.MapFrom(src => src.DateRange));
 
         CreateMap<DateRange, DateRangeDto>()
             .ForMember(dest => dest.From,
-                opt => opt.MapFrom(src => src.From.ToTimestamp()))
+                opt =>
+                    opt.MapFrom(src => src.From.ToTimestamp()))
             .ForMember(dest => dest.To,
-                opt => opt.MapFrom(src => src.To.ToTimestamp()));;
+                opt => 
+                    opt.MapFrom(src => src.To.ToTimestamp()));;
         CreateMap<Reservation, ReadReservationDto>().ForMember(dest => dest.DateRange,
             opt =>
                 opt.MapFrom(src => src.DateRange));
         CreateMap<ReservationSearchRequest, SearchReservationsQuery>();
         CreateMap<SearchReservationResponse, ReadReservationDto>()
             .ForMember(dest => dest.DateRange,
-            opt => opt.MapFrom(src => src.DateRange));
+            opt => 
+                opt.MapFrom(src => src.DateRange));
         CreateMap<CancelReservationRequest, CancelReservationCommand>();
         CreateMap<CancelReservationCommandResponse, CancelReservationResponse>();
         CreateMap<UpdateReservationStatus, UpdateReservationStatusCommand>();
         CreateMap<UpdateReservationStatusCommandResponse, UpdateReservationStatusResponse>();
+        CreateMap<GetReservationsByGuestIdRequest, GetReservationsByGuestIdQuery>()
+            .ForMember(dest => dest.GuestId, 
+                opt => 
+                    opt.MapFrom(src => Guid.Parse(src.GuestId)));
+        CreateMap<GetReservationsByGuestIdCommandResponse, ReadReservationDto>().ForMember(dest => dest.DateRange,
+            opt => 
+                opt.MapFrom(src => src.DateRange))
+            .ForMember(dest => dest.Status,
+                opt => 
+                    opt.MapFrom(src => MapEnumToString(src.ReservationStatus)));
+    }
+
+    public string MapEnumToString(ReservationStatus status)
+    {
+        return status switch
+        {
+            ReservationStatus.Confirmed =>"Confirmed"  ,
+            ReservationStatus.Refused =>"Refused",
+            _ => "Waiting"
+        };
     }
     
 }

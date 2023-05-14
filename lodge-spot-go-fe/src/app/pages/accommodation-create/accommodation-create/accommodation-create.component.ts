@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import {Accommodation} from "../../../shered/model/accommodation";
 import {Address} from "../../../shered/model/addres";
-import {AccommodationService} from "../../../services/accommodationService";
+
 import {animate} from "@angular/animations";
 import { Buffer } from 'buffer';
 import * as pako from 'pako';
+import {AccommodationService} from "../../../common/services/accommodationService";
 
 
 @Component({
