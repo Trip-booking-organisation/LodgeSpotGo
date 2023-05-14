@@ -59,6 +59,7 @@ public class ReservationRepository : IReservationRepository
 
     public async Task<List<Reservation>> GetByGuestId(Guid guestId) =>
         await _reservationCollection.Find(x =>
-            x.GuestId == guestId)
+            x.GuestId == guestId
+            && x.Deleted == false)
             .ToListAsync();
 }
