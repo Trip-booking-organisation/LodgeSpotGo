@@ -13,6 +13,7 @@ public class Accommodation
     public int MaxGuests { get; set; }
     public int MinGuests { get; set; }
     public Guid HostId { get; set; }
+    public bool AutomaticConfirmation { get; set; }
     
     public List<SpecalPrice> SpecalPrices { get; set; }
 }

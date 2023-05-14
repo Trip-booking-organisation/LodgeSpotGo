@@ -23,7 +23,7 @@ public class AccommodationService : AccommodationApp.AccommodationAppBase
         _mapper = mapper;
         _mappingToGrpcResponse = mappingToGrpcResponse;
     }
-    [Authorize(Roles = "guest,host")]
+    /*[Authorize(Roles = "guest,host")]*/
     public override async  Task<GetAccommodationListResponse> GetAccommodationList(GetAccommodationListRequest request, ServerCallContext context)
     {
         var list = new GetAccommodationListResponse();
@@ -34,7 +34,7 @@ public class AccommodationService : AccommodationApp.AccommodationAppBase
         responseList.ForEach(dto => list.Accommodations.Add(dto));
         return list;
     }
-    [Authorize(Roles = "host")]
+    /*[Authorize(Roles = "host")]*/
     public override Task<CreateAccommodationResponse> CreateAccommodation(CreateAccommodationRequest request, ServerCallContext context)
     {
         _logger.LogInformation(@"Request {request.Accommodation}",request.Accommodation);
@@ -65,7 +65,8 @@ public class AccommodationService : AccommodationApp.AccommodationAppBase
                         To = a.DateRange.To.ToDateTime()
                     }
                 }).ToList(),
-            HostId = Guid.Parse(request.Accommodation.HostId)
+            HostId = Guid.Parse(request.Accommodation.HostId),
+            AutomaticConfirmation = request.Accommodation.AutomaticConfirmation
             
         };
         _repository.CreateAsync(accommodation);
