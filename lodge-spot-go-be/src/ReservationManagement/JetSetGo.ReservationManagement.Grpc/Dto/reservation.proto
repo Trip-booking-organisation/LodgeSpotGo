@@ -13,6 +13,7 @@ message ReadReservationDto{
   DateRangeDto dateRange =3;
   string status = 4;
   int32 numberOfGuest = 5;
+  string guestId = 6;
 }
 
 message CreateReservationDto{
@@ -20,6 +21,7 @@ message CreateReservationDto{
   DateRangeDto dateRange =2;
   string status = 3;
   int32 numberOfGuests = 4;
+  string guestId = 5;
 }
 
 message GetReservationListRequest{}

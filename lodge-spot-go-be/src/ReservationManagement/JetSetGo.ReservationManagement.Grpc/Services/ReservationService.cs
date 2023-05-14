@@ -51,7 +51,8 @@ public class ReservationService : ReservationApp.ReservationAppBase
             },
             ReservationStatus = MapStringToEnum(request.Reservation.Status),
             Deleted = false,
-            NumberOfGuests = request.Reservation.NumberOfGuests
+            NumberOfGuests = request.Reservation.NumberOfGuests,
+            GuestId = Guid.Parse(request.Reservation.GuestId)
         };
         _reservationRepository.CreateAsync(reservation);
         return Task.FromResult(new CreateReservationResponse

@@ -11,6 +11,7 @@ public class Reservation
     public ReservationStatus ReservationStatus { get; set; }
     public bool Deleted { get; set; }
     public int NumberOfGuests { get; set; }
+    public Guid GuestId { get; set; }
 
     public bool IsOverlapping(DateRange dateRange)
     {
