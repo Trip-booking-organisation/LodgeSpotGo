@@ -12,9 +12,10 @@ import {initializeKeycloak} from "./core/keycloak/init-keycloak";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {CommonModule} from "@angular/common";
 import {HomeModule} from "./pages/home/home.module";
-//import { SearchAccomodationsComponentComponent } from './search-accomodations-component/search-accomodations-component.component';
+
 import {AccommodationCreateModule} from "./pages/accommodation-create/accommodation-create.module";
 import {MatInputModule} from "@angular/material/input";
+import {HostsAccomodationsModule} from "./pages/hosts-accomodations/hosts-accomodations.module";
 
 @NgModule({
   declarations: [
@@ -30,6 +31,8 @@ import {MatInputModule} from "@angular/material/input";
     BrowserAnimationsModule,
     CommonModule,
     HomeModule,
+    MatInputModule,
+    HostsAccomodationsModule,
     MatIconModule,
     AccommodationCreateModule,
   ],

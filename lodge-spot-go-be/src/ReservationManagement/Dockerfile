@@ -5,16 +5,20 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["src/ReservationManagement/JetSetGo.ReservationManagement.Api/JetSetGo.ReservationManagement.Api.csproj", "src/ReservationManagement/JetSetGo.ReservationManagement.Api/"]
-RUN dotnet restore "src/ReservationManagement/JetSetGo.ReservationManagement.Api/JetSetGo.ReservationManagement.Api.csproj"
+COPY ["JetSetGo.ReservationManagement.Grpc/JetSetGo.ReservationManagement.Grpc.csproj", "JetSetGo.ReservationManagement.Grpc/"]
+COPY ["JetSetGo.ReservationManagement.Domain/JetSetGo.ReservationManagement.Domain.csproj", "JetSetGo.ReservationManagement.Domain/"]
+COPY ["JetSetGo.ReservationManagement.Application/JetSetGo.ReservationManagement.Application.csproj", "JetSetGo.ReservationManagement.Application/"]
+COPY ["JetSetGo.ReservationManagement.Infrastructure/JetSetGo.ReservationManagement.Infrastructure.csproj", "JetSetGo.ReservationManagement.Infrastructure/"]
+RUN dotnet restore "JetSetGo.ReservationManagement.Grpc/JetSetGo.ReservationManagement.Grpc.csproj"
 COPY . .
-WORKDIR "/src/src/ReservationManagement/JetSetGo.ReservationManagement.Api"
-RUN dotnet build "JetSetGo.ReservationManagement.Api.csproj" -c Release -o /app/build
+WORKDIR "/src/JetSetGo.ReservationManagement.Grpc"
+RUN dotnet build "JetSetGo.ReservationManagement.Grpc.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "JetSetGo.ReservationManagement.Api.csproj" -c Release -o /app/publish
+RUN dotnet publish "JetSetGo.ReservationManagement.Grpc.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "JetSetGo.ReservationManagement.Api.dll"]
+ENTRYPOINT ["dotnet", "JetSetGo.ReservationManagement.Grpc.dll"]
+

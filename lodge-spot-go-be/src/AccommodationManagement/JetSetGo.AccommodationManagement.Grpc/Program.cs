@@ -5,6 +5,7 @@ using JetSetGo.AccommodationManagement.Infrastructure;
 using Keycloak.AuthServices.Authentication;
 using Keycloak.AuthServices.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +18,16 @@ var builder = WebApplication.CreateBuilder(args);
         .AddApplication()
         .AddInfrastructure(builder.Configuration)
         .AddPresentation(builder.Configuration);
+    builder.Services
+        .AddCors(options =>
+        {
+            options.AddPolicy("AllowOrigin",
+                b =>
+                    b.AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+            );
+        });
     builder.Services.AddAuthentication(options =>
     {
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -26,7 +37,14 @@ var builder = WebApplication.CreateBuilder(args);
     {
         o.Authority = builder.Configuration["Jwt:Authority"];
         o.Audience = builder.Configuration["Jwt:Audience"];
+        o.TokenValidationParameters = new TokenValidationParameters{
+            ValidateAudience = false,
+        };
         o.RequireHttpsMetadata = false;
+        o.TokenValidationParameters.ValidIssuers = new[]
+        {
+            builder.Configuration["Jwt:Authority"]
+        };
         o.Events = new JwtBearerEvents
         {
             OnAuthenticationFailed = c =>
@@ -44,16 +62,7 @@ var builder = WebApplication.CreateBuilder(args);
     });
     //builder.Services.AddKeycloakAuthentication(builder.Configuration, KeycloakAuthenticationOptions.Section);
     builder.Services.AddAuthorization();
-    builder.Services.AddKeycloakAuthorization(builder.Configuration, KeycloakAuthenticationOptions.Section);
-    builder.Services
-        .AddCors(options =>
-        {
-            options.AddPolicy("AllowOrigin",
-                b =>
-                    b.AllowAnyOrigin()
-                        .AllowAnyHeader()
-                        .AllowAnyMethod());
-        });
+    // builder.Services.AddKeycloakAuthorization(builder.Configuration, KeycloakAuthenticationOptions.Section);
     builder.Services.AddGrpcSwagger().AddSwaggerGen(c =>
     {
         c.SwaggerDoc("v1",new OpenApiInfo
@@ -93,6 +102,7 @@ var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 {
     app.UseRouting();
+    app.UseCors("AllowOrigin");
     app.UseSwagger().UseSwaggerUI(c =>
     {
         c.OAuthClientId(builder.Configuration["Jwt:ClientId"]);
@@ -106,9 +116,9 @@ var app = builder.Build();
     app.MapGrpcService<SearchAccommodationService>();
     app.UseAuthentication();
     app.UseAuthorization();
-    app.UseCors("AllowOrigin");
     app.MapGet("/",
         () =>
-            "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
+            "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, " +
+            "visit: https://go.microsoft.com/fwlink/?linkid=2086909");
     app.Run();
 }

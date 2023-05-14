@@ -6,10 +6,26 @@
         "GET",
         "POST",
         "PUT",
-        "DELETE",
-        "OPTIONS"
+        "DELETE"
       ],
       "DownstreamPathTemplate": "/api/v1/accommodations",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7132
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/accommodations/{everything}",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "DownstreamPathTemplate": "/api/v1/accommodations/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -59,8 +75,7 @@
         "GET",
         "POST",
         "PUT",
-        "DELETE",
-        "OPTIONS"
+        "DELETE"
       ],
       "DownstreamPathTemplate": "/api/v1/reservations/{id}",
       "DownstreamScheme": "https",

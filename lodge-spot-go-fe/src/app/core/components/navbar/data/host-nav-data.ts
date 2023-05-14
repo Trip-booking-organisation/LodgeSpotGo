@@ -4,8 +4,8 @@ export const hostNavData = [
     routerLink: ''
   },
   {
-    label: 'Flights',
-    routerLink: ''
+    label: 'Reservations',
+    routerLink: 'reservations-host'
   },
   {
     label: 'About',

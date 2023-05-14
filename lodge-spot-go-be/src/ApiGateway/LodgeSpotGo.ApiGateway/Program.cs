@@ -6,7 +6,7 @@ using Ocelot.Middleware;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAnyOrigin",
+    options.AddPolicy("CorsPolicy",
         b =>
         {
             b.AllowAnyOrigin()
@@ -22,7 +22,7 @@ builder.Services.AddOcelot(builder.Configuration);
 
 var app = builder.Build();
 app.UseHttpsRedirection();
-await app.UseOcelot();
-app.UseCors("AllowAnyOrigin");
+app.UseCors("CorsPolicy");
+app.UseOcelot().Wait();
 app.UseMiddleware<CorsMiddleware>();
 app.Run();
