@@ -4,6 +4,7 @@ using JetSetGo.AccommodationManagement.Application.Common.Persistence;
 using JetSetGo.AccommodationManagement.Domain.Accommodation;
 using JetSetGo.AccommodationManagement.Domain.Accommodation.Enum;
 using JetSetGo.AccommodationManagement.Domain.Accommodation.ValueObjects;
+using JetSetGo.AccommodationManagement.Grpc.Mapping.MappingToGrpcResponse;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 
@@ -13,13 +14,15 @@ public class AccommodationService : AccommodationApp.AccommodationAppBase
 {
     private readonly ILogger<AccommodationService> _logger;
     private readonly IAccommodationRepository _repository;
+    private readonly IMappingToGrpcResponse _mappingToGrpcResponse;
     private readonly IMapper _mapper;
 
-    public AccommodationService(ILogger<AccommodationService> logger, IAccommodationRepository repository, IMapper mapper)
+    public AccommodationService(ILogger<AccommodationService> logger, IAccommodationRepository repository, IMapper mapper, IMappingToGrpcResponse mappingToGrpcResponse)
     {
         _logger = logger;
         _repository = repository;
         _mapper = mapper;
+        _mappingToGrpcResponse = mappingToGrpcResponse;
     }
     /*[Authorize(Roles = "guest")]*/
     public override async  Task<GetAccommodationListResponse> GetAccommodationList(GetAccommodationListRequest request, ServerCallContext context)
@@ -76,7 +79,7 @@ public class AccommodationService : AccommodationApp.AccommodationAppBase
     {
         _logger.LogInformation(@"Request {}",request.Id);
         var accommodation = await _repository.GetAsync(Guid.Parse(request.Id));
-        var response = _mapper.Map<GetAccommodationResponse>(accommodation);
-        return response;
+        var response = _mappingToGrpcResponse.MapAccommodationToGrpcResponse(accommodation);
+        return await response;
     }
 }

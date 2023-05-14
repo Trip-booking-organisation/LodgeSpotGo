@@ -1,6 +1,6 @@
 <div class="container-main">
   <div class="home-content">
-    <div class="flight-card">
+    <div class="flight-card" *ngFor="let r of reservedAccommodations">
       <div class="content-flight">
         <div class="flight-details">
           <div class="flight-info">
@@ -10,10 +10,11 @@
           </div>
           <div class="flight-info">
             <div class="flight-time">
-              <p class="time">Name</p>
-              <p class="date">arrivalDate - departureDate</p>
-              <p class="date">Guests</p>
-              <p class="place">Street, City, Country</p>
+              <p class="time">{{r.accommodation?.name}}</p>
+              <p class="date">{{ r.reservation?.dateRange?.from | date:'dd/MM/yyyy' }} - {{ r.reservation?.dateRange?.to | date:'dd/MM/yyyy' }}</p>
+              <p class="date">Guests : <span> {{r.reservation?.numberOfGuest}}</span></p>
+              <p class="place">{{r.accommodation?.address?.street}}, {{r.accommodation?.address?.city}}, {{r.accommodation?.address?.country}}</p>
+              <p class="date">Status : <span> {{r.reservation?.status!}}</span></p>
             </div>
           </div>
         </div>
@@ -35,7 +36,7 @@
         <div class="class-price">
           <p>In total: <span>€</span></p>
         </div>
-        <button class="btn-delete-lg book"  >Cancel</button>
+        <button [disabled]="r.disabled" class="btn-delete-lg book" (click)="onCancel(r.reservation)" >Cancel</button>
       </div>
     </div>
 

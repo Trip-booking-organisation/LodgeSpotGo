@@ -5,6 +5,7 @@ using JetSetGo.ReservationManagement.Application.GetReservationsByGuestId;
 using JetSetGo.ReservationManagement.Application.SearchReservations;
 using JetSetGo.ReservationManagement.Application.UpdateReservationStatus;
 using JetSetGo.ReservationManagement.Domain.Reservation;
+using JetSetGo.ReservationManagement.Domain.Reservation.Enums;
 using JetSetGo.ReservationManagement.Domain.Reservation.ValueObjects;
 using ZstdSharp;
 
@@ -42,9 +43,22 @@ public class MappingConfiguration:Profile
             .ForMember(dest => dest.GuestId, 
                 opt => 
                     opt.MapFrom(src => Guid.Parse(src.GuestId)));
-        CreateMap<GetReservationsByGuestIdCommandResponse, ReadReservationDto>()  .ForMember(dest => dest.DateRange,
+        CreateMap<GetReservationsByGuestIdCommandResponse, ReadReservationDto>().ForMember(dest => dest.DateRange,
             opt => 
-                opt.MapFrom(src => src.DateRange));
+                opt.MapFrom(src => src.DateRange))
+            .ForMember(dest => dest.Status,
+                opt => 
+                    opt.MapFrom(src => MapEnumToString(src.ReservationStatus)));
+    }
+
+    public string MapEnumToString(ReservationStatus status)
+    {
+        return status switch
+        {
+            ReservationStatus.Confirmed =>"Confirmed"  ,
+            ReservationStatus.Refused =>"Refused",
+            _ => "Waiting"
+        };
     }
     
 }

@@ -58,4 +58,4 @@ message SearchRequest{
 }
 message GetAccommodationRequest {string id = 1;}
 
-message GetAccommodationResponse {AccommodationResponse accommodation = 1;}
+message GetAccommodationResponse {AccommodationDto accommodation = 1;}
