@@ -10,7 +10,7 @@ import {
 
 const routes: Routes = [
   {path: '', component: HomePageComponent},
-  {path: 'create-accomodation', component: AccommodationCreateComponent},
+  {path: 'create-accommodation', component: AccommodationCreateComponent},
   {path:'hosts-accommodations', component:HostsAccomodationsComponent},
   {path: 'reservations', component: ReservationComponent}
 ];

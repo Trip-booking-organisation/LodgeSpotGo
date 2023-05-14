@@ -5,11 +5,10 @@ namespace JetSetGo.UsersManagement.Grpc;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddPresentation(this IServiceCollection services
-        ,ConfigurationManager builder)
+    public static void AddPresentation(this IServiceCollection services
+        , ConfigurationManager builder)
     {
         services.Configure<KeycloakAdmin>(builder.GetSection(KeycloakAdmin.SectionName));
         services.AddScoped<MessageLogger>();
-        return services;
     }
 }

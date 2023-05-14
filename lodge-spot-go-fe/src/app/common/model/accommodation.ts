@@ -1,5 +1,6 @@
 import {Address} from "./addres";
 import {SpecialPrice} from "./specialPrice";
+import {Photo} from "./Photo";
 
 export interface Accommodation {
   name?: string;
