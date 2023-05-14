@@ -7,17 +7,23 @@
         </div>
         <div class="texts">
           <h4>Location</h4>
-          <mat-form-field>
-            <input type="text" placeholder="Where you want to go?" matInput
-                   [matAutocomplete]="autoFrom">
-            <mat-autocomplete #autoFrom="matAutocomplete">
-              <mat-option *ngFor="let accomodation of filteredLocation | async">
-              [value]="accomodation.street  + ' , ' + accomodation.city + ', ' + accomodation.country"
-              {{ accomodation.street }} {{ accomodation.city }}, {{ accomodation.country }}
-              </mat-option>
+<!--          <mat-form-field>-->
+<!--            <input type="text" placeholder="Where you want to go?" >-->
 
-            </mat-autocomplete>
+<!--              <input type = "text"[value]= "accomodation.city + ',' + accomodation.country" [(ngModel)]="cityCountry">-->
+
+<!--              {{ accomodation.city }}, {{ accomodation.country }}-->
+
+<!--          </mat-form-field>-->
+          <mat-form-field>
+            <input matInput type="text" placeholder="City" [(ngModel)]="city">
+
           </mat-form-field>
+
+          <mat-form-field>
+            <input matInput type="text" placeholder="Country" [(ngModel)]="country">
+          </mat-form-field>
+
         </div>
       </div>
        </div>
@@ -28,36 +34,34 @@
         </div>
         <div class="texts">
           <h4>Number of guests</h4>
-          <mat-form-field>
-    <input type="text" placeholder="Enter the number of guests" matInput
-           [matAutocomplete]="autoGuests">
-    <mat-autocomplete #autoGuests="matAutocomplete">
-      <mat-option *ngFor="let number of filteredGuests | async" [value]="number">
-        {{ number }}
-      </mat-option>
-    </mat-autocomplete>
-  </mat-form-field>
+<!--           [matAutocomplete]="autoGuests">-->
+<!--    <mat-autocomplete #autoGuests="matAutocomplete">-->
+
+            <mat-form-field class="example-full-width">
+              <mat-label>Insert number of guests</mat-label>
+              <input type="number" min="0" matInput placeholder="Insert number of guests" value="1" [(ngModel)]="numberOfGuests">
+            </mat-form-field>
+<!--    </mat-autocomplete>-->
         </div>
       </div>
-      <div class="single-input flex">
-        <div class="icon-div">
-          <mat-icon>calendar_today</mat-icon>
-        </div>
-        <div class="texts">
-          <h4>Start date</h4>
-          <mat-form-field appearance="fill">
-            <mat-label>Enter a date range</mat-label>
-            <mat-date-range-input  [rangePicker]="picker">
-              <input [(ngModel)] ="startDate" matStartDate placeholder="Start date">
-              <input [(ngModel)] ="endDate" matEndDate  placeholder="End date">
-            </mat-date-range-input>
 
-            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-date-range-picker #picker></mat-date-range-picker>
+      <div class="date">
+        <h4>Date range</h4>
+        <mat-form-field>
+          <mat-label>Start Date</mat-label>
+          <input matInput [matDatepicker]="startDatePicker" placeholder="Choose a start date" [(ngModel)]="startDate">
+          <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+          <mat-datepicker #startDatePicker></mat-datepicker>
+        </mat-form-field>
 
-          </mat-form-field>
+        <mat-form-field>
+          <mat-label>End Date</mat-label>
+          <input matInput [matDatepicker]="endDatePicker" placeholder="Choose an end date" [(ngModel)]="endDate">
+          <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+          <mat-datepicker #endDatePicker></mat-datepicker>
+        </mat-form-field>
 
-        </div>
+
 
       </div>
       <button (click)="searchAccomodations()" class="btn btn-block flex">
