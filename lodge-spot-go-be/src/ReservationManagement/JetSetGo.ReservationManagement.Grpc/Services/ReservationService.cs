@@ -2,10 +2,12 @@
 using Grpc.Core;
 using JetSetGo.ReservationManagement.Application.CancelReservation;
 using JetSetGo.ReservationManagement.Application.Common.Persistence;
+using JetSetGo.ReservationManagement.Application.GetReservationsByGuestId;
 using JetSetGo.ReservationManagement.Application.UpdateReservationStatus;
 using JetSetGo.ReservationManagement.Domain.Reservation;
 using JetSetGo.ReservationManagement.Domain.Reservation.Enums;
 using JetSetGo.ReservationManagement.Domain.Reservation.ValueObjects;
+using JetSetGo.ReservationManagement.Grpc.Mapping.MapToGrpcResponse;
 using MediatR;
 
 namespace JetSetGo.ReservationManagement.Grpc.Services;
@@ -16,15 +18,17 @@ public class ReservationService : ReservationApp.ReservationAppBase
 
     private readonly ILogger<ReservationService> _logger;
     private readonly IReservationRepository _reservationRepository;
+    private readonly IMapToGrpcResponse _mapToGrpcResponse;
     private readonly IMapper _mapper;
     private readonly ISender _sender;
 
-    public ReservationService(IReservationRepository reservationRepository, ILogger<ReservationService> logger, IMapper mapper, ISender sender)
+    public ReservationService(IReservationRepository reservationRepository, ILogger<ReservationService> logger, IMapper mapper, ISender sender, IMapToGrpcResponse mapToGrpcResponse)
     {
         _logger = logger;
         _reservationRepository = reservationRepository;
         _mapper = mapper;
         _sender = sender;
+        _mapToGrpcResponse = mapToGrpcResponse;
     }
 
     public override async Task<GetReservationListResponse> GetReservationList(GetReservationListRequest request, ServerCallContext context)
@@ -84,5 +88,13 @@ public class ReservationService : ReservationApp.ReservationAppBase
         var command = _mapper.Map<UpdateReservationStatusCommand>(request.Reservation);
         var result = await _sender.Send(command);
         return _mapper.Map<UpdateReservationStatusResponse>(result);
+    }
+
+    public override async Task<GetReservationsByGuestIdResponse> GetReservationsByGuestId(GetReservationsByGuestIdRequest request, ServerCallContext context)
+    {
+        var query = _mapper.Map<GetReservationsByGuestIdQuery>(request);
+        var response = await _sender.Send(query);
+        var result = _mapToGrpcResponse.MapGetByGuestIdToGrpcResponse(response);
+        return await result;
     }
 }

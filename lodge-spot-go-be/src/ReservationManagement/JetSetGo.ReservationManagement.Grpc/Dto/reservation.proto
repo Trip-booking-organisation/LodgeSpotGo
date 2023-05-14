@@ -18,7 +18,7 @@ message ReadReservationDto{
 
 message CreateReservationDto{
   string accommodationId = 1;
-  DateRangeDto dateRange =2;
+  DateRangeDto dateRange = 2;
   string status = 3;
   int32 numberOfGuests = 4;
   string guestId = 5;
@@ -46,3 +46,5 @@ message UpdateReservationStatus{
 }
 message UpdateReservationStatusRequest{ UpdateReservationStatus reservation = 1;}
 message UpdateReservationStatusResponse{ bool success = 1;}
+message GetReservationsByGuestIdRequest { string guestId= 1;}
+message GetReservationsByGuestIdResponse { repeated ReadReservationDto reservations = 1;}
