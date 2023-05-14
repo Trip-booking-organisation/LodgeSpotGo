@@ -5,6 +5,7 @@ using JetSetGo.AccommodationManagement.Infrastructure;
 using Keycloak.AuthServices.Authentication;
 using Keycloak.AuthServices.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -36,7 +37,14 @@ var builder = WebApplication.CreateBuilder(args);
     {
         o.Authority = builder.Configuration["Jwt:Authority"];
         o.Audience = builder.Configuration["Jwt:Audience"];
+        o.TokenValidationParameters = new TokenValidationParameters{
+            ValidateAudience = false,
+        };
         o.RequireHttpsMetadata = false;
+        o.TokenValidationParameters.ValidIssuers = new[]
+        {
+            builder.Configuration["Jwt:Authority"]
+        };
         o.Events = new JwtBearerEvents
         {
             OnAuthenticationFailed = c =>
@@ -104,7 +112,7 @@ var app = builder.Build();
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "AccommodationManagementMicroservice v1");
     });
     app.MapGrpcService<GreeterService>().RequireAuthorization();
-    app.MapGrpcService<AccommodationService>().RequireAuthorization();
+    app.MapGrpcService<AccommodationService>();
     app.MapGrpcService<SearchAccommodationService>();
     app.UseAuthentication();
     app.UseAuthorization();

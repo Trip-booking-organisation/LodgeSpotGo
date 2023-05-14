@@ -5,16 +5,20 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["src/SearchAndFilter/JetSetGo.SearchAndFilter.Api/JetSetGo.SearchAndFilter.Api.csproj", "src/SearchAndFilter/JetSetGo.SearchAndFilter.Api/"]
-RUN dotnet restore "src/SearchAndFilter/JetSetGo.SearchAndFilter.Api/JetSetGo.SearchAndFilter.Api.csproj"
+COPY ["LodgeSpotGo.SearchAndFilter.Grpc/LodgeSpotGo.SearchAndFilter.Grpc.csproj", "LodgeSpotGo.SearchAndFilter.Grpc/"]
+COPY ["JetSetGo.SearchAndFilter.Domain/JetSetGo.SearchAndFilter.Domain.csproj", "JetSetGo.SearchAndFilter.Domain/"]
+COPY ["JetSetGo.SearchAndFilter.Application/JetSetGo.SearchAndFilter.Application.csproj", "JetSetGo.SearchAndFilter.Application/"]
+COPY ["JetSetGo.SearchAndFilter.Infrastructure/JetSetGo.SearchAndFilter.Infrastructure.csproj", "JetSetGo.SearchAndFilter.Infrastructure/"]
+RUN dotnet restore "LodgeSpotGo.SearchAndFilter.Grpc/LodgeSpotGo.SearchAndFilter.Grpc.csproj"
 COPY . .
-WORKDIR "/src/src/SearchAndFilter/JetSetGo.SearchAndFilter.Api"
-RUN dotnet build "JetSetGo.SearchAndFilter.Api.csproj" -c Release -o /app/build
+WORKDIR "/src/LodgeSpotGo.SearchAndFilter.Grpc"
+RUN dotnet build "LodgeSpotGo.SearchAndFilter.Grpc.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "JetSetGo.SearchAndFilter.Api.csproj" -c Release -o /app/publish
+RUN dotnet publish "LodgeSpotGo.SearchAndFilter.Grpc.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "JetSetGo.SearchAndFilter.Api.dll"]
+ENTRYPOINT ["dotnet", "LodgeSpotGo.SearchAndFilter.Grpc.dll"]
+

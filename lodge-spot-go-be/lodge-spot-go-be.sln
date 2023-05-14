@@ -36,7 +36,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JetSetGo.AccommodationManag
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JetSetGo.AccommodationManagement.Application", "src\AccommodationManagement\JetSetGo.AccommodationManagement.Application\JetSetGo.AccommodationManagement.Application.csproj", "{901393E4-7893-4DF6-A9E0-F670F8524B15}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JetSetGo.UsersManagement.Api", "src\UsersManagement\JetSetGo.UsersManagement.Api\JetSetGo.UsersManagement.Api.csproj", "{5B0D2DA2-D181-4952-B511-1D77EFE2BFA1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JetSetGo.UsersManagement.Grpc", "src\UsersManagement\JetSetGo.UsersManagement.Grpc\JetSetGo.UsersManagement.Grpc.csproj", "{5B0D2DA2-D181-4952-B511-1D77EFE2BFA1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Api", "Api", "{F6971341-1949-44E7-AFA0-C118F2B83963}"
 EndProject
@@ -69,6 +69,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LodgeSpotGo.SearchAndFilter.Grpc", "src\SearchAndFilter\LodgeSpotGo.SearchAndFilter.Grpc\LodgeSpotGo.SearchAndFilter.Grpc.csproj", "{F7F5D7FF-48E6-4BEA-9A29-A9B1D5589828}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LodgeSpotGo.ApiGateway", "src\ApiGateway\LodgeSpotGo.ApiGateway\LodgeSpotGo.ApiGateway.csproj", "{A3574BFC-A078-42D1-A8BA-3DD6D0AFD2CF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notification", "Notification", "{11E2C91C-BC5F-44E6-A04F-9E1C34852047}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LodgeSpotGo.Notification.Grpc", "src\Notification\LodgeSpotGo.Notification.Grpc\LodgeSpotGo.Notification.Grpc.csproj", "{B22E688C-7535-4879-BB8E-CB9C08F620F6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -110,6 +114,8 @@ Global
 		{A76547B1-BA36-4F3F-AF76-2D68A697307D} = {3858F104-00ED-406C-9D72-19AB7FC9A5F9}
 		{F7F5D7FF-48E6-4BEA-9A29-A9B1D5589828} = {08E8B297-F82B-4294-8CE6-5488CB38ADB0}
 		{A3574BFC-A078-42D1-A8BA-3DD6D0AFD2CF} = {00F0B8DD-933B-492A-9ABE-D48FA02AF0D9}
+		{11E2C91C-BC5F-44E6-A04F-9E1C34852047} = {6DE85D47-A30E-4493-A64D-4D52637647DE}
+		{B22E688C-7535-4879-BB8E-CB9C08F620F6} = {11E2C91C-BC5F-44E6-A04F-9E1C34852047}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{D4518123-ABBE-4664-8034-9C557340C719}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -184,5 +190,9 @@ Global
 		{A3574BFC-A078-42D1-A8BA-3DD6D0AFD2CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A3574BFC-A078-42D1-A8BA-3DD6D0AFD2CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A3574BFC-A078-42D1-A8BA-3DD6D0AFD2CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B22E688C-7535-4879-BB8E-CB9C08F620F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B22E688C-7535-4879-BB8E-CB9C08F620F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B22E688C-7535-4879-BB8E-CB9C08F620F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B22E688C-7535-4879-BB8E-CB9C08F620F6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

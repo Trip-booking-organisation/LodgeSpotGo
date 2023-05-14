@@ -1,25 +1,17 @@
-using LodgeSpotGo.SearchAndFilter.Grpc;
-using LodgeSpotGo.SearchAndFilter.Grpc.Services;
+using JetSetGo.UsersManagement.Grpc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddGrpc().AddJsonTranscoding();
-builder.Services.AddPresentation();
 builder.Configuration
     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
     .AddEnvironmentVariables();
-builder.Services
-    .AddCors(options =>
-    {
-        options.AddPolicy("AllowOrigin",
-            b =>
-                b.AllowAnyOrigin()
-                    .AllowAnyHeader()
-                    .AllowAnyMethod()
-        );
-    });
+builder.Services.AddPresentation(builder.Configuration);
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -54,30 +46,20 @@ builder.Services.AddAuthentication(options =>
 });
 //builder.Services.AddKeycloakAuthentication(builder.Configuration, KeycloakAuthenticationOptions.Section);
 builder.Services.AddAuthorization();
-builder.Services.AddGrpcSwagger().AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1",new OpenApiInfo
-    {
-        Title = "Search And Filter Microservice",
-        Version= "v1",
-        Description = "Search and Filter Microservice"
-    });
-});
 
 var app = builder.Build();
-app.UseRouting();
-app.UseCors("AllowOrigin");
+
 // Configure the HTTP request pipeline.
-app.MapGrpcService<GreeterService>();
-app.MapGrpcService<SearchAndFilterService>();
-app.UseSwagger().UseSwaggerUI(c =>
+if (app.Environment.IsDevelopment())
 {
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "SearchAndFilterMicroservice v1");
-});
-app.UseAuthentication();
-app.UseAuthorization();
-app.MapGet("/",
-    () =>
-        "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.UseHttpsRedirection();
+
+//app.UseAuthorization();
+
+app.MapEndpoints();
 
 app.Run();
