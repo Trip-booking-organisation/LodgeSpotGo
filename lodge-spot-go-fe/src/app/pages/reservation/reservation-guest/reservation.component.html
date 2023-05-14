@@ -36,7 +36,8 @@
         <div class="class-price">
           <p>In total: <span>€</span></p>
         </div>
-        <button [disabled]="r.disabled" class="btn-delete-lg book" (click)="onCancel(r.reservation)" >Cancel</button>
+        <button *ngIf="r.reservation?.status === 'Confirmed'" [disabled]="r.disabled" class="btn-delete-lg book" (click)="onCancel(r.reservation)" >Cancel</button>
+        <button *ngIf="r.reservation?.status === 'Waiting'" class="btn-delete-lg book" (click)="onDelete(r.reservation!)" >Delete</button>
       </div>
     </div>
 

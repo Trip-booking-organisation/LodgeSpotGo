@@ -55,3 +55,6 @@ message GetReservationByAccommodationResponse{repeated ReadReservationDto reserv
 
 message GetDeletedReservationsByGuestRequest{string guestId = 1;}
 message GetDeletedReservationsByGuestResponse {int32 count = 1;}
+
+message DeleteReservationRequest {string id = 1;}
+message DeleteReservationResponse {bool success = 1;}

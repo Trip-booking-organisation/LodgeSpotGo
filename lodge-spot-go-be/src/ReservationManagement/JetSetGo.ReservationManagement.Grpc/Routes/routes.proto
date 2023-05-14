@@ -44,4 +44,9 @@ service ReservationApp{
       get: "/api/v1/reservations/deleted/{guestId}"
     };
   }
+  rpc DeleteReservation(DeleteReservationRequest) returns(DeleteReservationResponse){
+    option(google.api.http) = {
+      delete : "/api/v1/reservations/delete/{id}",
+    };
+  }
 }
