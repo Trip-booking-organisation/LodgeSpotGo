@@ -26,7 +26,14 @@ export class AuthService {
           this.token = token;
           this.token$.next(this.token);
           let decoded: any = jwtDecode(token);
-          this.user = decoded.user;
+          console.log(decoded)
+          this.user = {
+            id : decoded.sub,
+            email : decoded.email,
+            name : decoded.name,
+            surname : decoded.given_name,
+            roles: decoded.roles
+          }
           this.user$.next(this.user);
         });
 

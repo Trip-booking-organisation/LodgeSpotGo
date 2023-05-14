@@ -41,7 +41,7 @@ var builder = WebApplication.CreateBuilder(args);
     });
     //builder.Services.AddKeycloakAuthentication(builder.Configuration, KeycloakAuthenticationOptions.Section);
     builder.Services.AddAuthorization();
-    //builder.Services.AddKeycloakAuthorization(builder.Configuration, KeycloakAuthenticationOptions.Section);
+    builder.Services.AddKeycloakAuthorization(builder.Configuration, KeycloakAuthenticationOptions.Section);
     builder.Services
         .AddCors(options =>
         {
