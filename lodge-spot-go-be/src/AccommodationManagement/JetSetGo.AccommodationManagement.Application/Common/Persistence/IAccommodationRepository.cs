@@ -11,4 +11,5 @@ public interface IAccommodationRepository
     Task UpdateAsync(Accommodation accommodation);
     Task RemoveAsync(Guid id);
     Task<List<Accommodation>> SearchAccommodations(SearchAccommodationQuery searchAccommodationQuery);
+    Task<List<Accommodation>> GetByHost(Guid hostId);
 }

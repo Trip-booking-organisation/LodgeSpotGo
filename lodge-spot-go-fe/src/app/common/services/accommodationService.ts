@@ -18,4 +18,7 @@ export class AccommodationService{
   public getAccommodationById(id:string):Observable<any>{
     return this.httpClient.get(this.baseUrl + id,{headers : this.headers});
   }
+  public getAccommodationByHost(id:string):Observable<any>{
+    return this.httpClient.get(this.baseUrl +"host/"+ id,{headers : this.headers});
+  }
 }

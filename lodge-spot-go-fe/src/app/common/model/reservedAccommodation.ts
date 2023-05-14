@@ -5,5 +5,6 @@ import {Accommodation} from "./accommodation";
 export interface IReservationAccommodation {
   reservation?: IReservation,
   accommodation?: Accommodation,
-  disabled? : boolean
+  disabled? : boolean,
+  deleted?: number
 }

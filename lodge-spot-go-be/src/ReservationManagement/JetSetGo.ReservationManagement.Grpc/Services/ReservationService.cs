@@ -97,4 +97,18 @@ public class ReservationService : ReservationApp.ReservationAppBase
         var result = _mapToGrpcResponse.MapGetByGuestIdToGrpcResponse(response);
         return await result;
     }
+
+    public override async Task<GetReservationByAccommodationResponse> GetReservationsByAccommodationId(GetReservationByAccommodationRequest request, ServerCallContext context)
+    {
+        var reservations = await _reservationRepository.GetReservationsByAccommodation(Guid.Parse(request.AccommodationId));
+        var result = _mapToGrpcResponse.MapGetByAccommodationToGrpcResponse(reservations);
+        return await result;
+    }
+
+    public override async Task<GetDeletedReservationsByGuestResponse> GetDeletedReservationsByGuestId(GetDeletedReservationsByGuestRequest request, ServerCallContext context)
+    {
+        var reservations = await _reservationRepository.GetDeletedByGuest(Guid.Parse(request.GuestId));
+        return  _mapToGrpcResponse.MapDeletedCountToGrpcResponse(reservations);
+        
+    }
 }

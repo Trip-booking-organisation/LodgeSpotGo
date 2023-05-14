@@ -21,4 +21,9 @@ service AccommodationApp {
       get: "/api/v1/accommodations/{id}"
     };
   }
+  rpc GetAccommodationByHost(GetAccommodationsByHostRequest) returns (GetAccommodationsByHostResponse){
+    option (google.api.http) = {
+      get: "/api/v1/accommodations/host/{hostId}"
+    };
+  }
 }

@@ -104,7 +104,7 @@ var app = builder.Build();
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "AccommodationManagementMicroservice v1");
     });
     app.MapGrpcService<GreeterService>().RequireAuthorization();
-    app.MapGrpcService<AccommodationService>().RequireAuthorization();
+    app.MapGrpcService<AccommodationService>()/*.RequireAuthorization()*/;
     app.MapGrpcService<SearchAccommodationService>();
     app.UseAuthentication();
     app.UseAuthorization();

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using JetSetGo.ReservationManagement.Application.GetReservationsByGuestId;
 using JetSetGo.ReservationManagement.Application.SearchReservations;
+using JetSetGo.ReservationManagement.Domain.Reservation;
 
 namespace JetSetGo.ReservationManagement.Grpc.Mapping.MapToGrpcResponse;
 
@@ -28,4 +29,23 @@ public class MapToGrpcResponse : IMapToGrpcResponse
         responseList.ForEach(dto => response.Reservations.Add(dto));
         return Task.FromResult(response);
     }
+
+    public Task<GetReservationByAccommodationResponse> MapGetByAccommodationToGrpcResponse(List<Reservation> list)
+    {
+        var response = new GetReservationByAccommodationResponse();
+        var responseList = list.Select(reservation => _mapper.Map<ReadReservationDto>(reservation)).ToList();
+        responseList.ForEach(dto => response.Reservations.Add(dto));
+        return Task.FromResult(response);
+    }
+
+    public GetDeletedReservationsByGuestResponse MapDeletedCountToGrpcResponse(List<Reservation> list)
+    {
+        var response = new GetDeletedReservationsByGuestResponse
+        {
+            Count = list.Count
+        };
+        return response;
+    }
+
+ 
 }

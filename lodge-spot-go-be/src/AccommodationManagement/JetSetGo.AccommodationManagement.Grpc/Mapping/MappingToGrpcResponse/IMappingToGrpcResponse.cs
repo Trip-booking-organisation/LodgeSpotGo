@@ -7,4 +7,5 @@ public interface IMappingToGrpcResponse
 {
     Task<GetAccommodationListResponse> MapSearchToGrpcResponse(List<SearchAccommodationResponse> list);
     Task<GetAccommodationResponse> MapAccommodationToGrpcResponse(Accommodation list);
+    Task<GetAccommodationsByHostResponse> MapAccommodationsToGrpcResponse(List<Accommodation> list);
 }
