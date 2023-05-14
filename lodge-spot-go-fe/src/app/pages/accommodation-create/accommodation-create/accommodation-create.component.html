@@ -1,4 +1,4 @@
-<div class="window">
+<div class="window container-main">
   <h1>Create an accommodation</h1>
   <div class="form">
     <div class="column">
@@ -58,13 +58,18 @@
       </div>
 
     </div>
-    <div class="subimt-button" style="margin-top: 2%">
-      <button mat-button (click)="create()" >Create</button>
+    <div class="subimt-button " style="margin-top: 2%">
+      <button mat-button class="button" (click)="create()">Create</button>
     </div>
   </div>
-
-  <img *ngIf="base64String" [src]="'data:image/jpeg;base64,' + base64String" alt="A beautiful landscape image"/>
-
+  <div class="photos">
+    <div *ngFor="let photo of photos;let i = index;" [attr.data-index]="i">
+      <div class="flex-col">
+      <img *ngIf="base64String" [src]="'data:image/jpeg;base64,' + photo" class="img-a" alt="A beautiful landscape image" width="280" height="280"/>
+        <button class="btn-delete" (click)="deletePhoto(i)">Remove</button>
+      </div>
+    </div>
+  </div>
 
 
 

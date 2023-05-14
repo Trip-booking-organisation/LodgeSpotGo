@@ -76,4 +76,10 @@ public class ReservationRepository : IReservationRepository
                 && x.Deleted == true)
             .ToListAsync();
 
+    public async Task DeleteReservation(Guid requestId)
+    {
+        var filter = Builders<Reservation>.Filter.Eq(r => r.Id, requestId);
+        await _reservationCollection.DeleteOneAsync(filter);
+    }
+        
 }

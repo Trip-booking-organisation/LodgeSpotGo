@@ -121,4 +121,13 @@ public class ReservationService : ReservationApp.ReservationAppBase
         return  _mapToGrpcResponse.MapDeletedCountToGrpcResponse(reservations);
         
     }
+
+    public override async Task<DeleteReservationResponse> DeleteReservation(DeleteReservationRequest request, ServerCallContext context)
+    {
+        await _reservationRepository.DeleteReservation(Guid.Parse(request.Id));
+        return new DeleteReservationResponse
+        {
+            Success = true
+        };
+    }
 }

@@ -12,7 +12,7 @@ export class HomePageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.http.get('http://localhost:7121/api/v1/accommodations').subscribe({
+    this.http.get('https://localhost:7132/api/v1/accommodations').subscribe({
       next: (response) =>{
         console.log(response);
       },

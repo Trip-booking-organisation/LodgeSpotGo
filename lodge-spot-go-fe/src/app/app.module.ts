@@ -16,6 +16,7 @@ import {HomeModule} from "./pages/home/home.module";
 import {AccommodationCreateModule} from "./pages/accommodation-create/accommodation-create.module";
 import {MatInputModule} from "@angular/material/input";
 import {HostsAccomodationsModule} from "./pages/hosts-accomodations/hosts-accomodations.module";
+import {ToastrModule} from "ngx-toastr";
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import {HostsAccomodationsModule} from "./pages/hosts-accomodations/hosts-accomo
     HostsAccomodationsModule,
     MatIconModule,
     AccommodationCreateModule,
+    ToastrModule.forRoot(),
   ],
   providers: [{
     provide: APP_INITIALIZER,

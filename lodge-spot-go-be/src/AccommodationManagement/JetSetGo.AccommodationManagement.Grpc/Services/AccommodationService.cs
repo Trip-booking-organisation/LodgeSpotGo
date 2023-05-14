@@ -53,7 +53,7 @@ public class AccommodationService : AccommodationApp.AccommodationAppBase
             Photos = request.Accommodation.Photos
                 .Select(x => new AccommodationPhoto
             {
-                Photo = x.Photo
+                Photo = x
             }).ToList(),
             SpecalPrices = request.Accommodation.SpecialPrices
                 .Select(a => new SpecalPrice

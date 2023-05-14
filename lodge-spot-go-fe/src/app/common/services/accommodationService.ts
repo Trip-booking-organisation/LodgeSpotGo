@@ -17,8 +17,8 @@ export class AccommodationService{
   constructor(private readonly httpClient:HttpClient) {
   }
 
-  public createAccommodation(accomodation:Accommodation):Observable<any>{
-    return this.httpClient.post<Accommodation>(this.baseUrl,accomodation, {headers : this.headers});
+  public createAccommodation(accommodation: Accommodation):Observable<any>{
+    return this.httpClient.post<Accommodation>(this.baseUrl,accommodation, {headers : this.headers});
   }
 
   public searchAccomodation(accomodationRequest: AccomodationResult):Observable<any> {
