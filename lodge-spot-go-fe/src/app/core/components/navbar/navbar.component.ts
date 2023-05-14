@@ -3,8 +3,8 @@ import {noRegisterUserNavData} from "./data/no-register-user-nav-data";
 import {hostNavData} from "./data/host-nav-data";
 import {guestNavData} from "./data/guest-nav-data";
 import {Router} from "@angular/router";
-import {AuthService} from "../keycloak/auth.service";
-import {User} from "../keycloak/user";
+import {AuthService} from "../../keycloak/auth.service";
+import {User} from "../../keycloak/user";
 import {Observable} from "rxjs";
 import {environment} from "../../../../environments/environment.development";
 
@@ -26,9 +26,15 @@ export class NavbarComponent implements OnInit {
   }
   ngOnInit(): void {
     this.authService.getUserObservable().subscribe(
-      value => console.log(value)
+      value => {
+        console.log(value)
+      }
     )
-    this.goToHomePage();
+    this.authService.getTokenObservable().subscribe(token => {
+      console.log("value")
+      console.log(token)
+    })
+    //this.goToHomePage();
   }
   login(): void {
     this.authService.login();

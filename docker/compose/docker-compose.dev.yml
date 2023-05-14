@@ -44,7 +44,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: lodge420
       MONGO_INITDB_DATABASE: accommodation-db
     ports:
-      - "27017:27017"
+      - "27101:27017"
     volumes:
       - accommodation-db-data:/data/db
       - ../entrypoint-initdb.d:/docker-entrypoint-initdb.d

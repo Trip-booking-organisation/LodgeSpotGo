@@ -1,0 +1,37 @@
+﻿syntax = "proto3";
+import "google/api/annotations.proto";
+import "Dto/reservation.proto";
+option csharp_namespace = "JetSetGo.ReservationManagement.Grpc";
+package routes;
+
+service ReservationApp{
+  rpc GetReservationList(GetReservationListRequest) returns (GetReservationListResponse){
+    option (google.api.http)={
+      get: "/api/v1/reservations"
+    };
+  }
+  
+  rpc CreateReservation(CreateReservationRequest) returns (CreateReservationResponse){
+    option(google.api.http) = {
+      post : "/api/v1/reservations",
+      body: "reservation"
+    };
+  }
+  rpc CancelReservation(CancelReservationRequest) returns(CancelReservationResponse){
+    option(google.api.http) = {
+      delete : "/api/v1/reservations/{id}",
+    };
+  }
+
+  rpc UpdateReservation(UpdateReservationStatusRequest) returns(UpdateReservationStatusResponse){
+    option(google.api.http) = {
+      put : "/api/v1/reservations",
+      body: "reservation"
+    };
+  }
+  rpc GetReservationsByGuestId(GetReservationsByGuestIdRequest) returns(GetReservationsByGuestIdResponse){
+    option (google.api.http)={
+      get: "/api/v1/reservations/{guestId}"
+    };
+  }
+}
