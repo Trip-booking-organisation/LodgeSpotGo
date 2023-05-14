@@ -68,7 +68,7 @@
       "description" : "${role_default-roles}",
       "composite" : true,
       "composites" : {
-        "realm" : [ "offline_access", "uma_authorization" ],
+        "realm" : [ "offline_access", "guest", "uma_authorization" ],
         "client" : {
           "account" : [ "manage-account", "view-profile" ]
         }
@@ -102,7 +102,6 @@
       "attributes" : { }
     } ],
     "client" : {
-      "wedohr-api" : [ ],
       "realm-management" : [ {
         "id" : "7784d97f-669c-4282-8c17-a08a79704b1d",
         "name" : "view-users",
@@ -271,6 +270,7 @@
         "containerId" : "bfcee60e-af5a-4211-a281-d58038b1a767",
         "attributes" : { }
       } ],
+      "lodge-spot-api" : [ ],
       "lodge-spot-go" : [ ],
       "security-admin-console" : [ ],
       "admin-cli" : [ ],
@@ -370,19 +370,19 @@
     "clientRoles" : { },
     "subGroups" : [ ]
   }, {
-    "id" : "6db3307f-1771-43d6-a82c-cdbc3a9a0e42",
-    "name" : "employee",
-    "path" : "/employee",
+    "id" : "7ae63f1e-7600-421b-93be-03ec146770ef",
+    "name" : "guest",
+    "path" : "/guest",
     "attributes" : { },
-    "realmRoles" : [ ],
+    "realmRoles" : [ "guest" ],
     "clientRoles" : { },
     "subGroups" : [ ]
   }, {
-    "id" : "4b71bb5c-32ee-4f8d-8328-600aa1f2243a",
-    "name" : "hr",
-    "path" : "/hr",
+    "id" : "573f38cf-cf90-49a7-8228-f757b5c9f6bf",
+    "name" : "host",
+    "path" : "/host",
     "attributes" : { },
-    "realmRoles" : [ ],
+    "realmRoles" : [ "host" ],
     "clientRoles" : { },
     "subGroups" : [ ]
   } ],
@@ -559,9 +559,9 @@
     "defaultClientScopes" : [ "web-origins", "acr", "roles", "profile", "email" ],
     "optionalClientScopes" : [ "address", "phone", "offline_access", "microprofile-jwt" ]
   }, {
-    "id" : "de9952f6-0395-4485-b05f-0fd14bfe4074",
-    "clientId" : "lodge-spot-go",
-    "name" : "lodge-spot-go",
+    "id" : "6ffe7920-b8a4-42cb-8d32-b175d1cab3d1",
+    "clientId" : "lodge-spot-api",
+    "name" : "lodge-spot-api",
     "description" : "",
     "rootUrl" : "",
     "adminUrl" : "",
@@ -570,8 +570,96 @@
     "enabled" : true,
     "alwaysDisplayInConsole" : false,
     "clientAuthenticatorType" : "client-secret",
+    "secret" : "rE71gWzi2H6t0ESlHLImloYqYlPK3eTE",
     "redirectUris" : [ "*" ],
     "webOrigins" : [ "*" ],
+    "notBefore" : 0,
+    "bearerOnly" : false,
+    "consentRequired" : false,
+    "standardFlowEnabled" : true,
+    "implicitFlowEnabled" : false,
+    "directAccessGrantsEnabled" : true,
+    "serviceAccountsEnabled" : true,
+    "publicClient" : false,
+    "frontchannelLogout" : true,
+    "protocol" : "openid-connect",
+    "attributes" : {
+      "client.secret.creation.time" : "1684000332",
+      "post.logout.redirect.uris" : "*",
+      "oauth2.device.authorization.grant.enabled" : "false",
+      "backchannel.logout.revoke.offline.tokens" : "false",
+      "use.refresh.tokens" : "true",
+      "tls-client-certificate-bound-access-tokens" : "false",
+      "oidc.ciba.grant.enabled" : "false",
+      "backchannel.logout.session.required" : "true",
+      "client_credentials.use_refresh_token" : "false",
+      "acr.loa.map" : "{}",
+      "require.pushed.authorization.requests" : "false",
+      "display.on.consent.screen" : "false",
+      "token.response.type.bearer.lower-case" : "false"
+    },
+    "authenticationFlowBindingOverrides" : { },
+    "fullScopeAllowed" : true,
+    "nodeReRegistrationTimeout" : -1,
+    "protocolMappers" : [ {
+      "id" : "ae757ca4-4cca-40be-9b1b-5dd830d19507",
+      "name" : "Client ID",
+      "protocol" : "openid-connect",
+      "protocolMapper" : "oidc-usersessionmodel-note-mapper",
+      "consentRequired" : false,
+      "config" : {
+        "user.session.note" : "clientId",
+        "userinfo.token.claim" : "true",
+        "id.token.claim" : "true",
+        "access.token.claim" : "true",
+        "claim.name" : "clientId",
+        "jsonType.label" : "String"
+      }
+    }, {
+      "id" : "140230cc-7ff6-4197-bc6f-63154005f10e",
+      "name" : "Client Host",
+      "protocol" : "openid-connect",
+      "protocolMapper" : "oidc-usersessionmodel-note-mapper",
+      "consentRequired" : false,
+      "config" : {
+        "user.session.note" : "clientHost",
+        "userinfo.token.claim" : "true",
+        "id.token.claim" : "true",
+        "access.token.claim" : "true",
+        "claim.name" : "clientHost",
+        "jsonType.label" : "String"
+      }
+    }, {
+      "id" : "b93cbc6e-2c57-45eb-bd02-186090a6b475",
+      "name" : "Client IP Address",
+      "protocol" : "openid-connect",
+      "protocolMapper" : "oidc-usersessionmodel-note-mapper",
+      "consentRequired" : false,
+      "config" : {
+        "user.session.note" : "clientAddress",
+        "userinfo.token.claim" : "true",
+        "id.token.claim" : "true",
+        "access.token.claim" : "true",
+        "claim.name" : "clientAddress",
+        "jsonType.label" : "String"
+      }
+    } ],
+    "defaultClientScopes" : [ "web-origins", "acr", "user_realm_roles", "roles", "profile", "email" ],
+    "optionalClientScopes" : [ "address", "phone", "offline_access", "microprofile-jwt" ]
+  }, {
+    "id" : "de9952f6-0395-4485-b05f-0fd14bfe4074",
+    "clientId" : "lodge-spot-go",
+    "name" : "lodge-spot-go",
+    "description" : "",
+    "rootUrl" : "http://localhost:4200",
+    "adminUrl" : "",
+    "baseUrl" : "http://localhost:4200",
+    "surrogateAuthRequired" : false,
+    "enabled" : true,
+    "alwaysDisplayInConsole" : false,
+    "clientAuthenticatorType" : "client-secret",
+    "redirectUris" : [ "http://localhost:4200/*" ],
+    "webOrigins" : [ "http://localhost:4200" ],
     "notBefore" : 0,
     "bearerOnly" : false,
     "consentRequired" : false,
@@ -585,7 +673,7 @@
     "attributes" : {
       "oidc.ciba.grant.enabled" : "false",
       "backchannel.logout.session.required" : "true",
-      "post.logout.redirect.uris" : "*",
+      "post.logout.redirect.uris" : "http://localhost:4200/*",
       "display.on.consent.screen" : "false",
       "oauth2.device.authorization.grant.enabled" : "false",
       "backchannel.logout.revoke.offline.tokens" : "false"
@@ -593,7 +681,7 @@
     "authenticationFlowBindingOverrides" : { },
     "fullScopeAllowed" : true,
     "nodeReRegistrationTimeout" : -1,
-    "defaultClientScopes" : [ "web-origins", "acr", "user_realm_roles", "roles", "profile", "email" ],
+    "defaultClientScopes" : [ "map_roles_to_users", "web-origins", "acr", "user_realm_roles", "roles", "profile", "email" ],
     "optionalClientScopes" : [ "address", "phone", "offline_access", "microprofile-jwt" ]
   }, {
     "id" : "bfcee60e-af5a-4211-a281-d58038b1a767",
@@ -668,94 +756,6 @@
       }
     } ],
     "defaultClientScopes" : [ "web-origins", "acr", "roles", "profile", "email" ],
-    "optionalClientScopes" : [ "address", "phone", "offline_access", "microprofile-jwt" ]
-  }, {
-    "id" : "6ffe7920-b8a4-42cb-8d32-b175d1cab3d1",
-    "clientId" : "wedohr-api",
-    "name" : "wedohr-api",
-    "description" : "",
-    "rootUrl" : "",
-    "adminUrl" : "",
-    "baseUrl" : "",
-    "surrogateAuthRequired" : false,
-    "enabled" : true,
-    "alwaysDisplayInConsole" : false,
-    "clientAuthenticatorType" : "client-secret",
-    "secret" : "**********",
-    "redirectUris" : [ "*" ],
-    "webOrigins" : [ "*" ],
-    "notBefore" : 0,
-    "bearerOnly" : false,
-    "consentRequired" : false,
-    "standardFlowEnabled" : true,
-    "implicitFlowEnabled" : false,
-    "directAccessGrantsEnabled" : true,
-    "serviceAccountsEnabled" : true,
-    "publicClient" : false,
-    "frontchannelLogout" : true,
-    "protocol" : "openid-connect",
-    "attributes" : {
-      "client.secret.creation.time" : "1683275058",
-      "post.logout.redirect.uris" : "*",
-      "oauth2.device.authorization.grant.enabled" : "false",
-      "backchannel.logout.revoke.offline.tokens" : "false",
-      "use.refresh.tokens" : "true",
-      "tls-client-certificate-bound-access-tokens" : "false",
-      "oidc.ciba.grant.enabled" : "false",
-      "backchannel.logout.session.required" : "true",
-      "client_credentials.use_refresh_token" : "false",
-      "acr.loa.map" : "{}",
-      "require.pushed.authorization.requests" : "false",
-      "display.on.consent.screen" : "false",
-      "token.response.type.bearer.lower-case" : "false"
-    },
-    "authenticationFlowBindingOverrides" : { },
-    "fullScopeAllowed" : true,
-    "nodeReRegistrationTimeout" : -1,
-    "protocolMappers" : [ {
-      "id" : "ae757ca4-4cca-40be-9b1b-5dd830d19507",
-      "name" : "Client ID",
-      "protocol" : "openid-connect",
-      "protocolMapper" : "oidc-usersessionmodel-note-mapper",
-      "consentRequired" : false,
-      "config" : {
-        "user.session.note" : "clientId",
-        "userinfo.token.claim" : "true",
-        "id.token.claim" : "true",
-        "access.token.claim" : "true",
-        "claim.name" : "clientId",
-        "jsonType.label" : "String"
-      }
-    }, {
-      "id" : "140230cc-7ff6-4197-bc6f-63154005f10e",
-      "name" : "Client Host",
-      "protocol" : "openid-connect",
-      "protocolMapper" : "oidc-usersessionmodel-note-mapper",
-      "consentRequired" : false,
-      "config" : {
-        "user.session.note" : "clientHost",
-        "userinfo.token.claim" : "true",
-        "id.token.claim" : "true",
-        "access.token.claim" : "true",
-        "claim.name" : "clientHost",
-        "jsonType.label" : "String"
-      }
-    }, {
-      "id" : "b93cbc6e-2c57-45eb-bd02-186090a6b475",
-      "name" : "Client IP Address",
-      "protocol" : "openid-connect",
-      "protocolMapper" : "oidc-usersessionmodel-note-mapper",
-      "consentRequired" : false,
-      "config" : {
-        "user.session.note" : "clientAddress",
-        "userinfo.token.claim" : "true",
-        "id.token.claim" : "true",
-        "access.token.claim" : "true",
-        "claim.name" : "clientAddress",
-        "jsonType.label" : "String"
-      }
-    } ],
-    "defaultClientScopes" : [ "web-origins", "acr", "user_realm_roles", "roles", "profile", "email" ],
     "optionalClientScopes" : [ "address", "phone", "offline_access", "microprofile-jwt" ]
   } ],
   "clientScopes" : [ {
@@ -862,6 +862,31 @@
         "id.token.claim" : "true",
         "access.token.claim" : "true",
         "claim.name" : "user.email",
+        "userinfo.token.claim" : "true"
+      }
+    } ]
+  }, {
+    "id" : "3f260965-6b71-445d-b384-5e4e2ecf33a7",
+    "name" : "map_roles_to_users",
+    "description" : "",
+    "protocol" : "openid-connect",
+    "attributes" : {
+      "include.in.token.scope" : "true",
+      "display.on.consent.screen" : "true",
+      "gui.order" : "",
+      "consent.screen.text" : ""
+    },
+    "protocolMappers" : [ {
+      "id" : "a3721fb1-4320-4c9a-adb7-ec198fa143b0",
+      "name" : "user-realm-role",
+      "protocol" : "openid-connect",
+      "protocolMapper" : "oidc-usermodel-realm-role-mapper",
+      "consentRequired" : false,
+      "config" : {
+        "id.token.claim" : "true",
+        "access.token.claim" : "true",
+        "claim.name" : "roles",
+        "multivalued" : "false",
         "userinfo.token.claim" : "true"
       }
     } ]
@@ -1310,17 +1335,17 @@
     "strictTransportSecurity" : "max-age=31536000; includeSubDomains"
   },
   "smtpServer" : {
-    "replyToDisplayName" : "SveNaDev",
+    "replyToDisplayName" : "djordjevuckovicc@gmail.com",
     "starttls" : "true",
     "auth" : "true",
-    "envelopeFrom" : "svenadev@gmail.com",
+    "envelopeFrom" : "djordjevuckovicc@gmail.com",
     "ssl" : "true",
     "password" : "**********",
     "port" : "465",
     "host" : "smtp.gmail.com",
-    "replyTo" : "svenadev@gmail.com",
-    "from" : "svenadev@gmail.com",
-    "fromDisplayName" : "SveNaDev",
+    "replyTo" : "djordjevuckovicc@gmail.com",
+    "from" : "djordjevuckovicc@gmail.com",
+    "fromDisplayName" : "djordjevuckovicc@gmail.com",
     "user" : "svenadev@gmail.com"
   },
   "loginTheme" : "keycloak",
@@ -1410,7 +1435,7 @@
       "providerId" : "declarative-user-profile",
       "subComponents" : { },
       "config" : {
-        "config-piece-0" : [ "{\"attributes\":[{\"name\":\"username\",\"displayName\":\"${username}\",\"permissions\":{\"view\":[\"admin\",\"user\"],\"edit\":[\"admin\",\"user\"]},\"validations\":{\"length\":{\"min\":3,\"max\":255},\"username-prohibited-characters\":{},\"up-username-not-idn-homograph\":{}}},{\"name\":\"email\",\"displayName\":\"${email}\",\"required\":{\"roles\":[\"user\"]},\"permissions\":{\"view\":[\"admin\",\"user\"],\"edit\":[\"admin\",\"user\"]},\"validations\":{\"email\":{},\"length\":{\"max\":255}}},{\"name\":\"firstName\",\"displayName\":\"${firstName}\",\"required\":{\"roles\":[\"user\"]},\"permissions\":{\"view\":[\"admin\",\"user\"],\"edit\":[\"admin\",\"user\"]},\"validations\":{\"length\":{\"max\":255},\"person-name-prohibited-characters\":{}}},{\"name\":\"lastName\",\"displayName\":\"${lastName}\",\"required\":{\"roles\":[\"user\"]},\"permissions\":{\"view\":[\"admin\",\"user\"],\"edit\":[\"admin\",\"user\"]},\"validations\":{\"length\":{\"max\":255},\"person-name-prohibited-characters\":{}}},{\"name\":\"address\",\"displayName\":\"${address}\",\"selector\":{\"scopes\":[\"acr\",\"offline_access\",\"user_realm_roles\",\"roles\",\"email\",\"profile\",\"role_list\",\"address\",\"phone\",\"microprofile-jwt\",\"web-origins\"]},\"permissions\":{\"edit\":[\"user\",\"admin\"],\"view\":[\"user\",\"admin\"]},\"annotations\":{},\"validations\":{},\"group\":null,\"required\":{\"roles\":[\"user\"],\"scopes\":[]}},{\"name\":\"phone\",\"displayName\":\"${phone}\",\"selector\":{\"scopes\":[\"acr\",\"offline_access\",\"user_realm_roles\",\"roles\",\"email\",\"profile\",\"role_list\",\"address\",\"phone\",\"microprofile-jwt\",\"web-origins\"]},\"permissions\":{\"edit\":[\"user\",\"admin\"],\"view\":[\"user\",\"admin\"]},\"annotations\":{},\"validations\":{},\"required\":{\"roles\":[\"user\"],\"scopes\":[]},\"group\":null}]}" ],
+        "config-piece-0" : [ "{\"attributes\":[{\"name\":\"username\",\"displayName\":\"${username}\",\"permissions\":{\"view\":[\"admin\",\"user\"],\"edit\":[\"admin\",\"user\"]},\"validations\":{\"length\":{\"min\":3,\"max\":255},\"username-prohibited-characters\":{},\"up-username-not-idn-homograph\":{}}},{\"name\":\"email\",\"displayName\":\"${email}\",\"required\":{\"roles\":[\"user\"]},\"permissions\":{\"view\":[\"admin\",\"user\"],\"edit\":[\"admin\",\"user\"]},\"validations\":{\"email\":{},\"length\":{\"max\":255}}},{\"name\":\"firstName\",\"displayName\":\"${firstName}\",\"required\":{\"roles\":[\"user\"]},\"permissions\":{\"view\":[\"admin\",\"user\"],\"edit\":[\"admin\",\"user\"]},\"validations\":{\"length\":{\"max\":255},\"person-name-prohibited-characters\":{}}},{\"name\":\"lastName\",\"displayName\":\"${lastName}\",\"required\":{\"roles\":[\"user\"]},\"permissions\":{\"view\":[\"admin\",\"user\"],\"edit\":[\"admin\",\"user\"]},\"validations\":{\"length\":{\"max\":255},\"person-name-prohibited-characters\":{}}},{\"name\":\"address\",\"displayName\":\"Address\",\"selector\":{\"scopes\":[\"acr\",\"offline_access\",\"user_realm_roles\",\"roles\",\"email\",\"profile\",\"role_list\",\"address\",\"phone\",\"microprofile-jwt\",\"web-origins\"]},\"permissions\":{\"edit\":[\"user\",\"admin\"],\"view\":[\"user\",\"admin\"]},\"annotations\":{},\"validations\":{},\"group\":null,\"required\":{\"roles\":[\"user\"],\"scopes\":[]}},{\"name\":\"phone\",\"displayName\":\"Phone\",\"selector\":{\"scopes\":[\"acr\",\"offline_access\",\"user_realm_roles\",\"roles\",\"email\",\"profile\",\"role_list\",\"address\",\"phone\",\"microprofile-jwt\",\"web-origins\"]},\"permissions\":{\"edit\":[\"user\",\"admin\"],\"view\":[\"user\",\"admin\"]},\"annotations\":{},\"validations\":{},\"group\":null,\"required\":{\"roles\":[\"user\"],\"scopes\":[]}}]}" ],
         "config-pieces-count" : [ "1" ]
       }
     } ],
@@ -2063,7 +2088,7 @@
     "acr.loa.map" : "{}"
   },
   "keycloakVersion" : "21.1.1",
-  "userManagedAccessAllowed" : false,
+  "userManagedAccessAllowed" : true,
   "clientProfiles" : {
     "profiles" : [ ]
   },

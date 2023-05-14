@@ -5,6 +5,7 @@ using JetSetGo.AccommodationManagement.Domain.Accommodation;
 using JetSetGo.AccommodationManagement.Domain.Accommodation.Enum;
 using JetSetGo.AccommodationManagement.Domain.Accommodation.ValueObjects;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 
 namespace JetSetGo.AccommodationManagement.Grpc.Services;
 
@@ -20,13 +21,14 @@ public class AccommodationService : AccommodationApp.AccommodationAppBase
         _repository = repository;
         _mapper = mapper;
     }
-    
+    /*[Authorize(Roles = "guest")]*/
     public override async  Task<GetAccommodationListResponse> GetAccommodationList(GetAccommodationListRequest request, ServerCallContext context)
     {
         var list = new GetAccommodationListResponse();
         var accommodations = await _repository.GetAllAsync();
         _logger.LogInformation(@"List {}",accommodations.ToString());
         var responseList = accommodations.Select(accommodation => _mapper.Map<AccommodationDto>(accommodation)).ToList();
+        
         responseList.ForEach(dto => list.Accommodations.Add(dto));
         return list;
     }
@@ -50,7 +52,18 @@ public class AccommodationService : AccommodationApp.AccommodationAppBase
                 .Select(x => new AccommodationPhoto
             {
                 Photo = x.Photo
-            }).ToList()
+            }).ToList(),
+            SpecalPrices = request.Accommodation.SpecialPrices
+                .Select(a => new SpecalPrice
+                {
+                    Price = a.Price,
+                    DateRange = new DateRange
+                    {
+                        From = a.DateRange.From.ToDateTime(),
+                        To = a.DateRange.To.ToDateTime()
+                    }
+                }).ToList()
+            
         };
         _repository.CreateAsync(accommodation);
         return Task.FromResult(new CreateAccommodationResponse

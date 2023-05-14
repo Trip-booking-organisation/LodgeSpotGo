@@ -1,0 +1,13 @@
+﻿syntax = "proto3";
+import "Dto/search.proto";
+import "google/api/annotations.proto";
+option csharp_namespace = "LodgeSpotGo.SearchAndFilter.Grpc";
+package routes;
+
+service SearchAndFilterApp{
+    rpc SearchAndFilterAccommodations(SearchAccommodationRequest) returns (GetAccommodationListResponse){
+      option(google.api.http) = {
+        get: "/api/v1/search/{numberOfGuests}/{startDate.seconds}/{endDate.seconds}/{city}/{country}"
+      };
+    }
+}

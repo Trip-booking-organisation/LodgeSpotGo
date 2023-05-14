@@ -1,4 +1,5 @@
 ﻿using JetSetGo.AccommodationManagement.Application.Common.Persistence;
+using JetSetGo.AccommodationManagement.Application.Mapping;
 using JetSetGo.AccommodationManagement.Infrastructure.Persistence.Configuration;
 using JetSetGo.AccommodationManagement.Infrastructure.Persistence.Repository;
 using JetSetGo.AccommodationManagement.Infrastructure.Persistence.Settings;
@@ -13,6 +14,7 @@ public static class DependencyInjection
     {
         services.Configure<DatabaseSettings>(builderConfiguration.GetSection(DatabaseSettings.OptionName));
         services.AddSingleton<IAccommodationRepository,AccommodationRepository>();
+        services.AddAutoMapper(typeof(MappingConfiguration));
         AddDbConfig();
         return services;
     }

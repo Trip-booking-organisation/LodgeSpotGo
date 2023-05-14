@@ -1,0 +1,50 @@
+﻿syntax = "proto3";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "JetSetGo.ReservationManagement.Grpc";
+message DateRangeDto {
+  google.protobuf.Timestamp from = 1;
+  google.protobuf.Timestamp to = 2;
+}
+
+message ReadReservationDto{
+  string id = 1;
+  string accommodationId = 2;
+  DateRangeDto dateRange =3;
+  string status = 4;
+  int32 numberOfGuest = 5;
+  string guestId = 6;
+}
+
+message CreateReservationDto{
+  string accommodationId = 1;
+  DateRangeDto dateRange = 2;
+  string status = 3;
+  int32 numberOfGuests = 4;
+  string guestId = 5;
+}
+
+message GetReservationListRequest{}
+
+message GetReservationListResponse{repeated ReadReservationDto reservations = 1;}
+
+message CreateReservationRequest{
+    CreateReservationDto reservation = 1;
+}
+message CreateReservationResponse {
+  string createdId = 1;
+}
+message ReservationSearchRequest{
+  google.protobuf.Timestamp startDate = 1;
+  google.protobuf.Timestamp endDate = 2;
+}
+message CancelReservationRequest{ string id = 1; }
+message CancelReservationResponse{ bool success = 1; }
+message UpdateReservationStatus{
+  string id = 1;
+  string status = 2;
+}
+message UpdateReservationStatusRequest{ UpdateReservationStatus reservation = 1;}
+message UpdateReservationStatusResponse{ bool success = 1;}
+message GetReservationsByGuestIdRequest { string guestId= 1;}
+message GetReservationsByGuestIdResponse { repeated ReadReservationDto reservations = 1;}
