@@ -5,8 +5,8 @@ import {Accommodation} from "../model/accommodation";
 
 import {AccomodationResult} from "../../core/model/AccomodationResult";
 
-import {AccommodationResponse} from "../../shered/model/accommodationResponse";
 import {environment} from "../../../environments/environment.development";
+import {AccommodationResponse} from "../../shered/model/accommodationResponse";
 
 
 @Injectable({
