@@ -1,0 +1,39 @@
+<div class="card">
+
+  <div class="field">
+    <div class="filed-info"> Name:</div>
+    <div class="value">
+      {{acc.name}}
+    </div>
+  </div>
+  <div class="field">
+    <div class="field-info"> Address:</div>
+    <div class="value">
+      {{acc.address!.country}}
+      {{acc.address!.city}}
+      {{acc.address!.street}}
+    </div>
+
+  </div>
+  <div  *ngFor="let am of acc.amenities">
+    <div class="field">
+      <div class="filed-info"> Included:</div>
+      <div class="value">{{am}}</div>
+    </div>
+  </div>
+
+    <div class="field">
+      <div class="field-value">
+        <div class="value">from: {{this.from | date:'yyyy-MM-dd'}}</div>
+        <div class="value">to:{{this.to | date:'yyyy-MM-dd'}}</div>
+
+      </div>
+    </div>
+  <div class="field">
+    <div class="field-value">
+    <div class="value">{{price}}</div>
+    <div><button class="button" mat-button (click)="create()" >Submit reservation</button></div>
+    </div>
+  </div>
+
+</div>

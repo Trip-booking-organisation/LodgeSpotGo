@@ -11,6 +11,7 @@ import {FormsModule} from "@angular/forms";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
+import {CoreModule} from "../../core/core.module";
 //import { LoadingAnimationComponent } from 'path/to/loading-animation.component';
 
 
@@ -20,17 +21,18 @@ import {MatInputModule} from "@angular/material/input";
     HomePageComponent,
     SearchAccomodationsComponentComponent
   ],
-  imports: [
-    CommonModule,
-    MatIconModule,
-    MatAutocompleteModule,
-    MatOptionModule,
-    MatNativeDateModule,
-    FormsModule,
-    MatDatepickerModule,
-    MatFormFieldModule,
-    MatInputModule
-  ],
+    imports: [
+        CommonModule,
+        MatIconModule,
+        MatAutocompleteModule,
+        MatOptionModule,
+        MatNativeDateModule,
+        FormsModule,
+        MatDatepickerModule,
+        MatFormFieldModule,
+        MatInputModule,
+        CoreModule
+    ],
   exports:
   [SearchAccomodationsComponentComponent]
 })
