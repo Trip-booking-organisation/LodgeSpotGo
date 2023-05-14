@@ -15,5 +15,5 @@ public class Accommodation
     public Guid HostId { get; set; }
     public bool AutomaticConfirmation { get; set; }
     
-    public List<SpecalPrice> SpecalPrices { get; set; }
+    public List<SpecalPrice> SpecalPrices { get; set; } = null!;
 }

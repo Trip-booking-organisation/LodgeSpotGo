@@ -11,7 +11,7 @@ import {
 
 const routes: Routes = [
   {path: '', component: HomePageComponent},
-  {path: 'create-accomodation', component: AccommodationCreateComponent},
+  {path: 'create-accommodation', component: AccommodationCreateComponent},
   {path: 'reservations', component: ReservationComponent},
   {path: 'reservations-host', component: ReservationHostComponent},
   {path:'hosts-accommodations', component:HostsAccomodationsComponent},

@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {CommonModule, NgOptimizedImage} from '@angular/common';
 import { AccommodationCreateComponent } from './accommodation-create/accommodation-create.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import {MatInputModule} from "@angular/material/input";
@@ -23,7 +23,8 @@ import {MatLegacyButtonModule} from "@angular/material/legacy-button";
     ReactiveFormsModule,
     FormsModule,
     MatFormFieldModule,
-    MatLegacyButtonModule
+    MatLegacyButtonModule,
+    NgOptimizedImage
   ]
 })
 export class AccommodationCreateModule { }

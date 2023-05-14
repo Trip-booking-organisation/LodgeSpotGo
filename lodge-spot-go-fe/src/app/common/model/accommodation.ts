@@ -8,5 +8,7 @@ export interface Accommodation {
   min_guests?:number;
   amenities?:string[];
   photos?:string[];
-  specialPrices?:SpecialPrice[]
+  specialPrices?:SpecialPrice[];
+  hostId: string;
+  automaticConfirmation: boolean
 }

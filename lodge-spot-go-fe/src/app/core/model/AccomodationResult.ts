@@ -6,6 +6,6 @@ export interface AccomodationResult {
     country?: string,
     city: string,
     numberOfGuests?: number,
-    startDate: MyDate,
-    endDate: MyDate
+    startDate: Date,
+    endDate: Date
   }

@@ -10,6 +10,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
+import {CoreModule} from "../../core/core.module";
 //import { LoadingAnimationComponent } from 'path/to/loading-animation.component';
 
 
@@ -29,7 +30,8 @@ import {MatInputModule} from "@angular/material/input";
         MatDatepickerModule,
         MatFormFieldModule,
         MatInputModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        CoreModule
     ],
   exports:
   [SearchAccomodationsComponentComponent]

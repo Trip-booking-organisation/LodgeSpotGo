@@ -1,4 +1,4 @@
-<div class="window">
+<div class="window container-main">
   <h1>Create an accommodation</h1>
   <div class="form">
     <div class="column">
@@ -43,31 +43,33 @@
       <div class="field">
         <input type="file"  (change)="onFileSelected($event)">
       </div>
-
     </div>
     <div class="column">
-
       <div class="field">
-
         <p><mat-checkbox [(ngModel)]="wifi">wifi</mat-checkbox></p>
         <p><mat-checkbox [(ngModel)]="kitchen">kitchen</mat-checkbox></p>
         <p><mat-checkbox [(ngModel)]="airCondition">air condition</mat-checkbox></p>
         <p><mat-checkbox [(ngModel)]="freeParking">free parking</mat-checkbox></p>
         <p><mat-checkbox [(ngModel)]="fridge">fridge</mat-checkbox></p>
-
       </div>
-
+    </div>
+    <div class="column">
+      <div class="field">
+        <p><mat-checkbox [(ngModel)]="isAutomatic">Is Automatic Confirmation?</mat-checkbox></p>
+      </div>
     </div>
     <div class="subimt-button" style="margin-top: 2%">
-      <button mat-button (click)="create()" >Create</button>
+      <button mat-button class="button" (click)="create()">Create</button>
     </div>
   </div>
-
-  <img *ngIf="base64String" [src]="'data:image/jpeg;base64,' + base64String" alt="A beautiful landscape image"/>
-
-
-
-
+  <div class="photos">
+    <div *ngFor="let photo of photos;let i = index;" [attr.data-index]="i">
+      <div class="flex-col">
+      <img *ngIf="base64String" [src]="'data:image/jpeg;base64,' + photo" class="img-a" alt="A beautiful landscape image" width="280" height="280"/>
+        <button class="btn-delete" (click)="deletePhoto(i)">Remove</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 

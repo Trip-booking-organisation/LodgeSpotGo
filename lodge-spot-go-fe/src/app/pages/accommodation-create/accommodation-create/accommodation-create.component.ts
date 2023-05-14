@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
-import {Accommodation} from "../../../shered/model/accommodation";
 import {Address} from "../../../shered/model/addres";
-
-import {animate} from "@angular/animations";
-import { Buffer } from 'buffer';
-import * as pako from 'pako';
 import {AccommodationService} from "../../../common/services/accommodationService";
+import {Accommodation} from "../../../common/model/accommodation";
+import {ToastrService} from "ngx-toastr";
+import {Router} from "@angular/router";
+import {AuthService} from "../../../core/keycloak/auth.service";
 
 
 @Component({
@@ -16,11 +15,13 @@ import {AccommodationService} from "../../../common/services/accommodationServic
 export class AccommodationCreateComponent {
 
   base64String: string = '';
+  photos: string[] = [];
   wifi= false;
   kitchen= false;
   airCondition= false;
   freeParking= false;
   fridge = false;
+  isAutomatic = false;
 
   name ="";
   country = "";
@@ -28,13 +29,19 @@ export class AccommodationCreateComponent {
   street = "";
   max = 0;
   min = 0;
+  userId: string = "";
 
-  constructor(private readonly accomodationService:AccommodationService) {
-
+  constructor(private readonly accommodationService:AccommodationService, private toastService:ToastrService,
+              private router:Router,private authService:AuthService) {
+    this.authService.getUserObservable().subscribe(
+      value => {
+        console.log(value)
+        this.userId = value?.id!
+      })
   }
 
   assambleAmenitetis():string[]{
-    var amenitetis:string[] = []
+    let amenitetis:string[] = []
     if(this.freeParking){
       amenitetis.push("free parking")
     }
@@ -54,27 +61,44 @@ export class AccommodationCreateComponent {
   }
 
   create() {
-    var phts: string[]= []
-    phts.push(this.base64String)
-    console.log(phts)
-    var addres : Address ={
+    let phtsBase: string[] = []
+    phtsBase.push(this.base64String)
+    console.log(phtsBase)
+    let address : Address ={
       country : this.country,
       city:this.city,
       street:this.street
     }
-    console.log(addres)
-    var acc: Accommodation = {
+    console.log(address)
+    let accommodation: Accommodation = {
       name: this.name,
-      address: addres,
+      address: address,
       max_guests: this.max,
       min_guests: this.min,
       amenities: this.assambleAmenitetis(),
-      photos:phts
+      photos: this.photos,
+      hostId: this.userId,
+      automaticConfirmation: this.isAutomatic
     }
-    console.log(acc)
-    this.accomodationService.createAccommodation(acc).subscribe({
+    if(accommodation.max_guests! < accommodation.min_guests!){
+      this.toastService.error("Wrong range max and min guests!")
+      return
+    }
+    if(accommodation.name === '' || accommodation.address?.city === ''
+      || accommodation.name === ''  || !this.assambleAmenitetis()){
+      this.toastService.error("Please valid fulfill form!")
+      return;
+    }
+    console.log(accommodation)
+    this.accommodationService.createAccommodation(accommodation).subscribe({
       next:res =>{
         console.log(res)
+        this.toastService.success("You are successfully created accommodation","Success")
+        this.router.navigate([''])
+      },
+      error: err => {
+        console.log(err)
+        this.toastService.error(err.toString(),"Error")
       }
     })
   }
@@ -86,14 +110,16 @@ export class AccommodationCreateComponent {
     if (files && files.length > 0) {
       const file: File = files[0];
       const reader = new FileReader();
-
       reader.onloadend = () => {
         this.base64String = reader.result!.toString().split(',')[1];
+        this.photos.push(this.base64String)
       };
-
       reader.readAsDataURL(file);
-      const compressedData = pako.deflate(this.base64String);
-      console.log(compressedData)
     }
+  }
+
+  deletePhoto(i: number) {
+    const filter =this.photos.filter((photo, index) => i !== index)
+    this.photos = [...filter]
   }
 }
