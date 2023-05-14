@@ -1,11 +1,11 @@
 ﻿using System.Diagnostics;
-using JetSetGo.UsersManagement.Api.Common.Logger;
-using JetSetGo.UsersManagement.Api.Keycloak;
+using JetSetGo.UsersManagement.Grpc.Common.Logger;
+using JetSetGo.UsersManagement.Grpc.Keycloak;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
-namespace JetSetGo.UsersManagement.Api.Endpoints;
+namespace JetSetGo.UsersManagement.Grpc.Endpoints;
 
 public static class UserEndpoints
 {

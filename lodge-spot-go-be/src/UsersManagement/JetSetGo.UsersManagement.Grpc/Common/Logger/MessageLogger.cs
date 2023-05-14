@@ -1,4 +1,4 @@
-﻿namespace JetSetGo.UsersManagement.Api.Common.Logger;
+﻿namespace JetSetGo.UsersManagement.Grpc.Common.Logger;
 
 public class MessageLogger
 {

@@ -1,7 +1,7 @@
-﻿using JetSetGo.UsersManagement.Api.Common.Logger;
-using JetSetGo.UsersManagement.Api.Keycloak;
+﻿using JetSetGo.UsersManagement.Grpc.Common.Logger;
+using JetSetGo.UsersManagement.Grpc.Keycloak;
 
-namespace JetSetGo.UsersManagement.Api;
+namespace JetSetGo.UsersManagement.Grpc;
 
 public static class DependencyInjection
 {

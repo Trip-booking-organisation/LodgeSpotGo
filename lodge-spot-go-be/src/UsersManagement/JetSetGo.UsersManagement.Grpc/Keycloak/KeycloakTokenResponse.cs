@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace JetSetGo.UsersManagement.Api.Keycloak;
+namespace JetSetGo.UsersManagement.Grpc.Keycloak;
 
 public class KeycloakTokenResponse
 {

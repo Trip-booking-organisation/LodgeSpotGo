@@ -1,6 +1,6 @@
-﻿using JetSetGo.UsersManagement.Api.Endpoints;
+﻿using JetSetGo.UsersManagement.Grpc.Endpoints;
 
-namespace JetSetGo.UsersManagement.Api;
+namespace JetSetGo.UsersManagement.Grpc;
 
 public static class EndpointsExtension
 {

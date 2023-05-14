@@ -5,12 +5,17 @@ import {AccommodationCreateComponent} from "./pages/accommodation-create/accommo
 import {ReservationComponent} from "./pages/reservation/reservation-guest/reservation.component";
 import {ReservationModule} from "./pages/reservation/reservation.module";
 import {ReservationHostComponent} from "./pages/reservation/reservation-host/reservation-host.component";
+import {
+  HostsAccomodationsComponent
+} from "./pages/hosts-accomodations/hosts-accomodations/hosts-accomodations.component";
 
 const routes: Routes = [
   {path: '', component: HomePageComponent},
   {path: 'create-accomodation', component: AccommodationCreateComponent},
   {path: 'reservations', component: ReservationComponent},
-  {path: 'reservations-host', component: ReservationHostComponent}
+  {path: 'reservations-host', component: ReservationHostComponent},
+  {path:'hosts-accommodations', component:HostsAccomodationsComponent},
+  {path: 'reservations', component: ReservationComponent}
 ];
 
 @NgModule({

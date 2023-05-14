@@ -2,11 +2,16 @@ using JetSetGo.ReservationManagement.Application;
 using JetSetGo.ReservationManagement.Grpc;
 using JetSetGo.ReservationManagement.Grpc.Services;
 using JetSetGo.ReservationManagement.Infrastructure;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 {
     builder.Services.AddGrpc().AddJsonTranscoding();
+    builder.Configuration
+        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+        .AddEnvironmentVariables();
     builder.Services
         .AddInfrastructure(builder.Configuration)
         .AddPresentation()
@@ -32,7 +37,39 @@ var builder = WebApplication.CreateBuilder(args);
     });
 
 }
-
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    
+}).AddJwtBearer(o =>
+{
+    o.Authority = builder.Configuration["Jwt:Authority"];
+    o.Audience = builder.Configuration["Jwt:Audience"];
+    o.TokenValidationParameters = new TokenValidationParameters{
+        ValidateAudience = false,
+    };
+    o.RequireHttpsMetadata = false;
+    o.TokenValidationParameters.ValidIssuers = new[]
+    {
+        builder.Configuration["Jwt:Authority"]
+    };
+    o.Events = new JwtBearerEvents
+    {
+        OnAuthenticationFailed = c =>
+        {
+            c.NoResult();
+    
+            c.Response.StatusCode = 500;
+            c.Response.ContentType = "text/plain";
+    
+            return c.Response.WriteAsync(builder.Environment.IsDevelopment() 
+                ? c.Exception.ToString() 
+                : "An error occured processing your authentication.");
+        }
+    };
+});
+builder.Services.AddAuthorization();
 var app = builder.Build();
 {
     app.UseSwagger().UseSwaggerUI(c =>
@@ -45,6 +82,8 @@ var app = builder.Build();
 app.MapGrpcService<GreeterService>();
 app.MapGrpcService<ReservationService>();
 app.MapGrpcService<SearchReservationService>();
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapGet("/",
     () =>
         "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");

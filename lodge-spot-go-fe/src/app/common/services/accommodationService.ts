@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from "rxjs";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Accommodation} from "../model/accommodation";
+import {AccommodationResponse} from "../../shered/model/accommodationResponse";
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,10 @@ export class AccommodationService{
 
   public createAccommodation(accomodation:Accommodation):Observable<any>{
     return this.httpClient.post<Accommodation>(this.baseUrl,accomodation, {headers : this.headers});
+  }
+
+  public getAllAccommodations():Observable<any> {
+    return this.httpClient.get<AccommodationResponse[]>(this.baseUrl);
   }
   public getAccommodationById(id:string):Observable<any>{
     return this.httpClient.get(this.baseUrl + id,{headers : this.headers});
