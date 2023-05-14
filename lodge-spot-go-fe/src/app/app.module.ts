@@ -15,6 +15,7 @@ import {HomeModule} from "./pages/home/home.module";
 //import { SearchAccomodationsComponentComponent } from './search-accomodations-component/search-accomodations-component.component';
 import {AccommodationCreateModule} from "./pages/accommodation-create/accommodation-create.module";
 import {MatInputModule} from "@angular/material/input";
+
 @NgModule({
   declarations: [
     AppComponent
@@ -30,8 +31,7 @@ import {MatInputModule} from "@angular/material/input";
     CommonModule,
     HomeModule,
     MatIconModule,
-    MatInputModule,
-    AccommodationCreateModule
+    AccommodationCreateModule,
   ],
   providers: [{
     provide: APP_INITIALIZER,
