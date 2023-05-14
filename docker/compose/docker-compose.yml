@@ -1,6 +1,43 @@
 version: "3.8"
-services: 
-  accommodation:
+services:
+  accommodation-db:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: lodge1312
+      MONGO_INITDB_ROOT_PASSWORD: lodge420
+      MONGO_INITDB_DATABASE: accommodation-db
+    ports:
+      - "27101:27017"
+    volumes:
+      - accommodation-db-data:/data/db
+      - ../entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    networks: 
+      - lodge-spot-go-net
+  accommodation-service:
     image: accommodation
     container_name: accommodation
-    build: ../
+    build: ../../lodge-spot-go-be/src/AccommodationManagement
+    ports:
+      - "7120:443"
+      - "7121:80"
+    environment:
+      ASPNETCORE_MongoDatabaseSettings__ConnectionString: mongodb://lodge1312:lodge420@accommodation-db:27017
+    networks:
+      - lodge-spot-go-net
+    depends_on:
+      - accommodation-db
+volumes:
+  accommodation-db-data:
+    driver: local
+  reservation-db-data:
+    driver: local
+  user-db-data:
+    driver: local
+  search-db-data:
+    driver: local
+  keycloak-db-data:
+    driver: local
+networks:
+  lodge-spot-go-net:
+    driver: bridge
