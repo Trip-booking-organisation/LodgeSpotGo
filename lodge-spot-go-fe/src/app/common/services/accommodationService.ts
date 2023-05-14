@@ -21,11 +21,11 @@ export class AccommodationService{
     return this.httpClient.post<Accommodation>(this.baseUrl,accomodation, {headers : this.headers});
   }
 
-  public searchAccomodation(accomodationRequest: AccomodationResult):Observable<any>{
+  public searchAccomodation(accomodationRequest: AccomodationResult):Observable<any> {
     console.log("https://localhost:7132/api/v1/search/" + accomodationRequest.numberOfGuests + "/" + accomodationRequest.startDate + "/" + accomodationRequest.endDate + "/" + accomodationRequest.city + "/" + accomodationRequest.country)
-    return this.httpClient.post<AccomodationResult>("https://localhost:7132/api/v1/search",accomodationRequest, {headers : this.headers} );
+    return this.httpClient.post<AccomodationResult>("https://localhost:7132/api/v1/search", accomodationRequest, {headers: this.headers});
 
-
+  }
 
   public getAllAccommodations():Observable<any> {
     return this.httpClient.get<AccommodationResponse[]>(this.baseUrl);
