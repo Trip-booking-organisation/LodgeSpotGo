@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Google.Protobuf.WellKnownTypes;
+using JetSetGo.ReservationManagement.Application.CancelReservation;
 using JetSetGo.ReservationManagement.Application.SearchReservations;
+using JetSetGo.ReservationManagement.Application.UpdateReservationStatus;
 using JetSetGo.ReservationManagement.Domain.Reservation;
 using JetSetGo.ReservationManagement.Domain.Reservation.ValueObjects;
 using ZstdSharp;
@@ -27,6 +29,10 @@ public class MappingConfiguration:Profile
         CreateMap<SearchReservationResponse, ReadReservationDto>()
             .ForMember(dest => dest.DateRange,
             opt => opt.MapFrom(src => src.DateRange));
+        CreateMap<CancelReservationRequest, CancelReservationCommand>();
+        CreateMap<CancelReservationCommandResponse, CancelReservationResponse>();
+        CreateMap<UpdateReservationStatus, UpdateReservationStatusCommand>();
+        CreateMap<UpdateReservationStatusCommandResponse, UpdateReservationStatusResponse>();
     }
     
 }

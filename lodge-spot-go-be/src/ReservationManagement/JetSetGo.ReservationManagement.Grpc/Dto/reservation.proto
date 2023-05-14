@@ -11,11 +11,15 @@ message ReadReservationDto{
   string id = 1;
   string accommodationId = 2;
   DateRangeDto dateRange =3;
+  string status = 4;
+  int32 numberOfGuest = 5;
 }
 
 message CreateReservationDto{
   string accommodationId = 1;
   DateRangeDto dateRange =2;
+  string status = 3;
+  int32 numberOfGuests = 4;
 }
 
 message GetReservationListRequest{}
@@ -32,3 +36,11 @@ message ReservationSearchRequest{
   google.protobuf.Timestamp startDate = 1;
   google.protobuf.Timestamp endDate = 2;
 }
+message CancelReservationRequest{ string id = 1; }
+message CancelReservationResponse{ bool success = 1; }
+message UpdateReservationStatus{
+  string id = 1;
+  string status = 2;
+}
+message UpdateReservationStatusRequest{ UpdateReservationStatus reservation = 1;}
+message UpdateReservationStatusResponse{ bool success = 1;}

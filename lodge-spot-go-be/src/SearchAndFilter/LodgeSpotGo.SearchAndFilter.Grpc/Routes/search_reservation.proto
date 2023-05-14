@@ -16,6 +16,8 @@ message ReadReservationDto{
   string id = 1;
   string accommodationId = 2;
   DateRangeDto dateRange =3;
+  string status = 4;
+  int32 numberOfGuest = 5;
 }
 message GetReservationListResponse{repeated ReadReservationDto reservations = 1;}
 
