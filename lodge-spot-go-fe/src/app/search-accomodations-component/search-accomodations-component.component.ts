@@ -57,8 +57,8 @@ searchAccomodations(){
       city: this.city,
       country: this.country,
       numberOfGuests: this.numberOfGuests,
-      endDate: ed,
-      startDate: sd
+      endDate: this.endDate,
+      startDate: this.startDate
 
   }
   console.log(accomodationRequest)
