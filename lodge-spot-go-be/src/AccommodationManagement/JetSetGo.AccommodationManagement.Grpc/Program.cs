@@ -52,8 +52,7 @@ var builder = WebApplication.CreateBuilder(args);
                 b =>
                     b.AllowAnyOrigin()
                         .AllowAnyHeader()
-                        .AllowAnyMethod()
-                        .WithExposedHeaders("Grpc-Status", "Grpc-Message", "Grpc-Encoding", "Grpc-Accept-Encoding"));
+                        .AllowAnyMethod());
         });
     builder.Services.AddGrpcSwagger().AddSwaggerGen(c =>
     {
@@ -107,12 +106,7 @@ var app = builder.Build();
     app.MapGrpcService<SearchAccommodationService>();
     app.UseAuthentication();
     app.UseAuthorization();
-    app.UseCors(builder =>
-    {
-        builder.AllowAnyOrigin()
-            .AllowAnyHeader()
-            .AllowAnyMethod();
-    });
+    app.UseCors("AllowOrigin");
     app.MapGet("/",
         () =>
             "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import {Accommodation} from "../model/accommodation";
-import {Address} from "../model/addres";
-import {AccommodationService} from "../../../services/accommodationService";
+import {Accommodation} from "../../../common/model/accommodation";
+import {Address} from "../../../common/model/addres";
+import {AccommodationService} from "../../../common/services/accommodationService";
 import {animate} from "@angular/animations";
 
 

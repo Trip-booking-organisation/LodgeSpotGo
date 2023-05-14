@@ -1,18 +1,28 @@
 using LodgeSpotGo.ApiGateway;
+using LodgeSpotGo.ApiGateway.Middleware;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddCorsPolicy(builder.Configuration);
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAnyOrigin",
+        b =>
+        {
+            b.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+        });
+});
 builder.Configuration.SetBasePath(builder.Environment.ContentRootPath)
     .AddJsonFile("ocelot.json", optional: false, reloadOnChange: true)
     .AddEnvironmentVariables();
 builder.Services.AddOcelot(builder.Configuration);
 
-var app = builder.Build();
-await app.UseOcelot();
-app.UseCors(app.Configuration
-    .GetSection("Cors")
-    .GetSection("PolicyName").Value!);
 
+var app = builder.Build();
+app.UseHttpsRedirection();
+await app.UseOcelot();
+app.UseCors("AllowAnyOrigin");
+app.UseMiddleware<CorsMiddleware>();
 app.Run();

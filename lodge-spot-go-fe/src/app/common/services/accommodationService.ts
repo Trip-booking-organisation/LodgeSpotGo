@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from "rxjs";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {Accommodation} from "../pages/accommodation-create/model/accommodation";
+import {Accommodation} from "../model/accommodation";
 
 @Injectable({
   providedIn: 'root'
