@@ -1,4 +1,6 @@
-﻿namespace LodgeSpotGo.ApiGateway.Middleware;
+﻿using System.Net;
+
+namespace LodgeSpotGo.ApiGateway.Middleware;
 
 public class CorsMiddleware
 {
@@ -11,15 +13,16 @@ public class CorsMiddleware
 
     public async Task Invoke(HttpContext context)
     {
-        if (context.Request.Method == "OPTIONS")
+        context.Response.Headers.Add("Access-Control-Allow-Credentials", new[] { "true" });
+        context.Response.Headers.Add("Access-Control-Allow-Headers", new[] { "Origin, X-Requested-With, Content-Type, Accept, Authorization, ActualUserOrImpersonatedUserSamAccount, IsImpersonatedUser" });
+        context.Response.Headers.Add("Access-Control-Allow-Methods", new[] { "GET, POST, PUT, DELETE, OPTIONS" });
+        if (context.Request.Method == HttpMethod.Options.Method)
         {
-            context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-            context.Response.Headers.Add("Access-Control-Allow-Headers", "*");
-            context.Response.Headers.Add("Access-Control-Allow-Methods", "*");
-            context.Response.StatusCode = 200;
+            context.Response.StatusCode = (int)HttpStatusCode.OK;
+            await context.Response.WriteAsync("OK");
             return;
         }
 
-        await _next(context);
+        await _next.Invoke(context);
     }
 }

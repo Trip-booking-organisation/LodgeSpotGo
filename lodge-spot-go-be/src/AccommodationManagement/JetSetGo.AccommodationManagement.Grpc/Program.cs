@@ -10,10 +10,23 @@ using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 {
     builder.Services.AddGrpc().AddJsonTranscoding();
+    builder.Configuration
+        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+        .AddEnvironmentVariables();
     builder.Services
         .AddApplication()
         .AddInfrastructure(builder.Configuration)
         .AddPresentation(builder.Configuration);
+    builder.Services
+        .AddCors(options =>
+        {
+            options.AddPolicy("AllowOrigin",
+                b =>
+                    b.AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+            );
+        });
     builder.Services.AddAuthentication(options =>
     {
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -41,16 +54,7 @@ var builder = WebApplication.CreateBuilder(args);
     });
     //builder.Services.AddKeycloakAuthentication(builder.Configuration, KeycloakAuthenticationOptions.Section);
     builder.Services.AddAuthorization();
-    builder.Services.AddKeycloakAuthorization(builder.Configuration, KeycloakAuthenticationOptions.Section);
-    builder.Services
-        .AddCors(options =>
-        {
-            options.AddPolicy("AllowOrigin",
-                b =>
-                    b.AllowAnyOrigin()
-                        .AllowAnyHeader()
-                        .AllowAnyMethod());
-        });
+    // builder.Services.AddKeycloakAuthorization(builder.Configuration, KeycloakAuthenticationOptions.Section);
     builder.Services.AddGrpcSwagger().AddSwaggerGen(c =>
     {
         c.SwaggerDoc("v1",new OpenApiInfo
@@ -90,6 +94,7 @@ var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 {
     app.UseRouting();
+    app.UseCors("AllowOrigin");
     app.UseSwagger().UseSwaggerUI(c =>
     {
         c.OAuthClientId(builder.Configuration["Jwt:ClientId"]);
@@ -99,11 +104,10 @@ var app = builder.Build();
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "AccommodationManagementMicroservice v1");
     });
     app.MapGrpcService<GreeterService>().RequireAuthorization();
-    app.MapGrpcService<AccommodationService>();
+    app.MapGrpcService<AccommodationService>().RequireAuthorization();
     app.MapGrpcService<SearchAccommodationService>();
     app.UseAuthentication();
     app.UseAuthorization();
-    app.UseCors("AllowOrigin");
     app.MapGet("/",
         () =>
             "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");

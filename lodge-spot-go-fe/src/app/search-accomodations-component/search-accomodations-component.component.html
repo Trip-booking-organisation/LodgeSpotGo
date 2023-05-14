@@ -1,0 +1,73 @@
+<div class="search container-main section">
+  <div class="section-container grid" data-aos="fade-up" data-aos-duration="2000">
+    <div class="search-inputs flex">
+      <div class="single-input flex">
+        <div class="icon-div">
+          <mat-icon>where_to_vote</mat-icon>
+        </div>
+        <div class="texts">
+          <h4>Location</h4>
+          <mat-form-field>
+            <input type="text" placeholder="Where you want to go?" matInput
+                   [matAutocomplete]="autoFrom">
+            <mat-autocomplete #autoFrom="matAutocomplete">
+              <mat-option *ngFor="let accomodation of filteredLocation | async">
+              [value]="accomodation.street  + ' , ' + accomodation.city + ', ' + accomodation.country"
+              {{ accomodation.street }} {{ accomodation.city }}, {{ accomodation.country }}
+              </mat-option>
+
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+      </div>
+       </div>
+      </div>
+      <div class="single-input flex">
+        <div class="icon-div">
+          <mat-icon>account_circle</mat-icon>
+        </div>
+        <div class="texts">
+          <h4>Number of guests</h4>
+          <mat-form-field>
+    <input type="text" placeholder="Enter the number of guests" matInput
+           [matAutocomplete]="autoGuests">
+    <mat-autocomplete #autoGuests="matAutocomplete">
+      <mat-option *ngFor="let number of filteredGuests | async" [value]="number">
+        {{ number }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+        </div>
+      </div>
+      <div class="single-input flex">
+        <div class="icon-div">
+          <mat-icon>calendar_today</mat-icon>
+        </div>
+        <div class="texts">
+          <h4>Start date</h4>
+          <mat-form-field appearance="fill">
+            <mat-label>Enter a date range</mat-label>
+            <mat-date-range-input  [rangePicker]="picker">
+              <input [(ngModel)] ="startDate" matStartDate placeholder="Start date">
+              <input [(ngModel)] ="endDate" matEndDate  placeholder="End date">
+            </mat-date-range-input>
+
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+
+          </mat-form-field>
+
+        </div>
+
+      </div>
+      <button (click)="searchAccomodations()" class="btn btn-block flex">
+        Search accomodations
+      </button>
+    </div>
+    <ng-container *ngIf="isLoading; else results">
+    </ng-container>
+    <ng-template #results>
+      <div *ngFor="let result of searchResults">
+      </div>
+    </ng-template>
+

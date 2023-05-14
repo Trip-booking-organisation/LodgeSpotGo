@@ -35,7 +35,7 @@ services:
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: root
       ME_CONFIG_MONGODB_ADMINPASSWORD: example
-      ME_CONFIG_MONGODB_URL: mongodb://lodge1312:lodge420@jajara-db:27017/
+      ME_CONFIG_MONGODB_URL: mongodb://lodge1312:lodge420@accommodation-db:27017/
   accommodation-db:
     image: mongo
     restart: always

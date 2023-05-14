@@ -2,7 +2,6 @@
 using Grpc.Core;
 using JetSetGo.AccommodationManagement.Application.Common.Persistence;
 using JetSetGo.AccommodationManagement.Domain.Accommodation;
-using JetSetGo.AccommodationManagement.Domain.Accommodation.Enum;
 using JetSetGo.AccommodationManagement.Domain.Accommodation.ValueObjects;
 using JetSetGo.AccommodationManagement.Grpc.Mapping.MappingToGrpcResponse;
 using MediatR;
@@ -24,7 +23,7 @@ public class AccommodationService : AccommodationApp.AccommodationAppBase
         _mapper = mapper;
         _mappingToGrpcResponse = mappingToGrpcResponse;
     }
-    /*[Authorize(Roles = "guest")]*/
+    [Authorize(Roles = "guest,host")]
     public override async  Task<GetAccommodationListResponse> GetAccommodationList(GetAccommodationListRequest request, ServerCallContext context)
     {
         var list = new GetAccommodationListResponse();
@@ -35,7 +34,7 @@ public class AccommodationService : AccommodationApp.AccommodationAppBase
         responseList.ForEach(dto => list.Accommodations.Add(dto));
         return list;
     }
-    
+    [Authorize(Roles = "host")]
     public override Task<CreateAccommodationResponse> CreateAccommodation(CreateAccommodationRequest request, ServerCallContext context)
     {
         _logger.LogInformation(@"Request {request.Accommodation}",request.Accommodation);
