@@ -4,6 +4,7 @@ import {AccommodationService} from "../../../common/services/accommodationServic
 import {Accommodation} from "../../../common/model/accommodation";
 import {ToastrService} from "ngx-toastr";
 import {Router} from "@angular/router";
+import {AuthService} from "../../../core/keycloak/auth.service";
 
 
 @Component({
@@ -20,6 +21,7 @@ export class AccommodationCreateComponent {
   airCondition= false;
   freeParking= false;
   fridge = false;
+  isAutomatic = false;
 
   name ="";
   country = "";
@@ -27,10 +29,15 @@ export class AccommodationCreateComponent {
   street = "";
   max = 0;
   min = 0;
+  userId: string = "";
 
   constructor(private readonly accommodationService:AccommodationService, private toastService:ToastrService,
-              private router:Router) {
-
+              private router:Router,private authService:AuthService) {
+    this.authService.getUserObservable().subscribe(
+      value => {
+        console.log(value)
+        this.userId = value?.id!
+      })
   }
 
   assambleAmenitetis():string[]{
@@ -69,7 +76,9 @@ export class AccommodationCreateComponent {
       max_guests: this.max,
       min_guests: this.min,
       amenities: this.assambleAmenitetis(),
-      photos: this.photos
+      photos: this.photos,
+      hostId: this.userId,
+      automaticConfirmation: this.isAutomatic
     }
     if(accommodation.max_guests! < accommodation.min_guests!){
       this.toastService.error("Wrong range max and min guests!")
@@ -112,6 +121,5 @@ export class AccommodationCreateComponent {
   deletePhoto(i: number) {
     const filter =this.photos.filter((photo, index) => i !== index)
     this.photos = [...filter]
-
   }
 }

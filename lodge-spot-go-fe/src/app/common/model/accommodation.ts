@@ -1,6 +1,5 @@
 import {Address} from "./addres";
 import {SpecialPrice} from "./specialPrice";
-import {Photo} from "./Photo";
 
 export interface Accommodation {
   name?: string;
@@ -9,5 +8,7 @@ export interface Accommodation {
   min_guests?:number;
   amenities?:string[];
   photos?:string[];
-  specialPrices?:SpecialPrice[]
+  specialPrices?:SpecialPrice[];
+  hostId: string;
+  automaticConfirmation: boolean
 }

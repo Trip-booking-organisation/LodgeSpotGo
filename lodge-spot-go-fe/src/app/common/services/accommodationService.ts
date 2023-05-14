@@ -1,24 +1,25 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable} from "rxjs";
+import {Observable} from "rxjs";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Accommodation} from "../model/accommodation";
 
 import {AccomodationResult} from "../../core/model/AccomodationResult";
 
 import {AccommodationResponse} from "../../shered/model/accommodationResponse";
+import {environment} from "../../../environments/environment.development";
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class AccommodationService{
-  private baseUrl =  "https://localhost:7132/api/v1/accommodations/";
+  private baseUrl =  `${environment.apiGateway}`;
   headers : HttpHeaders = new HttpHeaders({'Content-Type':'application/json'})
   constructor(private readonly httpClient:HttpClient) {
   }
 
   public createAccommodation(accommodation: Accommodation):Observable<any>{
-    return this.httpClient.post<Accommodation>(this.baseUrl,accommodation, {headers : this.headers});
+    return this.httpClient.post<Accommodation>(`${this.baseUrl}/api/accommodations`,accommodation, {headers : this.headers});
   }
 
   public searchAccomodation(accomodationRequest: AccomodationResult):Observable<any> {
