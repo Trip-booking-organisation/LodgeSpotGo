@@ -1,11 +1,11 @@
 import { Address } from "./Address";
+export interface MyDate{
+  date?:string;
+}
 export interface AccomodationResult {
-    id: string,
-    name: string,
-    address: Address,
-    maxGuests: number,
-    minGuests: number,
-    totalPrice: number,
-    pricePerNight: number
+    country?: string,
+    city: string,
+    numberOfGuests?: number,
+    startDate: MyDate,
+    endDate: MyDate
   }
-  

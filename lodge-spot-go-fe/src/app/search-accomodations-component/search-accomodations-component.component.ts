@@ -1,10 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AccomodationResult } from '../core/model/AccomodationResult';
+import {AccomodationResult, MyDate} from '../core/model/AccomodationResult';
 import { FormControl } from '@angular/forms';
 import { accomodationsAutoComplete } from '../core/data-access/cityAndCountryData';
 import { Observable, map, startWith } from 'rxjs';
 
 import { Address } from '../core/model/Address';
+import {AccommodationService} from "../common/services/accommodationService";
 
 
 @Component({
@@ -15,46 +16,60 @@ import { Address } from '../core/model/Address';
 export class SearchAccomodationsComponentComponent implements OnInit {
 
   @Input() searchResults: AccomodationResult[] = [];
-  locationControl = new FormControl();
-  numberOfGuestsControl = new FormControl()
+
+  //locationControl = new FormControl();
+  numberOfGuests: number | undefined;
   startDate = new Date()
   endDate = new Date()
-  accomodationAddresses = accomodationsAutoComplete;
-  filteredLocation!: Observable<Address[]>;
-  filteredGuests!: Observable<number[]>;
-  isLoading!: boolean;
+  //accomodationAddresses = accomodationsAutoComplete;
+  //filteredLocation!: Observable<Address[]>;
 
-  constructor(){}
+  isLoading!: boolean;
+ // cityCountry: any;
+  country: any;
+  city: any
+
+  constructor(private accomodationService: AccommodationService){}
 
   ngOnInit(): void {
-    this.mapFilterLocation()
-    this.mapFilterNumberOfGuests()
-  }
-  private mapFilterLocation() {
-    this.filteredLocation = this.locationControl.valueChanges
-    .pipe(
-      startWith(''),
-      map(value => this._filterAccomodations(value))
-    )
-  }
-  private mapFilterNumberOfGuests() {
-    this.filteredGuests = this.numberOfGuestsControl.valueChanges
-    .pipe(
-      startWith(''),
-      map(value => this._filterAccomodations(value))
-    )
+
+
   }
 
-  private _filterAccomodations(value: string): any[] {
-    const filterValue = value.toLowerCase();
-    return this.accomodationAddresses.filter(accomodation => {
-      const street = accomodation.street.toLowerCase();
-      const city = accomodation.city.toLowerCase();
-      const country = accomodation.country.toLowerCase();
 
-      return street.includes(filterValue) || city.includes(filterValue) || country.includes(filterValue);
-    });
+
+
+
+  // parseCityCountry (){
+  //   var parsed = this.cityCountry.parse(",")
+  //   this.city = parsed[0]
+  //   this.country = parsed[1]
+  // }
+searchAccomodations(){
+    var sd:MyDate ={
+      date : this.startDate.toDateString()
+    }
+  var ed:MyDate ={
+    date : this.endDate.toDateString()
   }
-searchAccomodations(){}
 
-}
+    var accomodationRequest : AccomodationResult={
+      city: this.city,
+      country: this.country,
+      numberOfGuests: this.numberOfGuests,
+      endDate: ed,
+      startDate: sd
+
+  }
+  console.log(accomodationRequest)
+  this.accomodationService.searchAccomodation(accomodationRequest)
+    .subscribe({
+      next: (data: AccomodationResult[]) => {
+        this.searchResults = data
+        this.isLoading = false
+      },
+      error: (_: any) => {
+        //this.toast.error("Search error occurs!", "Search")
+        this.isLoading = false
+      }
+    })}}
