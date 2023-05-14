@@ -3,6 +3,8 @@ import {Accommodation} from "../../../shered/model/accommodation";
 import {Address} from "../../../shered/model/addres";
 import {AccommodationService} from "../../../services/accommodationService";
 import {animate} from "@angular/animations";
+import { Buffer } from 'buffer';
+import * as pako from 'pako';
 
 
 @Component({
@@ -12,6 +14,7 @@ import {animate} from "@angular/animations";
 })
 export class AccommodationCreateComponent {
 
+  base64String: string = '';
   wifi= false;
   kitchen= false;
   airCondition= false;
@@ -50,6 +53,9 @@ export class AccommodationCreateComponent {
   }
 
   create() {
+    var phts: string[]= []
+    phts.push(this.base64String)
+    console.log(phts)
     var addres : Address ={
       country : this.country,
       city:this.city,
@@ -61,12 +67,32 @@ export class AccommodationCreateComponent {
       address: addres,
       max_guests: this.max,
       min_guests: this.min,
-      amenities: this.assambleAmenitetis()
+      amenities: this.assambleAmenitetis(),
+      photos:phts
     }
+    console.log(acc)
     this.accomodationService.createAccommodation(acc).subscribe({
       next:res =>{
         console.log(res)
       }
     })
+  }
+
+  onFileSelected(event: any) {
+    const fileInput: HTMLInputElement = event.target as HTMLInputElement;
+    const files: FileList | null = fileInput.files;
+
+    if (files && files.length > 0) {
+      const file: File = files[0];
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        this.base64String = reader.result!.toString().split(',')[1];
+      };
+
+      reader.readAsDataURL(file);
+      const compressedData = pako.deflate(this.base64String);
+      console.log(compressedData)
+    }
   }
 }

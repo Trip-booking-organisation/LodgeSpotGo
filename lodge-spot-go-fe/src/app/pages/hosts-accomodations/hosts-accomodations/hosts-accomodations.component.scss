@@ -11,3 +11,29 @@
   width: 70%;
   margin-left: 15%;
 }
+.field{
+  margin-top: 1%;
+  background-color: #94bacb;
+  border-radius: 20px;
+  width: 70%;
+  display: flex;
+  justify-content: space-around;
+  padding: 1%;
+}
+
+.field-value{
+  display: flex;
+  justify-content: space-around;
+  align-content: center;
+  width: 80%;
+}
+
+.value{
+  background-color: #82adbe;
+  padding: 1%;
+  border-radius: 20px;
+  display: flex;
+  width: 30%;
+  text-align: center;
+  justify-content: center;
+}

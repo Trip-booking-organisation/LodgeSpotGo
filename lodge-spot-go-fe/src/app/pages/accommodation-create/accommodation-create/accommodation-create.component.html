@@ -40,6 +40,9 @@
           <input type="number" [(ngModel)]="min" pattern="[0-9]+" min="0" matInput placeholder="minimum guests" value="1">
         </mat-form-field>
       </div>
+      <div class="field">
+        <input type="file"  (change)="onFileSelected($event)">
+      </div>
 
     </div>
     <div class="column">
@@ -60,6 +63,7 @@
     </div>
   </div>
 
+  <img *ngIf="base64String" [src]="'data:image/jpeg;base64,' + base64String" alt="A beautiful landscape image"/>
 
 
 
