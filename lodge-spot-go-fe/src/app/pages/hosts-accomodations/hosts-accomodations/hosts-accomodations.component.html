@@ -1,0 +1,21 @@
+<div class="window">
+  <div class="list">
+    <div class="accomodation" *ngFor="let acc of yourAccomodations">
+      <div class="card">
+        {{acc.name}}
+        {{acc.address!.country}}
+        {{acc.address!.city}}
+        {{acc.address!.street}}
+        <div  *ngFor="let am of acc.amenities">
+          {{am}}
+        </div>
+        <div  *ngFor="let specialPrice of acc.specialPrices">
+          {{specialPrice.dateRange!.from | date:'yyyy-MM-dd'}}
+          {{specialPrice.dateRange!.to | date:'yyyy-MM-dd'}}
+          {{specialPrice.price}}
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -12,6 +12,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {CommonModule} from "@angular/common";
 import {HomeModule} from "./pages/home/home.module";
 import {AccommodationCreateModule} from "./pages/accommodation-create/accommodation-create.module"
+import {HostsAccomodationsModule} from "./pages/hosts-accomodations/hosts-accomodations.module"
 
 import {MatInputModule} from "@angular/material/input";
 
@@ -29,7 +30,8 @@ import {MatInputModule} from "@angular/material/input";
     BrowserAnimationsModule,
     CommonModule,
     HomeModule,
-    MatInputModule
+    MatInputModule,
+    HostsAccomodationsModule
   ],
   providers: [{
     provide: APP_INITIALIZER,
