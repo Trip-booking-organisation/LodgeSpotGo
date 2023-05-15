@@ -146,7 +146,7 @@
     </ng-container>
     <ng-template #results>
       <div *ngFor="let result of searchResults">
-       <!-- <app-search-card [flight]="result" [numberOfTravelers]="numberOfTravelers.value" (deletedFlight)="deleteFlight($event)"/>-->
+        <app-accommodation-card [accommodations]="result"  />
       </div>
     </ng-template>
   </div>

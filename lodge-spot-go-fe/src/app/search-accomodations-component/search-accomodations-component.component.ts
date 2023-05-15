@@ -7,6 +7,8 @@ import { Address } from '../core/model/Address';
 import {AccommodationService} from "../common/services/accommodationService";
 import {SearchAndFilterService} from "../common/services/search-and-filter.service";
 import {flightsAutoComplete} from "./data-access/cityAndCountryData";
+import {Accommodation} from "../common/model/accommodation";
+import {IAccommodationDto} from "../common/model/accommodation-dto";
 
 
 @Component({
@@ -16,8 +18,7 @@ import {flightsAutoComplete} from "./data-access/cityAndCountryData";
 })
 export class SearchAccomodationsComponentComponent implements OnInit {
 
-  @Input() searchResults: AccomodationResult[] = [];
-
+  searchResults: IAccommodationDto[] = [];
   flightsAddresses = flightsAutoComplete;
   filteredLocations!: Observable<Address[]>;
   location = new FormControl()
@@ -33,17 +34,6 @@ export class SearchAccomodationsComponentComponent implements OnInit {
 
   ngOnInit(): void {
     this.mapFilterTo()
-    /*const numberOfGuests = 3
-    const startDate= Math.floor(new Date().getTime() / 1000)
-    const endDate = Math.floor(new Date().getTime() / 1000)
-    const city = 'string'
-    const country = 'string'
-    this.searchService.searchAccommodations(numberOfGuests,startDate,endDate,city,country).subscribe({
-      next: response => {
-        console.log(response)
-      }
-    })
-*/
   }
   private mapFilterTo() {
     this.filteredLocations = this.location.valueChanges
@@ -70,7 +60,9 @@ export class SearchAccomodationsComponentComponent implements OnInit {
     const country = array[1]
     this.searchService.searchAccommodations(numberOfGuests,startDate,endDate,city,country).subscribe({
       next: response => {
-        console.log(response.accommodations)
+        const accommodations = response.accommodations
+        this.searchResults = [...accommodations]
+        console.log(this.searchResults)
       }
     })
   }

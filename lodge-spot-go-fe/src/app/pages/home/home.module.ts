@@ -11,6 +11,9 @@ import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {CoreModule} from "../../core/core.module";
+import {
+  AccommodationCardComponent
+} from "../../search-accomodations-component/accommodation-card/accommodation-card.component";
 //import { LoadingAnimationComponent } from 'path/to/loading-animation.component';
 
 
@@ -18,7 +21,8 @@ import {CoreModule} from "../../core/core.module";
 @NgModule({
   declarations: [
     HomePageComponent,
-    SearchAccomodationsComponentComponent
+    SearchAccomodationsComponentComponent,
+    AccommodationCardComponent
   ],
     imports: [
         CommonModule,
