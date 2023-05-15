@@ -11,39 +11,39 @@ import {HttpClientModule} from "@angular/common/http";
 import {initializeKeycloak} from "./core/keycloak/init-keycloak";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {CommonModule} from "@angular/common";
-import {HomeModule} from "./pages/home/home.module";
 
 import {AccommodationCreateModule} from "./pages/accommodation-create/accommodation-create.module";
 import {MatInputModule} from "@angular/material/input";
 import {HostsAccomodationsModule} from "./pages/hosts-accomodations/hosts-accomodations.module";
 import {ToastrModule} from "ngx-toastr";
+import { AccommodationCardComponent } from './search-accomodations-component/accommodation-card/accommodation-card.component';
+import {HomeModule} from "./pages/home/home.module";
 
 @NgModule({
-  declarations: [
-    AppComponent
-    //SearchAccomodationsComponentComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    CoreModule,
-    KeycloakAngularModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
-    CommonModule,
-    HomeModule,
-    MatInputModule,
-    HostsAccomodationsModule,
-    MatIconModule,
-    AccommodationCreateModule,
-    ToastrModule.forRoot(),
-  ],
-  providers: [{
-    provide: APP_INITIALIZER,
-    useFactory: initializeKeycloak,
-    multi: true,
-    deps: [KeycloakService]
-  }],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent
+    ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        CoreModule,
+        KeycloakAngularModule,
+        HttpClientModule,
+        BrowserAnimationsModule,
+        CommonModule,
+        MatInputModule,
+        HostsAccomodationsModule,
+        MatIconModule,
+        AccommodationCreateModule,
+        ToastrModule.forRoot(),
+        HomeModule
+    ],
+    providers: [{
+        provide: APP_INITIALIZER,
+        useFactory: initializeKeycloak,
+        multi: true,
+        deps: [KeycloakService]
+    }],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }

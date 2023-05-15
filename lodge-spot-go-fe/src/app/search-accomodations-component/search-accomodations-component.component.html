@@ -1,3 +1,4 @@
+<!--
 <div class="search container-main section">
   <div class="section-container grid" data-aos="fade-up" data-aos-duration="2000">
     <div class="search-inputs flex">
@@ -7,14 +8,14 @@
         </div>
         <div class="texts">
           <h4>Location</h4>
-<!--          <mat-form-field>-->
-<!--            <input type="text" placeholder="Where you want to go?" >-->
+&lt;!&ndash;          <mat-form-field>&ndash;&gt;
+&lt;!&ndash;            <input type="text" placeholder="Where you want to go?" >&ndash;&gt;
 
-<!--              <input type = "text"[value]= "accomodation.city + ',' + accomodation.country" [(ngModel)]="cityCountry">-->
+&lt;!&ndash;              <input type = "text"[value]= "accomodation.city + ',' + accomodation.country" [(ngModel)]="cityCountry">&ndash;&gt;
 
-<!--              {{ accomodation.city }}, {{ accomodation.country }}-->
+&lt;!&ndash;              {{ accomodation.city }}, {{ accomodation.country }}&ndash;&gt;
 
-<!--          </mat-form-field>-->
+&lt;!&ndash;          </mat-form-field>&ndash;&gt;
           <mat-form-field>
             <input matInput type="text" placeholder="City" [(ngModel)]="city">
 
@@ -34,14 +35,14 @@
         </div>
         <div class="texts">
           <h4>Number of guests</h4>
-<!--           [matAutocomplete]="autoGuests">-->
-<!--    <mat-autocomplete #autoGuests="matAutocomplete">-->
+&lt;!&ndash;           [matAutocomplete]="autoGuests">&ndash;&gt;
+&lt;!&ndash;    <mat-autocomplete #autoGuests="matAutocomplete">&ndash;&gt;
 
             <mat-form-field class="example-full-width">
               <mat-label>Insert number of guests</mat-label>
               <input type="number" min="0" matInput placeholder="Insert number of guests" value="1" [(ngModel)]="numberOfGuests">
             </mat-form-field>
-<!--    </mat-autocomplete>-->
+&lt;!&ndash;    </mat-autocomplete>&ndash;&gt;
         </div>
       </div>
 
@@ -64,8 +65,8 @@
 
 
       </div>
-      <button (click)="searchAccomodations()" class="btn btn-block flex">
-        Search accomodations
+      <button (click)="searchAccommodations()" class="btn btn-block flex">
+        Search accommodations
       </button>
     </div>
     <ng-container *ngIf="isLoading; else results">
@@ -76,3 +77,77 @@
     </ng-template>
   <app-reserve-accomodation-card></app-reserve-accomodation-card>
 
+-->
+<div class="search container-main section">
+  <div class="section-container grid" data-aos="fade-up" data-aos-duration="2000">
+    <div class="search-inputs flex">
+      <div class="single-input flex">
+        <div class="icon-div">
+          <mat-icon>location_on</mat-icon>
+        </div>
+        <div class="texts">
+          <h4>Location</h4>
+          <mat-form-field>
+            <input type="text" placeholder="Where you want to go?" matInput [formControl]="location"
+                   [matAutocomplete]="autoTo">
+            <mat-autocomplete #autoTo="matAutocomplete">
+              <mat-option *ngFor="let flight of filteredLocations | async"
+                          [value]="flight.city + ',' + flight.country">
+                {{ flight.city }}, {{ flight.country }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="single-input flex">
+        <div class="icon-div">
+          <mat-icon>account_circle</mat-icon>
+        </div>
+        <div class="texts">
+          <h4>Number of guests</h4>
+          <mat-form-field class="small-input">
+            <input type="number" placeholder="Add passenger number" matInput
+                   [formControl]="numberOfGuests" >
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="single-input flex">
+        <div class="icon-div">
+          <mat-icon>calendar_today</mat-icon>
+        </div>
+        <div class="texts">
+          <h4>From</h4>
+          <mat-form-field class="medium-input">
+            <input matInput [matDatepicker]="picker1" [formControl]="from" placeholder="Add date">
+            <mat-datepicker-toggle matIconSuffix [for]="picker1"/>
+            <mat-datepicker #picker1/>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="single-input flex">
+        <div class="icon-div">
+          <mat-icon>calendar_today</mat-icon>
+        </div>
+        <div class="texts">
+          <h4>To</h4>
+          <mat-form-field class="medium-input">
+            <input matInput [matDatepicker]="picker" [formControl]="to" placeholder="Add date">
+            <mat-datepicker-toggle matIconSuffix [for]="picker"/>
+            <mat-datepicker #picker/>
+          </mat-form-field>
+        </div>
+      </div>
+      <button (click)="searchAccommodations()" class="btn btn-block flex">
+        Search
+      </button>
+    </div>
+    <ng-container *ngIf="isLoading; else results">
+    <!--  <app-loading-animation/>-->
+    </ng-container>
+    <ng-template #results>
+      <div *ngFor="let result of searchResults">
+        <app-accommodation-card [accommodations]="result"  />
+      </div>
+    </ng-template>
+  </div>
+</div>
