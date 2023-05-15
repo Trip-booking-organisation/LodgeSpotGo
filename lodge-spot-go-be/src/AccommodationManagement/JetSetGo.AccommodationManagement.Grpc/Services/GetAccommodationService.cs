@@ -23,6 +23,7 @@ public class GetAccommodationService : GetAccommodationApp.GetAccommodationAppBa
         _logger.LogInformation(@"Request {}",request.Id);
         var accommodation = await _accommodationRepository.GetAsync(Guid.Parse(request.Id));
         var response = _mappingToGrpcResponse.MapAccommodationToGrpcResponse(accommodation);
+        _logger.LogInformation(@"Request {}",response.Result.Accommodation.ToString());
         return await response;
     }
 }

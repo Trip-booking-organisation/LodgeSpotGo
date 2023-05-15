@@ -1,6 +1,8 @@
 ﻿using System.Diagnostics;
+using JetSetGo.UserManagement.Grpc;
 using JetSetGo.UsersManagement.Grpc.Common.Logger;
 using JetSetGo.UsersManagement.Grpc.Keycloak;
+using JetSetGo.UsersManagement.Grpc.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -14,10 +16,15 @@ public static class UserEndpoints
         application.MapDelete("api/v1/users", DeleteUser);
     }
 
-    private static async Task<IResult> DeleteUser(Guid id,IOptions<KeycloakAdmin> adminOptions,[FromServices]MessageLogger logger)
+    private static async Task<IResult> DeleteUser(Guid id,string userRole,IOptions<KeycloakAdmin> adminOptions,
+        [FromServices]MessageLogger logger,[FromServices]UserGrpcService userGrpcService)
     {
         var options = adminOptions.Value;
-
+        userGrpcService.GetReservationResponse(new UserRequest
+        {
+            UserId = id.ToString(),
+            Role = userRole
+        });
         using var client = new HttpClient();
         var tokenUrl = $"{options.BaseUrl}/realms/master/protocol/openid-connect/token";
         logger.LogInfo("TokenUrl",tokenUrl);

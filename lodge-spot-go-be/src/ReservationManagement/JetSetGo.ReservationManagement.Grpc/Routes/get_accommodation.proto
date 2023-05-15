@@ -17,7 +17,6 @@ message SpecialPriceDto {
   DateRangeDto dateRange = 1;
   double price = 2;
 }
-
 message AccommodationDto {
   string id = 1;
   string name = 2;
@@ -25,7 +24,7 @@ message AccommodationDto {
   repeated string amenities = 4;
   int32 max_guests = 5;
   int32 min_guests = 6;
-  repeated PhotoDto photos = 7;
+  repeated string photos = 7;
   repeated SpecialPriceDto specialPrices = 8;
   string hostId = 9;
   bool automaticConfirmation = 10;

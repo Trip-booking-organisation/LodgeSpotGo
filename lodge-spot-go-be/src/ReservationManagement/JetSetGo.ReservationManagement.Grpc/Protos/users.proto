@@ -1,0 +1,14 @@
+﻿syntax = "proto3";
+option csharp_namespace = "JetSetGo.UserManagement.Grpc";
+
+message UserRequest {
+  string user_id = 1;
+  string role = 2;
+}
+message ReservationResponse {
+  bool has_reservation = 1;
+}
+service UserServiceGrpc {
+  rpc GetUserReservations(UserRequest) returns (ReservationResponse){
+  }
+}
