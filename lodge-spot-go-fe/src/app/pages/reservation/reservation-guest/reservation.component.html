@@ -4,7 +4,8 @@
       <div class="content-flight">
         <div class="flight-details">
           <div class="flight-info">
-            <img src="assets/images/hotel.jpg" alt="Accommodation">
+            <img [src]="'data:image/jpeg;base64,' + r.accommodation.photos[0]" class="img-a" alt="A beautiful landscape image" width="280" height="280"/>
+
           </div>
           <div class="flight-divider">
           </div>
@@ -22,19 +23,19 @@
       <div class="one-price">
         <h4 class="price-text">Price per person</h4>
         <div class="class-price">
-          <p>One night: <span>€</span></p>
+          <p>One night: <span>{{r.pricePerPersonOneNight}}€</span></p>
         </div>
         <div class="class-price">
-          <p>In total: <span>€</span></p>
+          <p>In total: <span>{{r.pricePerPersonInTotal}}€</span></p>
         </div>
       </div>
       <div class="total-price">
         <h4 class="price-h">Price in total</h4>
         <div class="class-price">
-          <p>One night: <span>€</span></p>
+          <p>One night: <span>{{r.pricePerPersonInTotal}}€</span></p>
         </div>
         <div class="class-price">
-          <p>In total: <span>€</span></p>
+          <p>In total: <span>{{r.priceInTotalInTotal}}€</span></p>
         </div>
         <button *ngIf="r.reservation?.status === 'Confirmed'" [disabled]="r.disabled" class="btn-delete-lg book" (click)="onCancel(r.reservation)" >Cancel</button>
         <button *ngIf="r.reservation?.status === 'Waiting'" class="btn-delete-lg book" (click)="onDelete(r.reservation!)" >Delete</button>

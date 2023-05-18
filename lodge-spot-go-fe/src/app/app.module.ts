@@ -18,6 +18,8 @@ import {HostsAccomodationsModule} from "./pages/hosts-accomodations/hosts-accomo
 import {ToastrModule} from "ngx-toastr";
 import { AccommodationCardComponent } from './search-accomodations-component/accommodation-card/accommodation-card.component';
 import {HomeModule} from "./pages/home/home.module";
+import {AllAccommodationsModule} from "./pages/all-accommodations/all-accommodations.module";
+import {ViewAccommodationModule} from "./pages/view-accommodation/view-accommodation.module";
 
 @NgModule({
     declarations: [
@@ -36,7 +38,9 @@ import {HomeModule} from "./pages/home/home.module";
         MatIconModule,
         AccommodationCreateModule,
         ToastrModule.forRoot(),
-        HomeModule
+        HomeModule,
+        AllAccommodationsModule,
+        ViewAccommodationModule
     ],
     providers: [{
         provide: APP_INITIALIZER,

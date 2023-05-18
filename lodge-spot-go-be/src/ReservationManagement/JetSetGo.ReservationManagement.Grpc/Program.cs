@@ -82,6 +82,7 @@ var app = builder.Build();
 app.MapGrpcService<GreeterService>();
 app.MapGrpcService<ReservationService>();
 app.MapGrpcService<SearchReservationService>();
+app.MapGrpcService<UserReservationService>();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapGet("/",

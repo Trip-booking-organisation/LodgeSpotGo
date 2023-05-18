@@ -4,6 +4,7 @@ import { ReservationComponent } from './reservation-guest/reservation.component'
 import { CancelReservationComponent } from './cancel-reservation/cancel-reservation.component';
 import {MatDialog, MatDialogModule} from "@angular/material/dialog";
 import { ReservationHostComponent } from './reservation-host/reservation-host.component';
+import { DeletedReservationsDialogComponent } from './reservation-host/deleted-reservations-dialog/deleted-reservations-dialog.component';
 
 
 
@@ -11,7 +12,8 @@ import { ReservationHostComponent } from './reservation-host/reservation-host.co
   declarations: [
     ReservationComponent,
     CancelReservationComponent,
-    ReservationHostComponent
+    ReservationHostComponent,
+    DeletedReservationsDialogComponent
   ],
   imports: [
     CommonModule,

@@ -1,0 +1,37 @@
+<div class="container container-main">
+  <div class="content" *ngIf="(accommodation$ | async);let accommodation">
+  <mat-card class="card">
+    <mat-card-header>
+      <mat-card-title class="gradient-text">{{ accommodation.name}}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="text">
+      <p>Address: {{ accommodation.address?.street }}, {{ accommodation.address?.city }}, {{ accommodation.address?.country }}</p>
+      <p>Max Guests: {{ accommodation.maxGuests }}</p>
+      <p>Min Guests: {{ accommodation.minGuests }}</p>
+      <p>Amenities: {{ accommodation.amenities?.join(', ') }}</p>
+      <p >Special Prices:</p>
+    </mat-card-content>
+    <div  *ngFor="let specialPrice of accommodation.specialPrices">
+      <div class="field" >
+        <div class="filed-info"> Special price:</div>
+        <div class="field-value">
+          <div class="value">from: {{specialPrice.dateRange!.from | date:'yyyy-MM-dd'}}</div>
+          <div class="value">to:{{specialPrice.dateRange!.to | date:'yyyy-MM-dd'}}</div>
+          <div class="value">{{specialPrice.price}}$</div>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+    <h4 class="gradient-text">
+      Photos
+    </h4>
+    <div class="photos">
+      <div *ngFor="let photo of accommodation.photos;let i = index;" [attr.data-index]="i">
+        <div class="flex-col">
+          <img [src]="'data:image/jpeg;base64,' + photo" class="img-a" alt="A beautiful landscape image" width="280" height="280"/>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

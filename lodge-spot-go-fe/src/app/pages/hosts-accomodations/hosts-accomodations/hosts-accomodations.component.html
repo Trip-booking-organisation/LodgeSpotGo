@@ -1,40 +1,66 @@
 <div class="window">
   <div class="list">
-    <div class="accomodation" *ngFor="let acc of yourAccomodations">
+    <div class="accommodation" *ngFor="let accommodation of transformedList$ | async">
       <div class="card">
-
-        <div class="field">
-          <div class="filed-info"> Name:</div>
-          <div class="value">
-            {{acc.name}}
-          </div>
-        </div>
-        <div class="field">
-          <div class="field-info"> Address:</div>
-          <div class="value">
-            {{acc.address!.country}}
-            {{acc.address!.city}}
-            {{acc.address!.street}}
-          </div>
-
-        </div>
-        <div  *ngFor="let am of acc.amenities">
+        <div class="field-group">
           <div class="field">
-            <div class="filed-info"> Included:</div>
-            <div class="value">{{am}}</div>
-          </div>
-        </div>
-        <div  *ngFor="let specialPrice of acc.specialPrices">
-
-          <div class="field">
-            <div class="filed-info"> Special price:</div>
-            <div class="field-value">
-              <div class="value">from: {{specialPrice.dateRange!.from | date:'yyyy-MM-dd'}}</div>
-              <div class="value">to:{{specialPrice.dateRange!.to | date:'yyyy-MM-dd'}}</div>
-              <div class="value">{{specialPrice.price}}$</div>
+            <div class="filed-info"> Name:</div>
+            <div class="value">
+              {{accommodation.name}}
             </div>
           </div>
-
+          <div class="field">
+            <div class="filed-info"> Address:</div>
+            <div class="value">
+              {{accommodation.address!.country}}
+              {{accommodation.address!.city}}
+              {{accommodation.address!.street}}
+            </div>
+          </div>
+          <div  *ngFor="let am of accommodation.amenities">
+            <div class="field">
+              <div class="filed-info"> Included:</div>
+              <div class="value">{{am}}</div>
+            </div>
+          </div>
+          <div  *ngFor="let specialPrice of accommodation.specialPrices">
+            <div class="field">
+              <div class="filed-info"> Special price:</div>
+              <div class="field-value">
+                <div class="value">from: {{specialPrice.dateRange.from | date:'yyyy-MM-dd'}}</div>
+                <div class="value">to:{{specialPrice.dateRange.to | date:'yyyy-MM-dd'}}</div>
+                <div class="value">{{specialPrice.price}}$</div>
+              </div>
+            </div>
+          </div>
+          <div class="field" *ngIf="accommodation.isPriceActive">
+            <div class="field-info">Add Price:</div>
+            <form class="value-form" (ngSubmit)="submitPrice(accommodation)">
+              <mat-form-field>
+                <mat-label>Enter a date range</mat-label>
+                <mat-date-range-input [rangePicker]="picker">
+                  <input matStartDate placeholder="Start date" [formControl]="startDate">
+                  <input matEndDate placeholder="End date" [formControl]="finishDate">
+                </mat-date-range-input>
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-date-range-picker #picker></mat-date-range-picker>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Enter a price</mat-label>
+                <input matInput type="number" placeholder="Price" [formControl]="price">
+              </mat-form-field>
+              <button class="btn">Submit</button>
+            </form>
+          </div>
+      </div>
+        <div class="img-wrap">
+          <img [src]="'data:image/jpeg;base64,' + accommodation.photos[0]" class="img-a" alt="A beautiful landscape image" width="150" height="150"/>
+          <button class="btn large" (click)="addPrice(accommodation)">
+            Add price
+          </button>
+          <button class="btn large" (click)="viewAccommodation(accommodation)">
+            View
+          </button>
         </div>
       </div>
     </div>

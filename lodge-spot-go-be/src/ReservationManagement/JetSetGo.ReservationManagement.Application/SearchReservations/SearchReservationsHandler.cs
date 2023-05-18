@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using JetSetGo.ReservationManagement.Application.Common.Persistence;
+using JetSetGo.ReservationManagement.Domain.Reservation;
+using JetSetGo.ReservationManagement.Domain.Reservation.ValueObjects;
 using MediatR;
 
 namespace JetSetGo.ReservationManagement.Application.SearchReservations;
@@ -17,8 +19,16 @@ public class SearchReservationsHandler : IRequestHandler<SearchReservationsQuery
 
     public async Task<List<SearchReservationResponse>> Handle(SearchReservationsQuery request, CancellationToken cancellationToken)
     {
-        var reservations = await _reservationRepository.SearchReservations(request);
-        var result = _mapper.Map<List<SearchReservationResponse>>(reservations);
+        var dateRange = new DateRange
+        {
+            From = request.StartDate,
+            To = request.EndDate
+        };
+        var reservations = await _reservationRepository.GetAllAsync(cancellationToken);
+        var reserv = (from res in reservations 
+                        let isOverlapping = res.IsOverlapping(dateRange) 
+                             where isOverlapping select res).ToList();
+        var result = _mapper.Map<List<SearchReservationResponse>>(reserv);
         return result;
 
     }

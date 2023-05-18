@@ -5,10 +5,10 @@ export interface IAccommodationDto {
   id? : string
   name?: string;
   address?:Address;
-  location?:Address;
-  max_guests?:number;
-  min_guests?:number;
+  maxGuests?:number;
+  minGuests?:number;
   amenities?:string[];
   photos?:string[];
-  specialPrices?:SpecialPrice[]
+  specialPrices?:SpecialPrice[];
+  hostId:string;
 }

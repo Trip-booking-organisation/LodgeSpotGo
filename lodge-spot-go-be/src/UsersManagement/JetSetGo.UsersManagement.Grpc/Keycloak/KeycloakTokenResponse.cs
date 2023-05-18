@@ -6,6 +6,8 @@ public class KeycloakTokenResponse
 {
     [JsonProperty("access_token")]
     public string AccessToken { get; set; } = null!;
+    [JsonProperty("refresh_token")]
+    public string RefreshToken { get; set; } = null!;
 
     [JsonProperty("expires_in")]
     public int ExpiresIn { get; set; }

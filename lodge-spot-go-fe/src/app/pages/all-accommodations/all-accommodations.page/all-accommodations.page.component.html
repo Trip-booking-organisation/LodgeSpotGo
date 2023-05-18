@@ -1,0 +1,5 @@
+<div class="container-main section content">
+    <div *ngFor="let accommodationResponse of accommodations$ | async">
+      <app-accommodation-card [accommodation]="accommodationResponse"/>
+    </div>
+</div>

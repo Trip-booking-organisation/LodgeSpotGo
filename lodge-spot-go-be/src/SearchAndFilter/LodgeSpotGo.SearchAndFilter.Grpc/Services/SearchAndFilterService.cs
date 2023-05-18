@@ -24,8 +24,6 @@ public class SearchAndFilterService : SearchAndFilterApp.SearchAndFilterAppBase
     {
         //TODO Validations!!!!
         _logger.LogInformation(@"Request {}",request);
-        /*var startDate = DateTimeOffset.Parse(request.StartDate);
-        var unixTimestamp = (long)(startDate - DateTimeOffset.UnixEpoch).TotalSeconds;*/
         var searchRequest = _mapper.Map<SearchRequest>(request);
         var searchReservationRequest = _mapper.Map<ReservationSearchRequest>(request);
         _logger.LogInformation(@"Request {}",searchReservationRequest);

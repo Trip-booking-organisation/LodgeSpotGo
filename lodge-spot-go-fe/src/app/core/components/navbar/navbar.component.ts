@@ -7,6 +7,8 @@ import {AuthService} from "../../keycloak/auth.service";
 import {User} from "../../keycloak/user";
 import {Observable} from "rxjs";
 import {environment} from "../../../../environments/environment.development";
+import {UserManagementService} from "../../../common/services/user-management.service";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-navbar',
@@ -22,19 +24,19 @@ export class NavbarComponent implements OnInit {
   isCollapsed: boolean = false
   user$: Observable<User | null> = this.authService.getUserObservable();
 
-  constructor(private router: Router, private authService:AuthService) {
+  constructor(private router: Router, private authService:AuthService, private userManagementService: UserManagementService, private toast: ToastrService) {
   }
   ngOnInit(): void {
-    this.authService.getUserObservable().subscribe(
-      value => {
-        console.log(value)
-      }
-    )
-    this.authService.getTokenObservable().subscribe(token => {
-      console.log("value")
-      console.log(token)
-    })
-    //this.goToHomePage();
+    // this.authService.getUserObservable().subscribe(
+    //   value => {
+    //     console.log(value)
+    //   }
+    // )
+    // this.authService.getTokenObservable().subscribe(token => {
+    //   console.log("value")
+    //   console.log(token)
+    // })
+    // //this.goToHomePage();
   }
   login(): void {
     this.authService.login();
@@ -70,5 +72,28 @@ export class NavbarComponent implements OnInit {
   navigate(routerLink: string) {
     this.activeClass = 'navbar-menu'
     this.router.navigate([routerLink]).then()
+  }
+
+  deleteUser() {
+    const user = this.authService.getUser()
+    const id = user.id
+    let role = ''
+    if(user.roles.includes('host')){
+      role = 'host'
+    }
+    if(user.roles.includes('guest')){
+      role = 'guest'
+    }
+    console.log(role)
+    console.log(id)
+    this.userManagementService.deleteUser(id,role).subscribe({
+      next: () => {
+        this.toast.success("User successfully deleted","success")
+      },
+      error: () => {
+        this.toast.error("You cannot delete account","Error")
+      }
+    });
+    this.authService.logout()
   }
 }

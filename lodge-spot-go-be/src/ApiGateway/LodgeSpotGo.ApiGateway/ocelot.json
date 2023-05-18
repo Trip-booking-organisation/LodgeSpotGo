@@ -9,11 +9,11 @@
         "DELETE"
       ],
       "DownstreamPathTemplate": "/api/v1/accommodations",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7132
+          "Port": 5020
         }
       ]
     },
@@ -31,6 +31,24 @@
         {
           "Host": "localhost",
           "Port": 7132
+        }
+      ]
+    },
+
+    {
+      "UpstreamPathTemplate": "/api/v1/accommodations/host/{hostId}",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "DownstreamPathTemplate": "/api/v1/accommodations/host/{hostId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5020
         }
       ]
     },
@@ -78,6 +96,23 @@
         "DELETE"
       ],
       "DownstreamPathTemplate": "/api/v1/reservations/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7105
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/reservations/{guestId}",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "DownstreamPathTemplate": "/api/v1/reservations/{guestId}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {

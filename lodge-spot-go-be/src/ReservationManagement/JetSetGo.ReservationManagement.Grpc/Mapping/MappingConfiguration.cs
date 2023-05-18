@@ -51,7 +51,9 @@ public class MappingConfiguration:Profile
                 opt.MapFrom(src => src.DateRange))
             .ForMember(dest => dest.Status,
                 opt => 
-                    opt.MapFrom(src => MapEnumToString(src.ReservationStatus)));
+                    opt.MapFrom(src => MapEnumToString(src.ReservationStatus)))
+            .ForMember(dest => dest.NumberOfGuest, opt =>
+        opt.MapFrom(src => src.NumberOfGuests));
     }
 
     public string MapEnumToString(ReservationStatus status)

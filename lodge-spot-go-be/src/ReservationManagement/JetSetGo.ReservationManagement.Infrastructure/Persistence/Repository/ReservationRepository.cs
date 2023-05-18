@@ -3,6 +3,7 @@ using JetSetGo.ReservationManagement.Application.Common.Persistence;
 using JetSetGo.ReservationManagement.Application.SearchReservations;
 using JetSetGo.ReservationManagement.Domain.Reservation;
 using JetSetGo.ReservationManagement.Domain.Reservation.Enums;
+using JetSetGo.ReservationManagement.Domain.Reservation.ValueObjects;
 using JetSetGo.ReservationManagement.Infrastructure.Persistence.Settings;
 using Microsoft.Extensions.Options;
 namespace JetSetGo.ReservationManagement.Infrastructure.Persistence.Repository;
@@ -27,10 +28,9 @@ public class ReservationRepository : IReservationRepository
         await _reservationCollection.InsertOneAsync(reservation);
     }
 
-    public async Task<List<Reservation>> SearchReservations(SearchReservationsQuery request) =>
+    public async Task<List<Reservation>> SearchReservations(DateRange request) =>
         await _reservationCollection.Find(x =>
-                x.DateRange.From.CompareTo(request.StartDate) <= 0
-                && x.DateRange.To.CompareTo(request.EndDate) >= 0)
+                x.IsOverlapping(request))
             .ToListAsync();
 
     public async Task CancelReservation(Reservation request)
@@ -62,6 +62,12 @@ public class ReservationRepository : IReservationRepository
         await _reservationCollection.Find(x =>
             x.GuestId == guestId
             && x.Deleted == false)
+            .ToListAsync();
+    public async Task<List<Reservation>> GetByGuestIdConfirmed(Guid guestId) =>
+        await _reservationCollection.Find(x =>
+                x.GuestId == guestId
+                && x.ReservationStatus == ReservationStatus.Confirmed
+                && x.Deleted == false)
             .ToListAsync();
 
     public async Task<List<Reservation>> GetReservationsByAccommodation(Guid accommodationId)=>

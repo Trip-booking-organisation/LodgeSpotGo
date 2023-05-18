@@ -7,10 +7,6 @@ message ReservationSearchRequest{
   google.protobuf.Timestamp startDate = 1;
   google.protobuf.Timestamp endDate = 2;
 }
-message DateRangeDto {
-  google.protobuf.Timestamp from = 1;
-  google.protobuf.Timestamp to = 2;
-}
 
 message ReadReservationDto{
   string id = 1;
@@ -18,6 +14,8 @@ message ReadReservationDto{
   DateRangeDto dateRange =3;
   string status = 4;
   int32 numberOfGuest = 5;
+  string guestId = 6;
+  bool deleted = 7;
 }
 message GetReservationListResponse{repeated ReadReservationDto reservations = 1;}
 

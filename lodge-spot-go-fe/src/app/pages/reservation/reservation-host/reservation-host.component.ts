@@ -14,6 +14,7 @@ import {CancelReservationComponent} from "../cancel-reservation/cancel-reservati
 import {Accommodation} from "../../../common/model/accommodation";
 import {IAccommodationDto} from "../../../common/model/accommodation-dto";
 import {UpdateReservationStatusRequest} from "../../../common/model/UpdateReservationStatusRequest";
+import {DeletedReservationsDialogComponent} from "./deleted-reservations-dialog/deleted-reservations-dialog.component";
 
 @Component({
   selector: 'app-reservation-guest-host',
@@ -34,16 +35,10 @@ export class ReservationHostComponent implements OnInit{
               private reservationClient : ReservationService,
               private dialog : MatDialog,
               private dataService: DataService) {
-    this.authService.getUserObservable().subscribe(
-      value => {
-        console.log(value)
-        this.getReservationsByGuest(value?.id!);
-      })
     this.dataService.getData().subscribe(data => {
       // @ts-ignore
       let res = this.reservedAccommodations.filter(e => {
-        //@ts-ignore
-        if(e.reservation.id != data){
+        if(e.reservation?.id != data){
           return true
         }
       });
@@ -52,18 +47,17 @@ export class ReservationHostComponent implements OnInit{
   }
 
   ngOnInit(): void {
+    this.getReservationsByGuest(this.authService.getUser()?.id!);
   }
 
   private getReservationsByGuest(id : string) {
     this.accommodationClient.getAccommodationByHost(id).subscribe({
       next: response => {
         this.accommodations = response.accommodations
-        console.log("accom: ",this.accommodations)
         const resAccomm: IReservationAccommodation[] = []
         this.accommodations.forEach(a => {
           this.reservationClient.getByAccommodationId(a.id!).subscribe({
             next: response => {
-              console.log("res: ",response.reservations)
               if(response.reservations.length >0){
                 this.reservations = response.reservations
                 this.reservationsCount = [...this.reservations]
@@ -71,15 +65,15 @@ export class ReservationHostComponent implements OnInit{
                   const reservedAccommodation : IReservationAccommodation={
                     reservation: r,
                     accommodation: a,
-                    deleted:  this.reservationsCount.filter(x=>x.guestId === r.guestId && x.deleted === true).length
+                    deleted:  response.count
                   }
                   resAccomm.push(reservedAccommodation!)
+                  this.calculatePrice(reservedAccommodation)
                 })
                 if(this.reservations.length === resAccomm.length){
                   this.assignReservedAccommodations(resAccomm)
                 }
               }
-
             }
           })
         })
@@ -90,10 +84,7 @@ export class ReservationHostComponent implements OnInit{
 
   assignReservedAccommodations(resAccomm: IReservationAccommodation[]){
     this.reservedAccommodations = [...resAccomm]
-    console.log(this.reservedAccommodations)
-    console.log(this.reservedAccommodations[0].reservation?.status)
   }
-
   onConfirm(reservation: IReservation | undefined) {
     const updateReservationStatus :  UpdateReservationStatusRequest ={
       status : 'Confirmed',
@@ -136,14 +127,31 @@ export class ReservationHostComponent implements OnInit{
     })
   }
 
-  private getDeletedReservationsCount(guestId: string | undefined):number {
-    let count :number = 0;
-    this.reservationClient.getDeletedReservationsCount(guestId!).subscribe({
-      next : response => {
-      count = response.count
-        return count
+  private calculatePrice(reservedAccommodation: IReservationAccommodation) {
+    reservedAccommodation.pricePerPersonOneNight = 0
+    reservedAccommodation.priceInTotalOneNight = 0
+    reservedAccommodation.priceInTotalInTotal = 0
+    reservedAccommodation.pricePerPersonInTotal = 0
+    reservedAccommodation.accommodation.specialPrices.forEach( a => {
+      let start= new Date(reservedAccommodation.reservation.dateRange.from)
+      let end =  new Date( reservedAccommodation.reservation.dateRange.to)
+      if(new Date(a.dateRange.from).getTime() <= new Date(start).getTime() &&  new Date(end).getTime() <= new Date(a.dateRange.to).getTime())
+      {
+        reservedAccommodation.pricePerPersonOneNight = a.price
+        reservedAccommodation.priceInTotalOneNight = (a.price * reservedAccommodation.reservation.numberOfGuest)
+        let differenceMs = new Date(end).getTime() - new Date(start).getTime();
+        let daysDiff = Math.floor(differenceMs / (1000 * 60 * 60 * 24))
+        let priceTotal = (reservedAccommodation.reservation.numberOfGuest * a.price) * daysDiff
+        reservedAccommodation.priceInTotalInTotal = priceTotal;
+        reservedAccommodation.pricePerPersonInTotal = (daysDiff * a.price)
       }
     })
-    return count
+  }
+  onSeeDeleted(guestId: string) {
+    this.dialog.open(DeletedReservationsDialogComponent, {
+      width: '400px',
+      height:'220px',
+      data: { guestId: guestId }
+    });
   }
 }

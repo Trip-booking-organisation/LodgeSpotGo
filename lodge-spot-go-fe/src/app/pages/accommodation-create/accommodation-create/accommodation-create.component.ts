@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Address} from "../../../shered/model/addres";
 import {AccommodationService} from "../../../common/services/accommodationService";
 import {Accommodation} from "../../../common/model/accommodation";
@@ -12,7 +12,7 @@ import {AuthService} from "../../../core/keycloak/auth.service";
   templateUrl: './accommodation-create.component.html',
   styleUrls: ['./accommodation-create.component.scss']
 })
-export class AccommodationCreateComponent {
+export class AccommodationCreateComponent implements OnInit {
 
   base64String: string = '';
   photos: string[] = [];
@@ -33,12 +33,11 @@ export class AccommodationCreateComponent {
 
   constructor(private readonly accommodationService:AccommodationService, private toastService:ToastrService,
               private router:Router,private authService:AuthService) {
-    this.authService.getUserObservable().subscribe(
-      value => {
-        console.log(value)
-        this.userId = value?.id!
-      })
   }
+
+  ngOnInit(): void {
+    this.userId = this.authService.getUser()?.id!
+    }
 
   assambleAmenitetis():string[]{
     let amenitetis:string[] = []

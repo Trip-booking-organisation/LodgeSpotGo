@@ -12,3 +12,4 @@ export interface Accommodation {
   hostId: string;
   automaticConfirmation: boolean
 }
+

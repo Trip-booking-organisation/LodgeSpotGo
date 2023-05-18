@@ -22,7 +22,14 @@ message SpecialPriceDto {
   DateRangeDto dateRange = 1;
   double price = 2;
 }
-
+message AccommodationUpdateDto{
+  UpdatePrice price = 1;
+  string accommodationId = 2;
+}
+message UpdatePrice {
+  DateRangeDto dateRange = 1;
+  int32 price = 2;
+}
 message AccommodationDto {
   string id = 1;
   string name = 2;
@@ -51,8 +58,14 @@ message GetAccommodationListResponse { repeated AccommodationDto accommodations 
 message CreateAccommodationRequest {
     AccommodationDto accommodation = 1;
 }
+message UpdateAccommodationRequest {
+  AccommodationUpdateDto accommodation = 1;
+}
 message CreateAccommodationResponse {
   string createdId = 1;
+}
+message UpdateAccommodationResponse {
+  bool isSuccess = 1;
 }
 message SearchRequest{
   string numberOfGuests = 1;

@@ -1,6 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {Observable} from "rxjs";
-import {User} from "../../../core/keycloak/user";
 import {Router} from "@angular/router";
 import {AuthService} from "../../../core/keycloak/auth.service";
 import {ReservationService} from "../../../common/services/reservation.service";
@@ -10,7 +8,6 @@ import {IReservationAccommodation} from "../../../common/model/reservedAccommoda
 import {MatDialog} from "@angular/material/dialog";
 import {CancelReservationComponent} from "../cancel-reservation/cancel-reservation.component";
 import {DataService} from "../../../common/services/data.service";
-import {ReservationStatus} from "../../../common/model/reservationStatus";
 
 
 @Component({
@@ -19,7 +16,6 @@ import {ReservationStatus} from "../../../common/model/reservationStatus";
   styleUrls: ['./reservation.component.scss']
 })
 export class ReservationComponent implements OnInit{
-  user$: Observable<User | null> = this.authService.getUserObservable();
   reservations! : IReservation[];
   reservedAccommodations: IReservationAccommodation[]=[];
 
@@ -29,11 +25,9 @@ export class ReservationComponent implements OnInit{
               private reservationClient : ReservationService,
               private dialog : MatDialog,
               private dataService: DataService) {
-    this.authService.getUserObservable().subscribe(
-      value => {
-        console.log(value)
-        this.getReservationsByGuest(value?.id!);
-      })
+  }
+
+  ngOnInit(): void {
     this.dataService.getData().subscribe(data => {
       // @ts-ignore
       let res = this.reservedAccommodations.filter(e => {
@@ -44,9 +38,7 @@ export class ReservationComponent implements OnInit{
       });
       this.reservedAccommodations =  [...res];
     })
-  }
-
-  ngOnInit(): void {
+    this.getReservationsByGuest(this.authService.getUser()!.id!);
   }
 
   private getReservationsByGuest(id : string) {
@@ -65,6 +57,7 @@ export class ReservationComponent implements OnInit{
                 disabled: this.IsDisabled(r)
               }
               resAccomm.push(reservedAccommodation!)
+              this.calculatePrice(reservedAccommodation)
               if(this.reservations.length === resAccomm.length){
                 this.assignReservedAccommodations(resAccomm)
               }
@@ -75,13 +68,36 @@ export class ReservationComponent implements OnInit{
     })
 
   }
-  convertEnumToString(status : ReservationStatus):string{
-    if(status === ReservationStatus.Confirmed)
-      return 'Confirmed'
-    if(status === ReservationStatus.Waiting)
-      return 'Confirmed'
-    else return "Refused"
+  private calculatePrice(reservedAccommodation: IReservationAccommodation) {
+    reservedAccommodation.pricePerPersonOneNight = 0
+    reservedAccommodation.priceInTotalOneNight = 0
+    reservedAccommodation.priceInTotalInTotal = 0
+    reservedAccommodation.pricePerPersonInTotal = 0
+    reservedAccommodation.accommodation.specialPrices.forEach( a => {
+      let start= new Date(reservedAccommodation.reservation.dateRange.from)
+      let end =  new Date( reservedAccommodation.reservation.dateRange.to)
+      console.log("rez", start)
+      console.log("cena", a.dateRange.from)
+      console.log("rez", end)
+      console.log("cena", a.dateRange.to)
 
+      console.log(new Date(a.dateRange.from).getTime() <= new Date(start).getTime())
+      console.log(new Date(end).getTime() <= new Date(a.dateRange.to).getTime())
+      if(new Date(a.dateRange.from).getTime() <= new Date(start).getTime() &&  new Date(end).getTime() <= new Date(a.dateRange.to).getTime())
+      {
+        console.log("aaaa")
+        reservedAccommodation.pricePerPersonOneNight = a.price
+        reservedAccommodation.priceInTotalOneNight = (a.price * reservedAccommodation.reservation.numberOfGuest)
+        let differenceMs = new Date(end).getTime() - new Date(start).getTime();
+        let daysDiff = Math.floor(differenceMs / (1000 * 60 * 60 * 24))
+        console.log(daysDiff)
+        let priceTotal = (reservedAccommodation.reservation.numberOfGuest * a.price) * daysDiff
+
+        reservedAccommodation.priceInTotalInTotal = priceTotal;
+        reservedAccommodation.pricePerPersonInTotal = (daysDiff * a.price)
+        console.log(reservedAccommodation.pricePerPersonInTotal)
+      }
+    })
   }
   assignReservedAccommodations(resAccomm: IReservationAccommodation[]){
     this.reservedAccommodations = [...resAccomm]

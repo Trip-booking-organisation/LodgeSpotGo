@@ -151,6 +151,15 @@ img, video {
   width: 100%;
   height: auto;
 }
+.gradient-text {
+  background: $gradient-blue;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
+  font-size: 30px;
+  margin-right: 2rem;
+  text-align: center;
+}
 
 input {
   font-size: 100%;

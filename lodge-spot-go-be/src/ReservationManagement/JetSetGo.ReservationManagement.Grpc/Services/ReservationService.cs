@@ -15,8 +15,6 @@ namespace JetSetGo.ReservationManagement.Grpc.Services;
 
 public class ReservationService : ReservationApp.ReservationAppBase
 {
- 
-
     private readonly ILogger<ReservationService> _logger;
     private readonly IReservationRepository _reservationRepository;
     private readonly IMapToGrpcResponse _mapToGrpcResponse;
@@ -33,7 +31,7 @@ public class ReservationService : ReservationApp.ReservationAppBase
         _mapToGrpcResponse = mapToGrpcResponse;
         _accommodationClient = accommodationClient;
     }
-
+    /*[Authorize(Roles = "host,guest")]*/
     public override async Task<GetReservationListResponse> GetReservationList(GetReservationListRequest request, ServerCallContext context)
     {
         var list = new GetReservationListResponse();
@@ -43,8 +41,8 @@ public class ReservationService : ReservationApp.ReservationAppBase
         responseList.ForEach( dto => list.Reservations.Add(dto));
         return list;
     }
-
-    public override Task<CreateReservationResponse> CreateReservation(CreateReservationRequest request, ServerCallContext context)
+    /*[Authorize(Roles = "guest")]*/
+    public async override Task<CreateReservationResponse> CreateReservation(CreateReservationRequest request, ServerCallContext context)
     {
         _logger.LogInformation(@"Request {request.Reservation}", request.Reservation);
         var reservation = new Reservation
@@ -66,15 +64,33 @@ public class ReservationService : ReservationApp.ReservationAppBase
             Id = request.Reservation.AccommodationId
         };
         var accommodationResponse = _accommodationClient.GetAccommodation(accommodationRequest);
+        // var isLap = await CheckOverlapping(reservation,accommodationResponse);
+        // if (isLap)
+        // {
+        //     throw new RpcException(new Status(StatusCode.Cancelled, "Overlapping dates!"));
+        // }
+        if (accommodationResponse.Accommodation.MinGuests > request.Reservation.NumberOfGuests ||
+            accommodationResponse.Accommodation.MaxGuests < request.Reservation.NumberOfGuests)
+        {
+            throw new RpcException(new Status(StatusCode.Cancelled, "You sepecified wrong guest number"));
+        }
         if (accommodationResponse.Accommodation.AutomaticConfirmation)
             reservation.ReservationStatus = ReservationStatus.Confirmed;
-        _reservationRepository.CreateAsync(reservation);
-        return Task.FromResult(new CreateReservationResponse
+        await _reservationRepository.CreateAsync(reservation);
+        return new CreateReservationResponse
         {
             CreatedId = reservation.Id.ToString()
-        });
+        };
     }
 
+    private async Task<bool> CheckOverlapping(Reservation reservation,
+        GetAccommodationResponse getAccommodationResponse)
+    {
+        var list = await _reservationRepository.GetAllAsync();
+        var laps = list.Select(reservation1 => reservation1.IsOverlapping(reservation.DateRange) 
+                                               && reservation.AccommodationId.ToString() == getAccommodationResponse.Accommodation.Id);
+        return laps.FirstOrDefault(lap => lap);
+    }
     private static ReservationStatus MapStringToEnum(string reservationStatus)
     {
         return reservationStatus switch
@@ -84,7 +100,7 @@ public class ReservationService : ReservationApp.ReservationAppBase
             _ => ReservationStatus.Waiting
         };
     }
-
+    /*[Authorize(Roles = "guest")]*/
     public override async Task<CancelReservationResponse> CancelReservation(CancelReservationRequest request, ServerCallContext context)
     {
         var cancelRequest =  _mapper.Map<CancelReservationCommand>(request);
@@ -92,14 +108,14 @@ public class ReservationService : ReservationApp.ReservationAppBase
         _logger.LogInformation(@"------------------Cancel reservation status : {}",result.ToString());
        return _mapper.Map<CancelReservationResponse>(result);
     }
-
+    /*[Authorize(Roles = "guest")]*/
     public override async Task<UpdateReservationStatusResponse> UpdateReservation(UpdateReservationStatusRequest request, ServerCallContext context)
     {
         var command = _mapper.Map<UpdateReservationStatusCommand>(request.Reservation);
         var result = await _sender.Send(command);
         return _mapper.Map<UpdateReservationStatusResponse>(result);
     }
-
+    /*[Authorize(Roles = "guest")]*/
     public override async Task<GetReservationsByGuestIdResponse> GetReservationsByGuestId(GetReservationsByGuestIdRequest request, ServerCallContext context)
     {
         var query = _mapper.Map<GetReservationsByGuestIdQuery>(request);

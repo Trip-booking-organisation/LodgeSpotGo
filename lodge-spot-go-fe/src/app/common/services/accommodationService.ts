@@ -3,10 +3,8 @@ import {Observable} from "rxjs";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Accommodation} from "../model/accommodation";
 
-import {AccomodationResult} from "../../core/model/AccomodationResult";
-
 import {environment} from "../../../environments/environment.development";
-import {AccommodationResponse} from "../../shered/model/accommodationResponse";
+import {PriceData} from "./accommodation.price.model";
 
 
 @Injectable({
@@ -19,23 +17,20 @@ export class AccommodationService{
   }
 
   public createAccommodation(accommodation: Accommodation):Observable<any>{
-    return this.httpClient.post<Accommodation>(`${this.baseUrl}/api/accommodations`,accommodation, {headers : this.headers});
+    return this.httpClient.post<Accommodation>(`${this.baseUrl}api/accommodations`,accommodation, {headers : this.headers});
   }
-
-  public searchAccomodation(accomodationRequest: AccomodationResult):Observable<any> {
-    console.log("https://localhost:7132/api/v1/search/" + accomodationRequest.numberOfGuests + "/" + accomodationRequest.startDate + "/" + accomodationRequest.endDate + "/" + accomodationRequest.city + "/" + accomodationRequest.country)
-    return this.httpClient.post<AccomodationResult>("https://localhost:7132/api/v1/search", accomodationRequest, {headers: this.headers});
-
+  public updatePrice(price: PriceData):Observable<any>{
+    return this.httpClient.put<PriceData>(`${this.baseUrl}api/accommodations`,price, {headers : this.headers});
   }
 
   public getAllAccommodations():Observable<any> {
-    return this.httpClient.get<AccommodationResponse[]>(this.baseUrl);
+    return this.httpClient.get(`${this.baseUrl}api/accommodations`);
   }
+
   public getAccommodationById(id:string):Observable<any>{
-    return this.httpClient.get(this.baseUrl + id,{headers : this.headers});
+    return this.httpClient.get(`${this.baseUrl}api/accommodations/${id}`,{headers : this.headers});
   }
   public getAccommodationByHost(id:string):Observable<any>{
-    return this.httpClient.get(this.baseUrl +"host/"+ id,{headers : this.headers});
-
+    return this.httpClient.get(this.baseUrl +"api/v1/accommodations/host/"+ id,{headers : this.headers});
   }
 }

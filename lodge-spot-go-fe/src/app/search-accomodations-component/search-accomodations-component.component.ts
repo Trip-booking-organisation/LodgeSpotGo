@@ -25,7 +25,7 @@ export class SearchAccomodationsComponentComponent implements OnInit {
   numberOfGuests = new FormControl();
   from = new FormControl()
   to =new FormControl()
-  isLoading!: boolean;
+  isLoading: boolean;
   country: any;
   city: any
 
@@ -39,10 +39,10 @@ export class SearchAccomodationsComponentComponent implements OnInit {
     this.filteredLocations = this.location.valueChanges
       .pipe(
         startWith(''),
-        map(value => this._filterFlights(value))
+        map(value => this._filter(value))
       )
   }
-  private _filterFlights(value: string): any[] {
+  private _filter(value: string): any[] {
     const filterValue = value.toLowerCase();
     return this.flightsAddresses.filter(flight => {
       const city = flight.city.toLowerCase();

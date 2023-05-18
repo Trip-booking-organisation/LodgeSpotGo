@@ -7,5 +7,9 @@ export interface IReservationAccommodation {
   reservation?: IReservation,
   accommodation?: IAccommodationDto,
   disabled? : boolean,
-  deleted?: number
+  deleted?: number,
+  pricePerPersonOneNight?: number,
+  pricePerPersonInTotal?: number,
+  priceInTotalOneNight?: number,
+  priceInTotalInTotal?: number
 }

@@ -1,7 +1,7 @@
 <div class="navbar flex">
   <div class="navbar-one flex">
     <div (click)="navigateHome()" class="navigate-home" matTooltip="Navigate Home">
-      <mat-icon class="icon">airplanemode_active</mat-icon>
+      <mat-icon class="icon">home</mat-icon>
     </div>
     <div class="none flex">
       <li class="flex">
@@ -16,7 +16,8 @@
     <div class="gap__ flex">
       <a *ngIf="(user$ | async)" (click)="goToAccountPage()">Account</a>
       <a *ngIf="!(user$ | async)" (click)="login()">Log In</a>
-      <a *ngIf="!(user$ | async)" (click)="register()">Register as Guest</a>
+      <a *ngIf="!(user$ | async)" (click)="register()">Register</a>
+      <a *ngIf="(user$ | async)" (click)="deleteUser()">Delete account</a>
       <a *ngIf="(user$ | async)" (click)="logout()">Log out</a>
     </div>
   </div>
@@ -38,12 +39,12 @@
           {{data.label}}
         </li>
       </ul>
-      <ul class="menu flex" *ngIf="user.roles.includes('host')">
-        <li (click)="navigate(data.routerLink)" class="list-item"
+      <div class="menu flex" *ngIf="user.roles.includes('host')">
+        <a (click)="navigate(data.routerLink)" class="list-item"
             *ngFor="let data of navDataHost">
           {{data.label}}
-        </li>
-      </ul>
+        </a>
+      </div>
       </div>
       <button class="btn btn-one flex">
         Contact

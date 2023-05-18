@@ -45,6 +45,9 @@ export class AuthService {
     console.log(this.user$)
     return this.user$;
   }
+  getUser(): User | null {
+    return this.user
+  }
   getToken(): string {
     return this.token;
   }

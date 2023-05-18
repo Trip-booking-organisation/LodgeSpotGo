@@ -12,6 +12,16 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
+builder.Services
+    .AddCors(options =>
+    {
+        options.AddPolicy("AllowOrigin",
+            b =>
+                b.AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+        );
+    });
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -55,10 +65,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 app.UseHttpsRedirection();
+app.UseCors("AllowOrigin");
 
-//app.UseAuthorization();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapEndpoints();
 

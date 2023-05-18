@@ -8,11 +8,15 @@ export const hostNavData = [
     routerLink: 'reservations-host'
   },
   {
-    label: 'About',
-    routerLink: ''
+    label: 'Your Accommodations',
+    routerLink: 'hosts-accommodations'
   },
   {
-    label: 'Seats',
+    label: 'Create Accommodation',
+    routerLink: 'create-accommodation'
+  },
+  {
+    label: 'About',
     routerLink: ''
   }
 ]

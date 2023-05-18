@@ -15,11 +15,11 @@ public class Reservation
 
     public bool IsOverlapping(DateRange dateRange)
     {
-        if (DateRange.From >= dateRange.From && DateRange.From <= dateRange.To)
+        if (DateRange.From >= dateRange.From && DateRange.From <= dateRange.To && DateRange.To >= dateRange.To)
             return true;
-        if (DateRange.To >= dateRange.From && DateRange.To <= dateRange.To)
+        if (DateRange.From <= dateRange.From && DateRange.To >= dateRange.From && DateRange.To <= dateRange.To)
             return true;
-        if (DateRange.To >= dateRange.From && DateRange.To <= dateRange.To)
+        if (DateRange.To >= dateRange.From && DateRange.To <= dateRange.To )
             return true;
         if (DateRange.From <= dateRange.From && DateRange.To >= dateRange.To)
             return true;

@@ -8,6 +8,7 @@ public class MappingConfiguration : Profile
 {
     public MappingConfiguration()
     {
-        CreateMap<Accommodation, SearchAccommodationResponse>();
+        CreateMap<Accommodation, SearchAccommodationResponse>()
+            .ForMember(dest => dest.SpecalPrices, opt => opt.MapFrom(src => src.SpecalPrices));
     }
 }

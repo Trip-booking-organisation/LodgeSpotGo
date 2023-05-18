@@ -6,9 +6,5 @@ export const noRegisterUserNavData = [
   {
     label: 'About',
     routerLink: ''
-  },
-  {
-    label: 'Seats',
-    routerLink: ''
   }
 ]

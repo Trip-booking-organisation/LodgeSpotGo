@@ -3,6 +3,7 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {environment} from "../../../environments/environment.development";
 import {UpdateReservationStatusRequest} from "../model/UpdateReservationStatusRequest";
+import {ReservationCreate} from "../model/reservation.create";
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,10 @@ export class ReservationService {
   headers : HttpHeaders = new HttpHeaders({'Content-Type':'application/json'})
   constructor(private readonly httpClient:HttpClient) {
   }
+  public createReservation(reservation: ReservationCreate):Observable<any> {
+    return this.httpClient.post(`${this.baseUrl}api/reservations`,reservation, {headers : this.headers});
 
+  }
   public getByGuestId(id: string):Observable<any>{
     return this.httpClient.get(`${this.reservationUrl + id} ` , {headers : this.headers});
   }

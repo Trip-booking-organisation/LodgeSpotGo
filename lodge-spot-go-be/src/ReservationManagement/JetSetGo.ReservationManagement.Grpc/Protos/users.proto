@@ -1,5 +1,5 @@
 ﻿syntax = "proto3";
-option csharp_namespace = "JetSetGo.UserManagement.Grpc";
+option csharp_namespace = "JetSetGo.ReservationManagement.Grpc";
 
 message UserRequest {
   string user_id = 1;

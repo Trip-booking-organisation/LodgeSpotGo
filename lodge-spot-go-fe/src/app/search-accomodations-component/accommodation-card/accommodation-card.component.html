@@ -1,0 +1,52 @@
+<div class="container-main">
+  <div class="home-content">
+    <div class="flight-card" >
+      <div class="content-flight">
+        <div class="flight-details">
+          <div class="flight-info">
+            <img [src]="'data:image/jpeg;base64,' + accommodation.photos[0]" class="img-a" alt="A beautiful landscape image" width="280" height="280"/>
+          </div>
+          <div class="flight-divider">
+          </div>
+          <div class="flight-info">
+            <div class="flight-time">
+              <p class="time">{{accommodation.name}}</p>
+              <p class="place">{{accommodation.address?.street}}, {{accommodation.address?.city}}, {{accommodation.address?.country}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="one-price">
+        <h4 class="price-text">Amentities</h4>
+        <div class="class-price">
+          <div *ngFor="let a of accommodation.amenities">
+            <p>{{a}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="one-price">
+        <h4 class="price-text">Price per person</h4>
+        <div class="class-price">
+          <p>One night: <span>{{pricePerPersonOneNight}}€</span></p>
+        </div>
+        <div class="class-price">
+          <p>In total: <span>{{pricePerPersonInTotal}}€</span></p>
+        </div>
+      </div>
+      <div class="total-price">
+        <h4 class="price-h">Price in total</h4>
+        <div class="class-price">
+          <p>One night: <span>{{priceInTotalOneNight}}€</span></p>
+        </div>
+        <div class="class-price">
+          <p>In total: <span>{{priceInTotalInTotal}}€</span></p>
+        </div>
+        <button class="btn book" (click)="viewAccommodation()">View Accommodation</button>
+        <button *ngIf="user!.roles.includes('guest')" class="btn book" (click)="onBook()">Book</button>
+        <button *ngIf="user!.roles.includes('host')" class="btn book" (click)="viewAccommodation()">Edit Accommodation</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+

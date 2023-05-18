@@ -4,7 +4,7 @@
       <div class="content-flight">
         <div class="flight-details">
           <div class="flight-info">
-            <img src="assets/images/hotel.jpg" alt="Accommodation">
+            <img [src]="'data:image/jpeg;base64,' + r.accommodation.photos[0]" class="img-a" alt="A beautiful landscape image" width="280" height="280"/>
           </div>
           <div class="flight-divider">
           </div>
@@ -15,7 +15,6 @@
               <p class="date">Guests : <span> {{r.reservation?.numberOfGuest}}</span></p>
               <p class="place">{{r.accommodation?.address?.street}}, {{r.accommodation?.address?.city}}, {{r.accommodation?.address?.country}}</p>
               <p class="date">Status : <span> {{r.reservation?.status!}}</span></p>
-              <p class="date">Guest canceled : <span> {{r.deleted}}</span></p>
             </div>
           </div>
         </div>
@@ -23,22 +22,23 @@
       <div class="one-price">
         <h4 class="price-text">Price per person</h4>
         <div class="class-price">
-          <p>One night: <span>€</span></p>
+          <p>One night: <span>{{r.pricePerPersonOneNight}}€</span></p>
         </div>
         <div class="class-price">
-          <p>In total: <span>€</span></p>
+          <p>In total: <span>{{r.pricePerPersonInTotal}}€</span></p>
         </div>
       </div>
       <div class="total-price">
         <h4 class="price-h">Price in total</h4>
         <div class="class-price">
-          <p>One night: <span>€</span></p>
+          <p>One night: <span>{{r.priceInTotalOneNight}}€</span></p>
         </div>
         <div class="class-price">
-          <p>In total: <span>€</span></p>
+          <p>In total: <span>{{r.priceInTotalInTotal}}€</span></p>
         </div>
-        <button  class="btn-delete-lg book" (click)="onConfirm(r.reservation)" >Confirm</button>
+        <button  class="btn book" (click)="onConfirm(r.reservation)" >Confirm</button>
         <button  class="btn-delete-lg book" (click)="onRefuse(r.reservation)" >Refuse</button>
+        <button  class="btn-delete-lg book" (click)="onSeeDeleted(r.reservation.guestId)" >Canceled info</button>
       </div>
     </div>
 

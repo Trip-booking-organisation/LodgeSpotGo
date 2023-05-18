@@ -8,11 +8,11 @@ export const guestNavData = [
     routerLink: 'reservations'
   },
   {
-    label: 'About',
-    routerLink: ''
+    label: 'All Accommodations',
+    routerLink: 'all-accommodations'
   },
   {
-    label: 'Seats',
+    label: 'About',
     routerLink: ''
   }
 ]

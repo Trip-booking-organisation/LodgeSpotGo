@@ -3,12 +3,12 @@ using JetSetGo.UserManagement.Grpc;
 
 namespace JetSetGo.UsersManagement.Grpc.Services;
 
-public class UserGrpcService
+public class MyUserGrpcService
 {
     private readonly IConfiguration _configuration;
-    private readonly ILogger<UserGrpcService> _logger;
+    private readonly ILogger<MyUserGrpcService> _logger;
 
-    public UserGrpcService(IConfiguration configuration, ILogger<UserGrpcService> logger)
+    public MyUserGrpcService(IConfiguration configuration, ILogger<MyUserGrpcService> logger)
     {
         _configuration = configuration;
         _logger = logger;

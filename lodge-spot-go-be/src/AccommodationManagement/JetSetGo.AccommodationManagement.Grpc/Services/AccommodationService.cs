@@ -28,7 +28,7 @@ public class AccommodationService : AccommodationApp.AccommodationAppBase
     {
         var list = new GetAccommodationListResponse();
         var accommodations = await _repository.GetAllAsync();
-        _logger.LogInformation(@"List {}",accommodations.ToString());
+        _logger.LogInformation(@"List {}",accommodations.Select(accommodation => accommodation.Id.ToString()));
         var responseList = accommodations.Select(accommodation => _mapper.Map<AccommodationDto>(accommodation)).ToList();
         
         responseList.ForEach(dto => list.Accommodations.Add(dto));
@@ -56,7 +56,7 @@ public class AccommodationService : AccommodationApp.AccommodationAppBase
                 Photo = x
             }).ToList(),
             SpecalPrices = request.Accommodation.SpecialPrices
-                .Select(a => new SpecalPrice
+                .Select(a => new SpecialPrice
                 {
                     Price = a.Price,
                     DateRange = new DateRange
@@ -75,7 +75,27 @@ public class AccommodationService : AccommodationApp.AccommodationAppBase
             CreatedId = Guid.NewGuid().ToString()
         });
     }
-
+    /*[Authorize(Roles = "host")]*/
+    public override async Task<UpdateAccommodationResponse> UpdateAccommodationPrice(UpdateAccommodationRequest request, ServerCallContext context)
+    {
+        var accId = new Guid(request.Accommodation.AccommodationId);
+        var accommodation = await _repository.GetAsync(accId);
+        accommodation.SpecalPrices.Add(new SpecialPrice
+        {
+            DateRange = new DateRange
+            {
+                From = request.Accommodation.Price.DateRange.From.ToDateTime(),
+                To = request.Accommodation.Price.DateRange.To.ToDateTime()
+            },
+            Price = request.Accommodation.Price.Price
+        });
+        await _repository.UpdateAsync(accommodation);
+        return new UpdateAccommodationResponse
+        {
+            IsSuccess = true
+        };
+    }
+    /*[Authorize(Roles = "host")]*/
     public override async Task<GetAccommodationResponse> GetAccommodation(GetAccommodationRequest request, ServerCallContext context)
     {
         _logger.LogInformation(@"Request {}",request.Id);
@@ -83,7 +103,7 @@ public class AccommodationService : AccommodationApp.AccommodationAppBase
         var response = _mappingToGrpcResponse.MapAccommodationToGrpcResponse(accommodation);
         return await response;
     }
-
+    /*[Authorize(Roles = "host")]*/
     public override async Task<GetAccommodationsByHostResponse> GetAccommodationByHost(GetAccommodationsByHostRequest request, ServerCallContext context)
     {
         var accommodations = await _repository.GetByHost(Guid.Parse(request.HostId));

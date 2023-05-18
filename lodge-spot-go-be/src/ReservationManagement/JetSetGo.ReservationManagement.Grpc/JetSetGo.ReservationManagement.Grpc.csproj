@@ -13,7 +13,8 @@
         <Protobuf Include="Routes\routes.proto" GrpcServices="Server" />
         <Protobuf Include="Routes\search_reservation.proto" GrpcServices="Server" />
         <Protobuf Include="Routes\get_accommodation.proto" GrpcServices="Client" />
-
+        <Protobuf Include="Protos\users.proto" GrpcServices="Server" />
+        <Protobuf Include="Protos\accommodation.proto" GrpcServices="Client" />
     </ItemGroup>
 
     <ItemGroup>
@@ -38,5 +39,6 @@
     <ItemGroup>
       <ProjectReference Include="..\JetSetGo.ReservationManagement.Infrastructure\JetSetGo.ReservationManagement.Infrastructure.csproj" />
     </ItemGroup>
+    
 
 </Project>

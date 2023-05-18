@@ -1,0 +1,22 @@
+<mat-dialog-content class="content">
+  <h2 class="gradient-text">Create Reservation</h2>
+  <form [formGroup]="reservationForm" class="form" (ngSubmit)="submitReservation()">
+    <mat-form-field>
+      <input matInput [matDatepicker]="fromDatePicker" formControlName="from" placeholder="From">
+      <mat-datepicker-toggle matSuffix [for]="fromDatePicker"></mat-datepicker-toggle>
+      <mat-datepicker #fromDatePicker></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [matDatepicker]="toDatePicker" formControlName="to" placeholder="To">
+      <mat-datepicker-toggle matSuffix [for]="toDatePicker"></mat-datepicker-toggle>
+      <mat-datepicker #toDatePicker></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="number" formControlName="numberOfGuests" placeholder="Number of Guests">
+    </mat-form-field>
+    <div class="modal-buttons">
+      <button mat-button class="btn" type="submit" [disabled]="reservationForm.invalid">Create</button>
+      <button mat-button class="btn" (click)="closeModal()">Cancel</button>
+    </div>
+  </form>
+</mat-dialog-content>

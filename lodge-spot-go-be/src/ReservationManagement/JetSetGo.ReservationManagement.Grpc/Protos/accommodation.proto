@@ -1,0 +1,13 @@
+﻿syntax = "proto3";
+option csharp_namespace = "JetSetGo.ReservationManagement.Grpc";
+
+message HostAccommodationsRequest {
+  string hostId = 1;
+}
+message HostAccommodationsResponse {
+ repeated string id = 1;
+}
+service HostAccommodationService {
+  rpc GetUserReservations(HostAccommodationsRequest) returns (HostAccommodationsResponse){
+  }
+}

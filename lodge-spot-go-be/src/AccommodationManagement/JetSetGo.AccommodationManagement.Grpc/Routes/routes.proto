@@ -16,6 +16,12 @@ service AccommodationApp {
       body: "accommodation"
     };
   }
+  rpc UpdateAccommodationPrice(UpdateAccommodationRequest) returns (UpdateAccommodationResponse){
+    option (google.api.http) = {
+      put: "/api/v1/accommodations",
+      body: "accommodation"
+    };
+  }
   rpc GetAccommodation(GetAccommodationRequest) returns (GetAccommodationResponse){
     option (google.api.http) = {
       get: "/api/v1/accommodations/{id}"

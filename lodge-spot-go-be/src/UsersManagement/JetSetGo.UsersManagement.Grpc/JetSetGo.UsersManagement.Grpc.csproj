@@ -26,4 +26,9 @@
       </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\JetSetGo.UsersManagement.Application\JetSetGo.UsersManagement.Application.csproj" />
+      <ProjectReference Include="..\JetSetGo.UsersManagement.Infrastructure\JetSetGo.UsersManagement.Infrastructure.csproj" />
+    </ItemGroup>
+
 </Project>

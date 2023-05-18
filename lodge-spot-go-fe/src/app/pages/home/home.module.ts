@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {CommonModule, NgOptimizedImage} from '@angular/common';
 import { HomePageComponent } from './home.page/home.page.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatOptionModule } from '@angular/material/core';
@@ -35,9 +35,10 @@ import {
         MatFormFieldModule,
         MatInputModule,
         ReactiveFormsModule,
-        CoreModule
+        CoreModule,
+        NgOptimizedImage
     ],
   exports:
-  [SearchAccomodationsComponentComponent]
+    [SearchAccomodationsComponentComponent, AccommodationCardComponent]
 })
 export class HomeModule { }
