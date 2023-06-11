@@ -1,10 +1,11 @@
 ﻿version: '3.8'
+name: lodge-spot-dev
 services:
   keycloak-db:
     image: postgres
     restart: always
     ports:
-      - "5431:5432"
+      - "15431:5432"
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin1312
@@ -72,6 +73,18 @@ services:
     volumes:
       - user-db-data:/data/db
       - ../entrypoint-initdb.d:/docker-entrypoint-initdb.d
+  notification-db:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: lodge1312
+      MONGO_INITDB_ROOT_PASSWORD: lodge420
+      MONGO_INITDB_DATABASE: notification-db
+    ports:
+      - "27020:27017"
+    volumes:
+      - notification-db-data:/data/db
+      - ../entrypoint-initdb.d:/docker-entrypoint-initdb.d
   search-db:
     image: mongo
     restart: always
@@ -84,6 +97,19 @@ services:
     volumes:
       - search-db-data:/data/db
       - ../entrypoint-initdb.d:/docker-entrypoint-initdb.d
+  we-do-mq:
+    image: rabbitmq:3.11.7-management
+    container_name: lodge-mq
+    hostname: lodge-queue
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: user
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - mq-lodge-data:/var/lib/rabbitmq
+      - mq-lodge-log:/var/log/rabbitmq
 volumes:
   accommodation-db-data:
     driver: local
@@ -94,4 +120,10 @@ volumes:
   search-db-data:
     driver: local
   keycloak-db-data:
+    driver: local
+  mq-lodge-data:
+    driver: local
+  mq-lodge-log:
+    driver: local
+  notification-db-data:
     driver: local

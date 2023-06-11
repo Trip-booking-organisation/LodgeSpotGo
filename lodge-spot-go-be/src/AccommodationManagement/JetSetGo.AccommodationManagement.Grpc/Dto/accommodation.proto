@@ -62,7 +62,7 @@ message UpdateAccommodationRequest {
   AccommodationUpdateDto accommodation = 1;
 }
 message CreateAccommodationResponse {
-  string createdId = 1;
+  string location = 1;
 }
 message UpdateAccommodationResponse {
   bool isSuccess = 1;

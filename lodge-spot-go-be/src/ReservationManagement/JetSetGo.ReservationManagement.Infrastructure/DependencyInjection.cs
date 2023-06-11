@@ -1,4 +1,6 @@
 ﻿using JetSetGo.ReservationManagement.Application.Common.Persistence;
+using JetSetGo.ReservationManagement.Application.MessageBroker;
+using JetSetGo.ReservationManagement.Infrastructure.MessageBroker.EventBus;
 using JetSetGo.ReservationManagement.Infrastructure.Persistence.Configuration;
 using JetSetGo.ReservationManagement.Infrastructure.Persistence.Repository;
 using JetSetGo.ReservationManagement.Infrastructure.Persistence.Settings;
@@ -15,6 +17,7 @@ public static class DependencyInjection
         services.Configure<DatabaseSettings>(builderConfiguration.GetSection(DatabaseSettings.OptionName));
         services.AddSingleton<IReservationRepository,ReservationRepository>();
         AddDbConfig();
+        services.AddScoped<IEventBus, EventBus>();
         return services;
     }
     

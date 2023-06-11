@@ -72,7 +72,7 @@ public class AccommodationService : AccommodationApp.AccommodationAppBase
         _repository.CreateAsync(accommodation);
         return Task.FromResult(new CreateAccommodationResponse
         {
-            CreatedId = Guid.NewGuid().ToString()
+            Location = "api/v1/accommodations/{id}"
         });
     }
     /*[Authorize(Roles = "host")]*/

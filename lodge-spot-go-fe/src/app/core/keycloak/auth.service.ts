@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
+import {Injectable, signal} from '@angular/core';
 import {KeycloakService} from "keycloak-angular";
 import {User} from "./user";
-import {Observable, Subject} from "rxjs";
+import {Observable, BehaviorSubject} from "rxjs";
 import jwtDecode from "jwt-decode";
 import {Router} from "@angular/router";
 
@@ -10,15 +10,17 @@ import {Router} from "@angular/router";
 })
 export class AuthService {
 
-  private user$: Subject<User|null> = new Subject();
-  private token$: Subject<string> =  new Subject();
-  private authenticated$: Subject<boolean> =  new Subject();
+  private user$: BehaviorSubject<User|null> = new BehaviorSubject(null);
+  private token$: BehaviorSubject<string> =  new BehaviorSubject(null);
+  private authenticated$: BehaviorSubject<boolean> =  new BehaviorSubject(null);
+  private USER_KEY: string = 'user'
 
   private user: User|null = null;
   private token: string = '';
   private authenticated: boolean = false;
 
   constructor(private keycloak: KeycloakService,private router:Router) {
+    this.loadFromStorage()
     this.keycloak.isLoggedIn().then((authenticated) => {
       this.authenticated = authenticated;
       if (authenticated) {
@@ -26,7 +28,6 @@ export class AuthService {
           this.token = token;
           this.token$.next(this.token);
           let decoded: any = jwtDecode(token);
-          console.log(decoded)
           this.user = {
             id : decoded.sub,
             email : decoded.email,
@@ -34,18 +35,35 @@ export class AuthService {
             surname : decoded.given_name,
             roles: decoded.roles
           }
+          this.saveUserToStorage(this.user)
           this.user$.next(this.user);
         });
-
         this.authenticated$.next(this.authenticated);
       }
     });
+  }
+  loadFromStorage(){
+    if(!this.user){
+     this.user = JSON.parse(sessionStorage.getItem(this.USER_KEY))
+    }
+  }
+  saveUserToStorage(user: User){
+    sessionStorage.setItem(this.USER_KEY, JSON.stringify(user));
+  }
+  removeUserFromStorage(){
+    sessionStorage.removeItem(this.USER_KEY)
   }
   getUserObservable(): Observable<User|null> {
     console.log(this.user$)
     return this.user$;
   }
+  getUserAsSignal(){
+    return signal(this.getUser()).asReadonly()
+  }
   getUser(): User | null {
+    if(!this.user){
+      this.loadFromStorage()
+    }
     return this.user
   }
   getToken(): string {
@@ -65,6 +83,7 @@ export class AuthService {
     this.keycloak.login();
   }
   logout() {
+    this.removeUserFromStorage()
     this.keycloak.logout().then(() => this.router.navigate(['']));
   }
 

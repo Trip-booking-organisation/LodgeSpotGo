@@ -2,41 +2,63 @@ using JetSetGo.ReservationManagement.Application;
 using JetSetGo.ReservationManagement.Grpc;
 using JetSetGo.ReservationManagement.Grpc.Services;
 using JetSetGo.ReservationManagement.Infrastructure;
+using JetSetGo.ReservationManagement.Infrastructure.MessageBroker.Settings;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddGrpc().AddJsonTranscoding();
+builder.Configuration
+    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+    .AddEnvironmentVariables();
+builder.Services
+    .AddInfrastructure(builder.Configuration)
+    .AddPresentation()
+    .AddApplication();
+builder.Services.AddCors(options =>
 {
-    builder.Services.AddGrpc().AddJsonTranscoding();
-    builder.Configuration
-        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-        .AddEnvironmentVariables();
-    builder.Services
-        .AddInfrastructure(builder.Configuration)
-        .AddPresentation()
-        .AddApplication();
-    builder.Services.AddCors(options =>
-    {
-        options.AddPolicy("AllowAnyOrigin",
-            b =>
-            {
-                b.AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader();
-            });
-    });
-    builder.Services.AddGrpcSwagger().AddSwaggerGen(c =>
-    {
-        c.SwaggerDoc("v1",new OpenApiInfo
+    options.AddPolicy("AllowAnyOrigin",
+        b =>
         {
-            Title = "Reservation Management Microservice",
-            Version= "v1",
-            Description = "Reservation Management Microservice"
+            b.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+        });
+});
+builder.Services.AddGrpcSwagger().AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1",new OpenApiInfo
+    {
+        Title = "Reservation Management Microservice",
+        Version= "v1",
+        Description = "Reservation Management Microservice"
+    });
+});
+// #### mass transit ####
+builder.Services.Configure<MessageBrokerSettings>
+    (builder.Configuration.GetSection(MessageBrokerSettings.SectionName));
+builder.Services.AddSingleton(provider => 
+    provider.GetRequiredService<IOptions<MessageBrokerSettings>>().Value);
+builder.Services.AddMassTransit(busConfigurator =>
+{
+    var assembly = typeof(IAssemblyMarker).Assembly;
+    busConfigurator.AddSagaStateMachines(assembly);
+    busConfigurator.AddSagas(assembly);
+    busConfigurator.AddActivities(assembly);
+    busConfigurator.SetKebabCaseEndpointNameFormatter();
+    busConfigurator.UsingRabbitMq((context, configurator) =>
+    {
+        var messageBrokerSettings = context.GetRequiredService<MessageBrokerSettings>();
+        configurator.Host(new Uri(messageBrokerSettings.Host), hostConfigurator =>
+        {
+            hostConfigurator.Username(messageBrokerSettings.Username);   
+            hostConfigurator.Password(messageBrokerSettings.Password);   
         });
     });
-
-}
+});
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

@@ -26,11 +26,11 @@
         "DELETE"
       ],
       "DownstreamPathTemplate": "/api/v1/accommodations/{everything}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7132
+          "Port": 5020
         }
       ]
     },

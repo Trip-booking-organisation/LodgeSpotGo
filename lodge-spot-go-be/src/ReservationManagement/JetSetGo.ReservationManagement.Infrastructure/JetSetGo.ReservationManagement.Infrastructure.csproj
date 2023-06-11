@@ -12,6 +12,8 @@
 
     <ItemGroup>
         <ProjectReference Include="..\JetSetGo.ReservationManagement.Application\JetSetGo.ReservationManagement.Application.csproj" />
+        <PackageReference Include="MassTransit" Version="8.1.0-develop.1393" />
+        <PackageReference Include="MassTransit.RabbitMQ" Version="8.1.0-develop.1393" />
         <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0-preview.3.23174.8" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0-preview.3.23174.8" />
         <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.0-preview.3.23174.8" />

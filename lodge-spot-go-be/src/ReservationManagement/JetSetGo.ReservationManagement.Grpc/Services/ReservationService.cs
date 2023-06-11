@@ -42,7 +42,7 @@ public class ReservationService : ReservationApp.ReservationAppBase
         return list;
     }
     /*[Authorize(Roles = "guest")]*/
-    public async override Task<CreateReservationResponse> CreateReservation(CreateReservationRequest request, ServerCallContext context)
+    public override async Task<CreateReservationResponse> CreateReservation(CreateReservationRequest request, ServerCallContext context)
     {
         _logger.LogInformation(@"Request {request.Reservation}", request.Reservation);
         var reservation = new Reservation
@@ -72,7 +72,7 @@ public class ReservationService : ReservationApp.ReservationAppBase
         if (accommodationResponse.Accommodation.MinGuests > request.Reservation.NumberOfGuests ||
             accommodationResponse.Accommodation.MaxGuests < request.Reservation.NumberOfGuests)
         {
-            throw new RpcException(new Status(StatusCode.Cancelled, "You sepecified wrong guest number"));
+            throw new RpcException(new Status(StatusCode.Cancelled, "You specified wrong guest number"));
         }
         if (accommodationResponse.Accommodation.AutomaticConfirmation)
             reservation.ReservationStatus = ReservationStatus.Confirmed;
