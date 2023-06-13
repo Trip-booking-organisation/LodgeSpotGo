@@ -1,21 +1,4 @@
-﻿//syntax = "proto3";
-//option csharp_namespace = "JetSetGo.UsersManagement.Grpc";
-//package routes;
-//
-//message HostGradeRequest{
-//  string guestId =1;
-//  string hostId = 2;
-//  int32 number= 3;
-//}
-//message  CreateHostGradeRequest{HostGradeRequest grade =1;}
-//message CreateHostGradeResponse{bool success =1;}
-//
-//service GradeApp {
-//  rpc CreateGradeForHost(CreateHostGradeRequest) returns (CreateHostGradeResponse){
-//  }
-//}
-
-syntax = "proto3";
+﻿syntax = "proto3";
 import "google/protobuf/timestamp.proto";
 import "google/api/annotations.proto";
 
@@ -35,11 +18,11 @@ message GetReservationByGuestAndAccom{
   string guestId = 1;
   string accommodationId = 2;
 }
-message GetReservationByGuestAndAccomResponse{
+message GetReservationsResponse{
   repeated GetReservationDto reservations = 1;
 }
 service GetReservationApp{
-  rpc GetReservationByGuestAndAccomRequest(GetReservationByGuestAndAccom) returns (GetReservationByGuestAndAccomResponse){
+  rpc GetReservationByGuestAndAccomRequest(GetReservationByGuestAndAccom) returns (GetReservationsResponse){
     option(google.api.http) = {
       get: "/api/v1/get-reservations/{guestId}/{accommodationId}"
     };

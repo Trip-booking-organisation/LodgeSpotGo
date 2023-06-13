@@ -15,10 +15,13 @@
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.5" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Grpc.JsonTranscoding" Version="7.0.5" />
+        <PackageReference Include="Microsoft.AspNetCore.Grpc.Swagger" Version="0.3.5" />
+        <PackageReference Include="AutoMapper" Version="12.0.1" />
     </ItemGroup>
     <ItemGroup>
         <Protobuf Include="Protos\users.proto" GrpcServices="Client" />
-        <Protobuf Include="Protos\grades.proto" GrpcServices="Client" />
+        <Protobuf Include="Protos\get_reservations.proto" GrpcServices="Client" />
     </ItemGroup>
 
     <ItemGroup>
@@ -30,10 +33,6 @@
     <ItemGroup>
       <ProjectReference Include="..\JetSetGo.UsersManagement.Application\JetSetGo.UsersManagement.Application.csproj" />
       <ProjectReference Include="..\JetSetGo.UsersManagement.Infrastructure\JetSetGo.UsersManagement.Infrastructure.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Dto\" />
     </ItemGroup>
 
 </Project>

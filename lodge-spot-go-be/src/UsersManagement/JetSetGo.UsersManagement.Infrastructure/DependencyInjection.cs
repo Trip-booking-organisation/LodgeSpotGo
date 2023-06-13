@@ -18,6 +18,7 @@ public static class DependencyInjection
         {
             builderConfiguration.GetSection(DatabaseSettings.OptionName).Bind(settings);
         });
+        
         services.AddSingleton(provider => 
             provider.GetRequiredService<IOptions<DatabaseSettings>>().Value);
         services.AddSingleton<IHostGradeRepository, HostGradeRepository>();
