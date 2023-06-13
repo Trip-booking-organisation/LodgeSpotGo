@@ -171,6 +171,23 @@
           "Port": 7132
         }
       ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/grades/{guestId}",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "DownstreamPathTemplate": "/api/v1/grades/{guestId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7132
+        }
+      ]
     }
   ],
   "GlobalConfiguration": {

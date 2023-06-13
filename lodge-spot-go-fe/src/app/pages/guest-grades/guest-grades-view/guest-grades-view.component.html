@@ -1,1 +1,5 @@
-<p>guest-grades-view works!</p>
+<div class="container-main section content">
+  <div *ngFor="let grade of grades">
+   <app-accommodation-grade-card [accommodationGrade]="grade" (gradeEmit)="onDelete($event)"/>
+  </div>
+</div>

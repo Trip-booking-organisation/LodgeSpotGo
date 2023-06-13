@@ -21,6 +21,7 @@ import {HomeModule} from "./pages/home/home.module";
 import {AllAccommodationsModule} from "./pages/all-accommodations/all-accommodations.module";
 import {ViewAccommodationModule} from "./pages/view-accommodation/view-accommodation.module";
 import {GradeAccommodationModule} from "./pages/grade-accommodation/grade-accommodation.module";
+import {GuestGradesModule} from "./pages/guest-grades/guest-grades.module";
 
 @NgModule({
     declarations: [
@@ -36,6 +37,7 @@ import {GradeAccommodationModule} from "./pages/grade-accommodation/grade-accomm
         CommonModule,
         MatInputModule,
         GradeAccommodationModule,
+        GuestGradesModule,
         HostsAccomodationsModule,
         MatIconModule,
         AccommodationCreateModule,
