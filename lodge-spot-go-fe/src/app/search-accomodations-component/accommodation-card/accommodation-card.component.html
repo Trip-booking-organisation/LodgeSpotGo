@@ -44,6 +44,7 @@
         <button class="btn book" (click)="viewAccommodation()">View Accommodation</button>
         <button *ngIf="user!.roles.includes('guest')" class="btn book" (click)="onBook()">Book</button>
         <button *ngIf="user!.roles.includes('host')" class="btn book" (click)="viewAccommodation()">Edit Accommodation</button>
+        <button *ngIf="user!.roles.includes('guest')" class="btn book" (click)="onGrade()">Grade accommodation</button>
       </div>
     </div>
 

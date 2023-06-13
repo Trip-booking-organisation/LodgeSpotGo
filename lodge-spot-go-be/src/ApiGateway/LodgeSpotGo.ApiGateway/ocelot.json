@@ -137,6 +137,40 @@
           "Port": 7231
         }
       ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/grades",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "DownstreamPathTemplate": "/api/v1/grades",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7132
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/grades/guest/{guestId}",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "DownstreamPathTemplate": "/api/v1/grades/guest/{guestId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7132
+        }
+      ]
     }
   ],
   "GlobalConfiguration": {

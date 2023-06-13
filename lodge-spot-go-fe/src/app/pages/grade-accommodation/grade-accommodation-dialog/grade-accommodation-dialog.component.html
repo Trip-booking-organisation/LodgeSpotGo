@@ -1,0 +1,17 @@
+<div class="cancel">
+  <h2>Grade {{text}}</h2>
+  <div class="input-div">
+    <mat-form-field class="example-form-field">
+      <mat-label>Grade</mat-label>
+      <input matInput type="number" [formControl]="gradeFormControl" >
+    </mat-form-field>
+  </div>
+  <div class="space">
+    <div>
+      <button class="btn-delete-lg"  mat-dialog-close  (click)="onConfirm()">Confirm</button>
+    </div>
+    <div>
+      <button class="btn-delete-lg" mat-dialog-close (click)="onCancel()">Cancel</button>
+    </div>
+  </div>
+</div>

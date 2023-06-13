@@ -1,10 +1,17 @@
 ﻿syntax = "proto3";
+import "Dto/accommodation.proto";
 option csharp_namespace = "JetSetGo.AccommodationManagement.Grpc";
 
 message GradeRequest{
   string guestId = 1;
   string accommodationId = 2;
   int32 number = 3;
+}
+message Grader{
+  string id = 1;
+  string name = 2;
+  string surname = 3;
+  string mail = 4;
 }
 message UpdateGrade{
   string id = 1;
@@ -15,6 +22,17 @@ message GradeDto{
   int32 number = 2;
   string guestId = 3;
   string accommodationId = 4;
+}
+message AccommodationGradeResponse {
+  string id = 1;
+  int32 number = 2;
+  Grader guest  = 3;
+  string accommodationId = 4;
+}
+message GradeByGuest{
+  string id = 1;
+  int32 number = 2;
+  AccommodationDto accommodation= 3;
 }
 message CreateGradeRequest{GradeRequest grade = 1;}
 message CreateGradeResponse{bool success = 1;}
@@ -28,3 +46,12 @@ message GetAllGradesRequest{}
 message DeleteGradeRequest{ string id = 1; }
 message DeleteGradeResponse{ bool success = 1; }
 
+message GetGradesByAccommodationRequest { string accommodationId = 1;}
+message GetGradesByAccommodationResponse 
+{ 
+  repeated AccommodationGradeResponse accommodationGrade = 1;
+  float averageGrade = 2;
+}
+
+message GetGradesByGuestResponse {repeated GradeByGuest grades = 1;}
+message GetGradesByGuestRequest { string guestId = 1;}
