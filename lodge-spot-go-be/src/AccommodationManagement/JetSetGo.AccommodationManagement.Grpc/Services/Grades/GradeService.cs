@@ -1,6 +1,9 @@
-﻿using Grpc.Core;
+﻿using AutoMapper;
+using Google.Protobuf.Collections;
+using Grpc.Core;
 using JetSetGo.AccommodationManagement.Application.Common.Persistence;
 using JetSetGo.AccommodationManagement.Domain.Accommodations.Entities;
+using JetSetGo.AccommodationManagement.Grpc.Clients;
 
 namespace JetSetGo.AccommodationManagement.Grpc.Services.Grades;
 
@@ -8,11 +11,16 @@ public class GradeService : GradeApp.GradeAppBase
 {
     private readonly IGradeRepository _gradeRepository;
     private readonly IAccommodationRepository _accommodationRepository;
+    private readonly IMapper _mapper;
+    private readonly IReservationClient _reservationClient;
 
-    public GradeService(IGradeRepository gradeRepository, IAccommodationRepository accommodationRepository)
+
+    public GradeService(IGradeRepository gradeRepository, IAccommodationRepository accommodationRepository, IMapper mapper, IReservationClient reservationClient)
     {
         _gradeRepository = gradeRepository;
         _accommodationRepository = accommodationRepository;
+        _mapper = mapper;
+        _reservationClient = reservationClient;
     }
 
     public override async Task<CreateGradeResponse> CreateGradeForAccommodation(CreateGradeRequest request,
@@ -20,6 +28,11 @@ public class GradeService : GradeApp.GradeAppBase
     {
         await GetAccommodation(request);
         ValidateRequest(request.Grade.Number);
+        var reservations = _reservationClient
+            .GetReservationsByGuestAndHostId(Guid.Parse(request.Grade.GuestId),
+                Guid.Parse(request.Grade.AccommodationId));
+        if (!CheckIfGuestHasStayedInAccommodation(request.Grade.GuestId, reservations.Reservations))
+            throw new RpcException(new Status(StatusCode.Cancelled, "You can't grade this accommodation!"));
         var grade = new Grade
         {
             Number = request.Grade.Number,
@@ -29,6 +42,11 @@ public class GradeService : GradeApp.GradeAppBase
         };
         await _gradeRepository.CreateGrade(grade);
         return new CreateGradeResponse { Success = true };
+    }
+
+    private bool CheckIfGuestHasStayedInAccommodation(string gradeGuestId, RepeatedField<GetReservationDto> reservations)
+    {
+        return reservations.Any(reservation => reservation.DateRange.To.ToDateTime() < DateTime.Now);
     }
 
     private static void ValidateRequest(int gradeNumber)
@@ -44,5 +62,41 @@ public class GradeService : GradeApp.GradeAppBase
             .GetAsync(Guid.Parse(request.Grade.AccommodationId));
         if (accommodation is null)
             throw new RpcException(new Status(StatusCode.Cancelled, "Accommodation doesn't exists!"));
+    }
+
+    public override async Task<UpdateGradeResponse> UpdateGradeForAccommodation(UpdateGradeRequest request, ServerCallContext context)
+    {
+       var grade =  await GetGradeById(request);
+       ValidateRequest(request.Grade.Number);
+       grade.Number = request.Grade.Number;
+       await _gradeRepository.UpdateGrade(grade);
+       return new UpdateGradeResponse { Success = true };
+    }
+
+    private async Task<Grade> GetGradeById(UpdateGradeRequest request)
+    {
+        var grade = await _gradeRepository.GetById(Guid.Parse(request.Grade.Id));
+        if (grade is null)
+            throw new RpcException(new Status(StatusCode.Cancelled, "Grade doesn't exists!"));
+        return grade;
+    }
+
+    public override async Task<GetAllGradesResponse> GetAllGrades(GetAllGradesRequest request, ServerCallContext context)
+    { 
+       var response = new GetAllGradesResponse();
+       var grades =  await _gradeRepository.GetAllAsync();
+       var responseList = grades.Select(grade => _mapper.Map<GradeDto>(grade)).ToList();
+        
+       responseList.ForEach(dto => response.Grades.Add(dto));
+       return response;
+    }
+
+    public override async Task<DeleteGradeResponse> DeleteGrade(DeleteGradeRequest request, ServerCallContext context)
+    {
+        var grade = await _gradeRepository.GetById(Guid.Parse(request.Id));
+        if (grade is null)
+            throw new RpcException(new Status(StatusCode.Cancelled, "Grade not found!"));
+        await _gradeRepository.DeleteGrade(grade.Id);
+        return new DeleteGradeResponse { Success = true };
     }
 }
