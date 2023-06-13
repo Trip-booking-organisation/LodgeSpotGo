@@ -22,4 +22,20 @@ public class GradeRepository : IGradeRepository
 
     public async Task GetByAccommodation(Guid accommodationId) =>
         await _gradeCollection.FindAsync(x => x.AccommodationId == accommodationId);
+
+    public async Task<Grade> GetById(Guid id, CancellationToken token = default) => 
+        await _gradeCollection.Find(x => x.Id == id)
+            .FirstOrDefaultAsync(token);
+
+    public async Task<List<Grade>> GetAllAsync(CancellationToken cancellationToken=default) =>
+        await _gradeCollection.Find(_ => true).ToListAsync(cancellationToken);
+
+    public async Task UpdateGrade(Grade grade) =>
+        await _gradeCollection.ReplaceOneAsync(x => x.Id == grade.Id, grade);
+
+    public async Task DeleteGrade(Guid id)
+    {
+        var filter = Builders<Grade>.Filter.Eq(r => r.Id, id);
+        await _gradeCollection.DeleteOneAsync(filter);
+    }
 }

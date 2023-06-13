@@ -11,4 +11,20 @@ service GradeApp {
       body: "grade"
     };
   }
+  rpc UpdateGradeForAccommodation(UpdateGradeRequest) returns (UpdateGradeResponse){
+    option (google.api.http) = {
+      put: "/api/v1/grades",
+      body: "grade"
+    };
+  }
+  rpc GetAllGrades(GetAllGradesRequest) returns (GetAllGradesResponse){
+    option (google.api.http) = {
+      get: "/api/v1/grades"
+    };
+  }
+  rpc DeleteGrade(DeleteGradeRequest) returns(DeleteGradeResponse){
+    option(google.api.http) = {
+      delete : "/api/v1/grades/{id}",
+    };
+  }
 }
