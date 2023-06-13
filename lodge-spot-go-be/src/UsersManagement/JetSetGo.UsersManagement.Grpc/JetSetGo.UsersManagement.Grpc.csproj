@@ -18,6 +18,7 @@
     </ItemGroup>
     <ItemGroup>
         <Protobuf Include="Protos\users.proto" GrpcServices="Client" />
+        <Protobuf Include="Protos\grades.proto" GrpcServices="Client" />
     </ItemGroup>
 
     <ItemGroup>
@@ -29,6 +30,10 @@
     <ItemGroup>
       <ProjectReference Include="..\JetSetGo.UsersManagement.Application\JetSetGo.UsersManagement.Application.csproj" />
       <ProjectReference Include="..\JetSetGo.UsersManagement.Infrastructure\JetSetGo.UsersManagement.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Dto\" />
     </ItemGroup>
 
 </Project>
