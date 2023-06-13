@@ -5,7 +5,9 @@ import {User} from "../../../core/keycloak/user";
 import {AuthService} from "../../../core/keycloak/auth.service";
 import {FormControl} from "@angular/forms";
 import {GradeAccommodationService} from "../../../common/services/grade-accommodation.service";
-import {GradeAccommodationRequest} from "../../../common/model/GradeAccommodationRequest";
+import {GradeAccommodationRequest, GradeHostRequst} from "../../../common/model/GradeAccommodationRequest";
+import {GradeHostService} from "../../../common/services/grade-host.service";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-grade-accommodation-dialog',
@@ -14,13 +16,17 @@ import {GradeAccommodationRequest} from "../../../common/model/GradeAccommodatio
 })
 export class GradeAccommodationDialogComponent implements OnInit{
   accommodationId! : string
+  hostId! : string
   text!: string
   user : User | null;
   gradeFormControl  = new FormControl(0);
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
               private dialogRef: MatDialogRef<GradeAccommodationDialogComponent>,
               private auth:AuthService,
-              private gradeAccommodationClient : GradeAccommodationService) {
+              private gradeAccommodationClient : GradeAccommodationService,
+              private toastr: ToastrService,
+              private gradeHostClient:GradeHostService) {
+    this.hostId = this.data.accommodation.hostId;
     this.accommodationId = this.data.accommodation.id;
     this.text = this.data.text
   }
@@ -40,7 +46,20 @@ export class GradeAccommodationDialogComponent implements OnInit{
       };
       this.gradeAccommodationClient.gradeAccommodation(request).subscribe({
         next: _=>{
-
+          this.toastr.success("U have successfully rated this accommodation.","Thank you for your support.")
+        }
+      })
+    }
+    if(this.text === 'host'){
+      let request : GradeHostRequst ={
+        accomodationId: this.accommodationId,
+        guestId: this.user.id,
+        number: this.gradeFormControl.value,
+        hostId:this.hostId
+      }
+      this.gradeHostClient.gradeAccommodation(request).subscribe({
+        next:res=>{
+          this.toastr.success("U have successfully rated this host.","Thank you for your support.")
         }
       })
     }

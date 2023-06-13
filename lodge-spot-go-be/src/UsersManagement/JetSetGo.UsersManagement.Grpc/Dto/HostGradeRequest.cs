@@ -2,7 +2,6 @@
 
 public class HostGradeRequest
 {
-    public Guid Id { get; set; }
     public Guid HostId { get; set; }
     public Guid GuestId { get; set; }
     public Guid AccomodationId { get; set; }

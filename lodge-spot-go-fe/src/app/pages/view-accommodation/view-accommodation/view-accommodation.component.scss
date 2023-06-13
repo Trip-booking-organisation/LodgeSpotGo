@@ -103,3 +103,20 @@ ul {
   align-content: center;
   justify-content: center;
 }
+.button-row{
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 2rem;
+}
+button{
+  width: 10%;
+  padding: 0.7rem 1rem 0.7rem 1rem;
+  background-color: #3d5cb8;
+  color: #fff;
+  font-size: 0.9rem;
+  border-width: 0;
+  border-radius: 1rem;
+}
+button:hover{
+  background-color: #183a9a;
+}
