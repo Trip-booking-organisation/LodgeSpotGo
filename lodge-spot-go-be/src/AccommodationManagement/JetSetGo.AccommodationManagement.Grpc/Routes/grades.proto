@@ -32,4 +32,9 @@ service GradeApp {
       get : "/api/v1/grades/{accommodationId}",
     };
   }
+  rpc GetGradesByGuest(GetGradesByGuestRequest) returns(GetGradesByGuestResponse){
+    option(google.api.http) = {
+      get : "/api/v1/grades/guest/{guestId}",
+    };
+  }
 }

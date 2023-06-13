@@ -24,6 +24,10 @@ public class GradeRepository : IGradeRepository
         await _gradeCollection.Find(x => x.AccommodationId == accommodationId)
             .ToListAsync();
 
+    public async Task<List<Grade>> GetAllByGuest(Guid guestId) =>
+        await _gradeCollection.Find(x => x.GuestId == guestId)
+            .ToListAsync();
+
     public async Task<Grade> GetById(Guid id, CancellationToken token = default) => 
         await _gradeCollection.Find(x => x.Id == id)
             .FirstOrDefaultAsync(token);

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Google.Protobuf.Collections;
 using Grpc.Core;
 using JetSetGo.AccommodationManagement.Application.Common.Persistence;
 using JetSetGo.AccommodationManagement.Domain.Accommodations.Entities;
@@ -31,7 +30,7 @@ public class GradeService : GradeApp.GradeAppBase
         var reservations = _reservationClient
             .GetReservationsByGuestAndHostId(Guid.Parse(request.Grade.GuestId),
                 Guid.Parse(request.Grade.AccommodationId));
-        if (!CheckIfGuestHasStayedInAccommodation(request.Grade.GuestId, reservations.Reservations))
+        if (!CheckIfGuestHasStayedInAccommodation(reservations.Reservations))
             throw new RpcException(new Status(StatusCode.Cancelled, "You can't grade this accommodation!"));
         var grade = new Grade
         {
@@ -44,7 +43,7 @@ public class GradeService : GradeApp.GradeAppBase
         return new CreateGradeResponse { Success = true };
     }
 
-    private bool CheckIfGuestHasStayedInAccommodation(string gradeGuestId, RepeatedField<GetReservationDto> reservations)
+    private bool CheckIfGuestHasStayedInAccommodation(IEnumerable<GetReservationDto> reservations)
     {
         return reservations.Any(reservation => reservation.DateRange.To.ToDateTime() < DateTime.Now);
     }
@@ -98,6 +97,27 @@ public class GradeService : GradeApp.GradeAppBase
             throw new RpcException(new Status(StatusCode.Cancelled, "Grade not found!"));
         await _gradeRepository.DeleteGrade(grade.Id);
         return new DeleteGradeResponse { Success = true };
+    }
+
+    public override async Task<GetGradesByGuestResponse> GetGradesByGuest(GetGradesByGuestRequest request, ServerCallContext context)
+    {
+        var grades = await _gradeRepository.GetAllByGuest(Guid.Parse(request.GuestId));
+        var response = new GetGradesByGuestResponse();
+
+        async void Action(Grade x)
+        {
+            var accommodation = await _accommodationRepository.GetAsync(x.AccommodationId);
+            var dto = new GradeByGuest
+            {
+                Number = x.Number,
+                Id = x.Id.ToString(), 
+                Accommodation = _mapper.Map<AccommodationDto>(accommodation)
+            };
+            response.Grades.Add(dto);
+        }
+
+        grades.ForEach(Action);
+        return response;
     }
 
     /*public override async Task<GetGradesByAccommodationResponse> GetGradesByAccommodation(GetGradesByAccommodationRequest request, ServerCallContext context)
