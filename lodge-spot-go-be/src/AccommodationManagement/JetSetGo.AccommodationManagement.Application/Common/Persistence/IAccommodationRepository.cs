@@ -1,5 +1,5 @@
 ﻿using JetSetGo.AccommodationManagement.Application.SearchAccommodation;
-using JetSetGo.AccommodationManagement.Domain.Accommodation;
+using JetSetGo.AccommodationManagement.Domain.Accommodations;
 
 namespace JetSetGo.AccommodationManagement.Application.Common.Persistence;
 

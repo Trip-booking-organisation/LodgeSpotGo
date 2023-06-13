@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using JetSetGo.AccommodationManagement.Application.SearchAccommodation;
 using Google.Protobuf.WellKnownTypes;
-using JetSetGo.AccommodationManagement.Domain.Accommodation;
-using JetSetGo.AccommodationManagement.Domain.Accommodation.ValueObjects;
+using JetSetGo.AccommodationManagement.Domain.Accommodations;
+using JetSetGo.AccommodationManagement.Domain.Accommodations.ValueObjects;
 
 namespace JetSetGo.AccommodationManagement.Grpc.Mapping;
 

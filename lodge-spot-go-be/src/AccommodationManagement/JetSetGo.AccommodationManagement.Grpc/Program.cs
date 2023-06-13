@@ -1,6 +1,7 @@
 using JetSetGo.AccommodationManagement.Application;
 using JetSetGo.AccommodationManagement.Grpc;
 using JetSetGo.AccommodationManagement.Grpc.Services;
+using JetSetGo.AccommodationManagement.Grpc.Services.Grades;
 using JetSetGo.AccommodationManagement.Infrastructure;
 using Keycloak.AuthServices.Authentication;
 using Keycloak.AuthServices.Authorization;
@@ -115,6 +116,7 @@ var app = builder.Build();
     app.MapGrpcService<AccommodationService>();
     app.MapGrpcService<GetAccommodationService>();
     app.MapGrpcService<SearchAccommodationService>();
+    app.MapGrpcService<GradeService>();
     app.UseAuthentication();
     app.UseAuthorization();
     app.MapGet("/",

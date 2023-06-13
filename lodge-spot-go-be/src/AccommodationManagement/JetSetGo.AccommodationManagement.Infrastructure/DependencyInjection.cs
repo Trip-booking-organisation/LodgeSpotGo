@@ -14,6 +14,7 @@ public static class DependencyInjection
     {
         services.Configure<DatabaseSettings>(builderConfiguration.GetSection(DatabaseSettings.OptionName));
         services.AddSingleton<IAccommodationRepository,AccommodationRepository>();
+        services.AddSingleton<IGradeRepository, GradeRepository>();
         services.AddAutoMapper(typeof(MappingConfiguration));
         AddDbConfig();
         return services;
@@ -22,5 +23,6 @@ public static class DependencyInjection
     private static void AddDbConfig()
     {
         AccommodationDbConfig.Configure();
+        GradeDbConfig.Configure();
     }
 }

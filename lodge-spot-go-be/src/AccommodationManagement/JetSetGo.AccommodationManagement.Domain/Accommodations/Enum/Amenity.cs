@@ -1,4 +1,4 @@
-﻿namespace JetSetGo.AccommodationManagement.Domain.Accommodation.Enum;
+﻿namespace JetSetGo.AccommodationManagement.Domain.Accommodations.Enum;
 
 public enum Amenity
 {

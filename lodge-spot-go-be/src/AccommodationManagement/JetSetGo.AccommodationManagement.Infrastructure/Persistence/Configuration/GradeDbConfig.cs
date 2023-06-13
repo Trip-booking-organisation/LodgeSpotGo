@@ -1,14 +1,14 @@
-﻿using JetSetGo.AccommodationManagement.Domain.Accommodations;
+﻿using JetSetGo.AccommodationManagement.Domain.Accommodations.Entities;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.IdGenerators;
 
 namespace JetSetGo.AccommodationManagement.Infrastructure.Persistence.Configuration;
 
-public class AccommodationDbConfig
+public class GradeDbConfig
 {
     public static void Configure()
     {
-        BsonClassMap.RegisterClassMap<Accommodation>(map =>
+        BsonClassMap.RegisterClassMap<Grade>(map =>
         {
             map.AutoMap();
             map.SetIgnoreExtraElements(true);

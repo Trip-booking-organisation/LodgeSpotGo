@@ -1,0 +1,13 @@
+﻿syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "JetSetGo.AccommodationManagement.Grpc";
+
+message GradeRequest{
+  string guestId = 1;
+  string accommodationId = 2;
+  int32 number = 3;
+}
+message CreateGradeRequest{GradeRequest grade = 1;}
+message CreateGradeResponse{bool success = 1;}

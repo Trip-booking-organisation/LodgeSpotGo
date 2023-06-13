@@ -1,4 +1,4 @@
-﻿namespace JetSetGo.AccommodationManagement.Domain.Accommodation.ValueObjects;
+﻿namespace JetSetGo.AccommodationManagement.Domain.Accommodations.ValueObjects;
 
 public class DateRange
 {

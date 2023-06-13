@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Grpc.Core;
 using JetSetGo.AccommodationManagement.Application.Common.Persistence;
-using JetSetGo.AccommodationManagement.Domain.Accommodation;
-using JetSetGo.AccommodationManagement.Domain.Accommodation.ValueObjects;
+using JetSetGo.AccommodationManagement.Domain.Accommodations;
+using JetSetGo.AccommodationManagement.Domain.Accommodations.ValueObjects;
 using JetSetGo.AccommodationManagement.Grpc.Mapping.MappingToGrpcResponse;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

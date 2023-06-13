@@ -1,7 +1,6 @@
-﻿using JetSetGo.AccommodationManagement.Domain.Accommodation.Enum;
-using JetSetGo.AccommodationManagement.Domain.Accommodation.ValueObjects;
+﻿using JetSetGo.AccommodationManagement.Domain.Accommodations.ValueObjects;
 
-namespace JetSetGo.AccommodationManagement.Domain.Accommodation;
+namespace JetSetGo.AccommodationManagement.Domain.Accommodations;
 
 public class Accommodation
 {

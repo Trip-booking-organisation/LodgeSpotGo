@@ -1,0 +1,14 @@
+﻿syntax = "proto3";
+import "google/api/annotations.proto";
+import "Dto/grade.proto";
+option csharp_namespace = "JetSetGo.AccommodationManagement.Grpc";
+package routes;
+service GradeApp {
+ 
+  rpc CreateGradeForAccommodation(CreateGradeRequest) returns (CreateGradeResponse){
+    option (google.api.http) = {
+      post: "/api/v1/grades",
+      body: "grade"
+    };
+  }
+}

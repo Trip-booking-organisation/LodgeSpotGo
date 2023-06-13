@@ -1,6 +1,6 @@
 ﻿using JetSetGo.AccommodationManagement.Application.Common.Persistence;
 using JetSetGo.AccommodationManagement.Application.SearchAccommodation;
-using JetSetGo.AccommodationManagement.Domain.Accommodation;
+using JetSetGo.AccommodationManagement.Domain.Accommodations;
 using JetSetGo.AccommodationManagement.Infrastructure.Persistence.Settings;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
