@@ -20,6 +20,7 @@ import { AccommodationCardComponent } from './search-accomodations-component/acc
 import {HomeModule} from "./pages/home/home.module";
 import {AllAccommodationsModule} from "./pages/all-accommodations/all-accommodations.module";
 import {ViewAccommodationModule} from "./pages/view-accommodation/view-accommodation.module";
+import {GradeAccommodationModule} from "./pages/grade-accommodation/grade-accommodation.module";
 
 @NgModule({
     declarations: [
@@ -34,6 +35,7 @@ import {ViewAccommodationModule} from "./pages/view-accommodation/view-accommoda
         BrowserAnimationsModule,
         CommonModule,
         MatInputModule,
+        GradeAccommodationModule,
         HostsAccomodationsModule,
         MatIconModule,
         AccommodationCreateModule,

@@ -99,4 +99,23 @@ public class GradeService : GradeApp.GradeAppBase
         await _gradeRepository.DeleteGrade(grade.Id);
         return new DeleteGradeResponse { Success = true };
     }
+
+    /*public override async Task<GetGradesByAccommodationResponse> GetGradesByAccommodation(GetGradesByAccommodationRequest request, ServerCallContext context)
+    {
+        var grades = await _gradeRepository.GetByAccommodation(Guid.Parse(request.AccommodationId));
+        var responseList = new List<AccommodationGradeResponse>();
+        grades.ForEach(x =>
+        {
+            var res = new AccommodationGradeResponse()
+            {
+                Id = x.Id.ToString(),
+                Number = x.Number,
+                AccommodationId = x.AccommodationId.ToString(),
+                Guest = 
+                
+            }
+        });
+        var response = new GetGradesByAccommodationResponse();
+        
+    }*/
 }

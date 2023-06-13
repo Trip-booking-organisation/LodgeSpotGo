@@ -20,8 +20,9 @@ public class GradeRepository : IGradeRepository
     public async Task CreateGrade(Grade grade) =>
         await _gradeCollection.InsertOneAsync(grade);
 
-    public async Task GetByAccommodation(Guid accommodationId) =>
-        await _gradeCollection.FindAsync(x => x.AccommodationId == accommodationId);
+    public async Task<List<Grade>> GetByAccommodation(Guid accommodationId) =>
+        await _gradeCollection.Find(x => x.AccommodationId == accommodationId)
+            .ToListAsync();
 
     public async Task<Grade> GetById(Guid id, CancellationToken token = default) => 
         await _gradeCollection.Find(x => x.Id == id)
