@@ -54,6 +54,7 @@ public class MappingConfiguration:Profile
                     opt.MapFrom(src => MapEnumToString(src.ReservationStatus)))
             .ForMember(dest => dest.NumberOfGuest, opt =>
         opt.MapFrom(src => src.NumberOfGuests));
+        CreateMap<Reservation, GetReservationDto>();
     }
 
     public string MapEnumToString(ReservationStatus status)

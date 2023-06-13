@@ -19,4 +19,5 @@ public interface IReservationRepository
     Task<List<Reservation>> GetDeletedByGuest(Guid guestId);
     Task DeleteReservation(Guid requestId);
     Task<List<Reservation>> GetByGuestIdConfirmed(Guid guestId);
+    Task<List<Reservation>> GetByGuestAndAccommodation(Guid guestId,Guid accommodationId);
 }
