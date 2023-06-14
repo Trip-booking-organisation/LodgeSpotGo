@@ -5,6 +5,7 @@ import {Accommodation} from "../model/accommodation";
 import {Observable} from "rxjs";
 import {GradeAccommodationRequest} from "../model/GradeAccommodationRequest";
 import {UpdateAccommodationGradeRequest} from "../model/update-accommodation-grade-request";
+import {GetGradesAccommodationRequest} from "../model/GetGradesAccommodationRequest";
 
 @Injectable({
   providedIn: 'root'
@@ -24,5 +25,8 @@ export class GradeAccommodationService {
   }
   public updateAccommodationGrade(request: UpdateAccommodationGradeRequest):Observable<any>{
     return this.httpClient.put<any>(`${this.baseUrl}api/grades`,request, {headers : this.headers});
+  }
+  public getGradesByAccommodation(accommodationId: string):Observable<any>{
+    return this.httpClient.get(`${this.baseUrl}api/grades/${accommodationId}`, {headers : this.headers});
   }
 }

@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
+using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using JetSetGo.AccommodationManagement.Application.Common.Persistence;
 using JetSetGo.AccommodationManagement.Domain.Accommodations.Entities;
-using JetSetGo.AccommodationManagement.Grpc.Clients;
 using JetSetGo.AccommodationManagement.Grpc.Clients.Reservations;
 using JetSetGo.AccommodationManagement.Grpc.Clients.Users;
 
@@ -128,9 +128,11 @@ public class GradeService : GradeApp.GradeAppBase
     {
         var grades = await _gradeRepository.GetByAccommodation(Guid.Parse(request.AccommodationId));
         var response = new GetGradesByAccommodationResponse();
+        var grade = 0;
         grades.ForEach(x =>
         {
             var user = _userClient.GetUserById(x.GuestId);
+            var date = new DateTimeOffset(x.Date.ToDateTime(TimeOnly.MinValue));
             var grader = new Grader
             {
                 Id = user.User.Id,
@@ -143,11 +145,14 @@ public class GradeService : GradeApp.GradeAppBase
                 Id = x.Id.ToString(),
                 Number = x.Number,
                 AccommodationId = x.AccommodationId.ToString(),
-                Guest = grader
+                Guest = grader,
+                Date = Timestamp.FromDateTimeOffset(date)
             };
+            grade += x.Number;
             response.AccommodationGrade.Add(res);
         });
-        
+        var averageGrade = grade / grades.Count;
+        response.AverageGrade = averageGrade;
         return response;
     }
 }

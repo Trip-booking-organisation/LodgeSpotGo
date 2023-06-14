@@ -9,6 +9,7 @@
       <p>Max Guests: {{ accommodation.maxGuests }}</p>
       <p>Min Guests: {{ accommodation.minGuests }}</p>
       <p>Amenities: {{ accommodation.amenities?.join(', ') }}</p>
+      <p>Average grade: {{ averageGrade}}</p>
       <p >Special Prices:</p>
     </mat-card-content>
     <div  *ngFor="let specialPrice of accommodation.specialPrices">
@@ -22,6 +23,8 @@
       </div>
     </div>
     <div class="button-row">
+      <button (click)="onAccommodationGrades()">Accommodation grades</button>
+
       <button (click)="rateHost()">Rate host</button>
     </div>
   </mat-card>
@@ -32,6 +35,13 @@
       <div *ngFor="let photo of accommodation.photos;let i = index;" [attr.data-index]="i">
         <div class="flex-col">
           <img [src]="'data:image/jpeg;base64,' + photo" class="img-a" alt="A beautiful landscape image" width="280" height="280"/>
+        </div>
+      </div>
+    </div>
+    <div class="grades" *ngIf="accommodationGrades && accommodationGrade.length > 0">
+      <div *ngFor="let grade of accommodationGrade">
+        <div>
+        <app-grade-card [accommodationGrade]="grade"/>
         </div>
       </div>
     </div>
