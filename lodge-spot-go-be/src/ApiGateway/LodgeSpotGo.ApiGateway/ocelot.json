@@ -9,11 +9,11 @@
         "DELETE"
       ],
       "DownstreamPathTemplate": "/api/v1/accommodations",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5020
+          "Port": 7132
         }
       ]
     },
@@ -26,11 +26,11 @@
         "DELETE"
       ],
       "DownstreamPathTemplate": "/api/v1/accommodations/{everything}",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5020
+          "Port": 7132
         }
       ]
     },
@@ -43,11 +43,11 @@
         "DELETE"
       ],
       "DownstreamPathTemplate": "/api/v1/users/gradeHost",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5228
+          "Port": 7132
         }
       ]
     },
@@ -61,11 +61,11 @@
         "DELETE"
       ],
       "DownstreamPathTemplate": "/api/v1/accommodations/host/{hostId}",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5020
+          "Port": 7132
         }
       ]
     },

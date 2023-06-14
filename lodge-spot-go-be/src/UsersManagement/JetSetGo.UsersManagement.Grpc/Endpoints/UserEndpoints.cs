@@ -19,8 +19,35 @@ public static class UserEndpoints
     {
         application.MapDelete("api/v1/users", DeleteUser);
         application.MapPost("api/v1/users/gradeHost", GradeHost);
+        application.MapDelete("api/v1/users/deleteGrade", DeleteGrade);
+        application.MapPut("api/v1/users/updateGrade", UpdateGrade);
+        application.MapPost("api/v1/users/getGradesByHost", GetGradesByHost);
+        application.MapPost("api/v1/users/getGradesByGuest", GetGradesByGuest);
     }
 
+    private static async Task<IResult> DeleteGrade([FromBody]DeleteHostGradeRequest request, [FromServices]GradesGrpcService gradesGrpcService)
+    {
+        var response = await gradesGrpcService.DeleteHostGrade(request);
+        return Results.Ok(response);
+    }
+    
+    private static async Task<IResult> UpdateGrade([FromBody]UpdateHostGradeRequest request, [FromServices]GradesGrpcService gradesGrpcService)
+    {
+        var response = await gradesGrpcService.UpdateHostGrade(request);
+        return Results.Ok(response);
+    }
+    
+    private static async Task<IResult> GetGradesByHost([FromBody]GetGradesByHostRequest request, [FromServices]GradesGrpcService gradesGrpcService)
+    {
+        var response = await gradesGrpcService.GetGradesByHost(request);
+        return Results.Ok(response);
+    }
+    
+    private static async Task<IResult> GetGradesByGuest(GetGradesByGuestRequest request, [FromServices]GradesGrpcService gradesGrpcService)
+    {
+        var response = await gradesGrpcService.GetGradesByGuest(request);
+        return Results.Ok(response);
+    }
     private static async Task<IResult> GradeHost(HostGradeRequest request,[FromServices] GradesGrpcService gradesGrpcService)
     {
         HostGradeResponse response = await gradesGrpcService.CreateGradeForHost(request);
