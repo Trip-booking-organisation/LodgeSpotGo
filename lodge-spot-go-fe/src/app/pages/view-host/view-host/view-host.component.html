@@ -33,7 +33,7 @@
     <div class="grades" *ngIf="(hostGrades$ | async) as hs">
       <div *ngFor="let grade of hs.hostGrades">
         <div>
-          <app-grade-host-card [hostGrade]="grade"/>
+          <app-grade-host-card  [hostGrade]="grade"/>
         </div>
       </div>
     </div>

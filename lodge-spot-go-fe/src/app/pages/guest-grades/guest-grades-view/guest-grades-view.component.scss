@@ -1,3 +1,26 @@
 .content{
   padding-top: 13rem;
 }
+
+.host-grade{
+  padding-top: 1rem;
+  width: 100%;
+}
+.grades{
+  padding-top: 3rem;
+  padding-right: 15rem;
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 1rem;
+  padding-left: 7%;
+}
+.guest-grades-title{
+  padding: 3rem 4rem 1rem 4rem;
+  margin: 0 4rem 0 4rem;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-bottom-color: #3d5cb8;
+  text-align: center;
+  font-size: 2rem;
+  color: #3d5cb8;
+}

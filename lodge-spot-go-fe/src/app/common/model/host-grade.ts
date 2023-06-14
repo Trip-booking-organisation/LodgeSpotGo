@@ -4,7 +4,7 @@ export interface HostGrade{
   id : string,
   guestId : string,
   number : number
-  hostId: Grader,
+  hostId: string,
   date: Date
 }
 

@@ -102,6 +102,40 @@
         }
       ]
     },
+    {
+      "UpstreamPathTemplate": "/api/users/deleteGrade",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "DownstreamPathTemplate": "/api/v1/users/deleteGrade",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7169
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/users/updateGrade",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "DownstreamPathTemplate": "/api/v1/users/updateGrade",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7169
+        }
+      ]
+    },
 
     {
       "UpstreamPathTemplate": "/api/v1/accommodations/host/{hostId}",

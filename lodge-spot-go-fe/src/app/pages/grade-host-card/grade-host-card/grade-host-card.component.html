@@ -24,7 +24,14 @@
         <div class="class-price">
           <p> <span>{{hostGrade.date | date:'yyyy-MM-dd'}}</span></p>
         </div>
+        <div *ngIf="canEdit">
+          <button class="button" (click)="editGrade()">Edit</button>
+          <button class="button" (click)="deleteGrade()" style="margin-top: 1rem">Delete</button>
+        </div>
+
       </div>
+
     </div>
   </div>
+
 </div>

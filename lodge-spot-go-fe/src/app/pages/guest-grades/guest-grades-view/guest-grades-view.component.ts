@@ -4,6 +4,8 @@ import {AuthService} from "../../../core/keycloak/auth.service";
 import {Observable, switchMap, take, tap} from "rxjs";
 import {AccommodationGrade} from "../../../common/model/accommodation-grade";
 import {MatDialog} from "@angular/material/dialog";
+import {HostGrades} from "../../../common/model/host-grade";
+import {UserManagementService} from "../../../common/services/user-management.service";
 
 @Component({
   selector: 'app-guest-grades-view',
@@ -12,8 +14,10 @@ import {MatDialog} from "@angular/material/dialog";
 })
 export class GuestGradesViewComponent implements OnInit{
   grades:AccommodationGrade[] =[];
+  hostGrades$: Observable<HostGrades>
   constructor(private gradeClient : GradeAccommodationService,
               private authService : AuthService,
+              private userService:UserManagementService,
               private dialog: MatDialog) {
   }
   ngOnInit(): void {
@@ -24,6 +28,11 @@ export class GuestGradesViewComponent implements OnInit{
         console.log(this.grades)
       }
     })
+    this.hostGrades$ = this.userService.getGuestsGrades({
+      guestId: user.id
+    })
+    console.log(user.id)
+
   }
 
   onDelete($event: AccommodationGrade) {
