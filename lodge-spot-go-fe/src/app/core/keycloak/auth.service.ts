@@ -36,6 +36,7 @@ export class AuthService {
             roles: decoded.roles
           }
           this.saveUserToStorage(this.user)
+          console.log(this.user)
           this.user$.next(this.user);
         });
         this.authenticated$.next(this.authenticated);

@@ -17,6 +17,8 @@ public static class DependencyInjection
         services.AddHttpClient();
         services.AddScoped<MyUserGrpcService>();
         services.AddScoped<TokenService>();
+        services.AddScoped<GradesGrpcService>();
+        services.AddSingleton < IReservationClient,ReservationClient>();
         services.AddScoped<KeyCloakConnections>();
     }
 }

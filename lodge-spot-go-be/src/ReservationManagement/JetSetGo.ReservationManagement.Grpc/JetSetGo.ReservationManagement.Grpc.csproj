@@ -8,6 +8,14 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Protobuf Include="Protos\grades.proto">
+          <GrpcServices>Service</GrpcServices>
+          <Access>Public</Access>
+          <ProtoCompile>True</ProtoCompile>
+          <CompileOutputs>True</CompileOutputs>
+          <OutputDir>obj\Debug\net7.0\</OutputDir>
+          <Generator>MSBuild:Compile</Generator>
+        </Protobuf>
         <Protobuf Include="Protos\greet.proto" GrpcServices="Server" />
         <Protobuf Include="Dto\reservation.proto" GrpcServices="Server" />
         <Protobuf Include="Routes\routes.proto" GrpcServices="Server" />
@@ -16,6 +24,7 @@
         <Protobuf Include="Routes\get_reservations.proto" GrpcServices="Server" />
         <Protobuf Include="Protos\users.proto" GrpcServices="Server" />
         <Protobuf Include="Protos\accommodation.proto" GrpcServices="Client" />
+        <Protobuf Include="Protos\grades.proto" GrpcServices="Server"/>
     </ItemGroup>
 
     <ItemGroup>

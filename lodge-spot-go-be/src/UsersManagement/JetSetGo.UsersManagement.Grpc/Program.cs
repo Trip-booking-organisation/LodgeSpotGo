@@ -1,5 +1,6 @@
 using JetSetGo.UsersManagement.Grpc;
 using JetSetGo.UsersManagement.Grpc.Services;
+using JetSetGo.UsersManagement.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
@@ -11,6 +12,7 @@ builder.Services.AddPresentation(builder.Configuration);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddInfrastructure(builder.Configuration);
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 builder.Services

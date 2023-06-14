@@ -34,6 +34,23 @@
         }
       ]
     },
+    {
+      "UpstreamPathTemplate": "/api/users/gradeHost",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "DownstreamPathTemplate": "/api/v1/users/gradeHost",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5228
+        }
+      ]
+    },
 
     {
       "UpstreamPathTemplate": "/api/v1/accommodations/host/{hostId}",
@@ -79,11 +96,11 @@
         "OPTIONS"
       ],
       "DownstreamPathTemplate": "/api/v1/reservations",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7105
+          "Port": 5064
         }
       ]
     },
