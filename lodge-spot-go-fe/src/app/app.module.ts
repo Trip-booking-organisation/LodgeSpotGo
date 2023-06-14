@@ -55,5 +55,6 @@ import {ViewHostModule} from "./pages/view-host/view-host.module";
         deps: [KeycloakService]
     }],
     bootstrap: [AppComponent]
+
 })
 export class AppModule { }

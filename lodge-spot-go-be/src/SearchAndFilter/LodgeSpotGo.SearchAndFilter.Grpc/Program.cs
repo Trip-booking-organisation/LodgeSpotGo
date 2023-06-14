@@ -69,6 +69,7 @@ app.UseRouting();
 app.UseCors("AllowOrigin");
 // Configure the HTTP request pipeline.
 app.MapGrpcService<GreeterService>();
+app.MapGrpcService<FilterService>();
 app.MapGrpcService<SearchAndFilterService>();
 app.UseSwagger().UseSwaggerUI(c =>
 {

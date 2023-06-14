@@ -1,0 +1,66 @@
+<div class="search container-main section">
+  <div class="section-container grid" data-aos="fade-up" data-aos-duration="2000">
+    <div class="search-inputs flex">
+      <div class="single-input flex">
+        <div class="icon-div">
+          <mat-icon>location_on</mat-icon>
+        </div>
+        <div class="texts">
+          <h4>Amenities</h4>
+          <mat-form-field>
+            <mat-select placeholder="Amenities"  multiple  [formControl]="amenitiesControl">
+              <mat-select-trigger>
+               selected
+              </mat-select-trigger>
+              <mat-option [value]="a" *ngFor="let a of amenities ">
+                {{a}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="single-input flex">
+        <div class="icon-div">
+          <mat-icon>account_circle</mat-icon>
+        </div>
+        <div class="texts">
+          <h4>Min grade</h4>
+          <mat-form-field class="small-input">
+            <input type="number" placeholder="Min grade" matInput [formControl]="minGrade"
+                   >
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="single-input flex">
+        <div class="icon-div">
+          <mat-icon>calendar_today</mat-icon>
+        </div>
+        <div class="texts">
+          <h4>Max grade
+          </h4>
+          <mat-form-field class="small-input">
+            <input type="number" placeholder="Max grade" matInput [formControl]="maxGrade"
+            >
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="single-input flex">
+        <div class="icon-div">
+          <mat-icon>calendar_today</mat-icon>
+        </div>
+        <div class="texts">
+          <h4>Host</h4>
+          <mat-form-field>
+            <mat-select placeholder="Host"   [formControl]="outstandingHost">
+              <mat-option [value]="true">outstanding hosts</mat-option>
+              <mat-option [value]="false">all hosts</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <button (click)="filterAccommodations()" class="btn btn-block flex">
+        Filter
+      </button>
+    </div>
+  </div>
+</div>
