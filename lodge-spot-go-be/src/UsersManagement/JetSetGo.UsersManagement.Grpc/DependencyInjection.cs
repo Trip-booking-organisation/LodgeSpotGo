@@ -1,4 +1,5 @@
 ﻿using JetSetGo.UserManagement.Grpc;
+using JetSetGo.UsersManagement.Grpc.Client;
 using JetSetGo.UsersManagement.Grpc.Common.Logger;
 using JetSetGo.UsersManagement.Grpc.Common.Utility;
 using JetSetGo.UsersManagement.Grpc.Keycloak;
