@@ -13,6 +13,7 @@ import {
 } from "./pages/all-accommodations/all-accommodations.page/all-accommodations.page.component";
 import {ViewAccommodationComponent} from "./pages/view-accommodation/view-accommodation/view-accommodation.component";
 import {GuestGradesViewComponent} from "./pages/guest-grades/guest-grades-view/guest-grades-view.component";
+import {ViewHostComponent} from "./pages/view-host/view-host/view-host.component";
 
 const routes: Routes = [
   {path: '', component: HomePageComponent},
@@ -23,6 +24,7 @@ const routes: Routes = [
   {path:'all-accommodations', component:AllAccommodationsPageComponent},
   {path:'accommodation-view', component:ViewAccommodationComponent},
   {path:'all-grades', component:GuestGradesViewComponent},
+  {path:'view-host', component:ViewHostComponent},
 ];
 
 @NgModule({

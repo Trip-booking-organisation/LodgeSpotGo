@@ -1,0 +1,30 @@
+<div class="container-main">
+  <div class="home-content">
+    <div class="flight-card" >
+      <div class="content-flight">
+        <div class="flight-details">
+          <div class="flight-info">
+            <div class="flight-time" *ngIf="(guest$ | async) as user">
+              <p class="time">{{user.firstName}}</p>
+              <p class="place">{{user.lastName}}</p>
+              <p class="place">{{user.email}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="one-price">
+        <h4 class="price-text">Grade</h4>
+        <div class="class-price">
+          <p> <span>{{hostGrade.number}}</span></p>
+        </div>
+      </div>
+
+      <div class="total-price">
+        <h4 class="price-text">Date of submission</h4>
+        <div class="class-price">
+          <p> <span>{{hostGrade.date | date:'yyyy-MM-dd'}}</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

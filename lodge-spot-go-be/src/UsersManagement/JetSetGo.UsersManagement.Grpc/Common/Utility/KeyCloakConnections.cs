@@ -20,7 +20,6 @@ public class KeyCloakConnections
     public async Task<KeycloakUserResponse?> GetUserIdAsync(Guid userId)
     {
         var accessToken = await _tokenService.GenerateToken();
-
         Console.WriteLine($"UserId:  {userId}");
         _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken.Value}");
         var getLink = $"http://localhost:8080/admin/realms/{_keycloakAdmin.Realm}/users/{userId}";

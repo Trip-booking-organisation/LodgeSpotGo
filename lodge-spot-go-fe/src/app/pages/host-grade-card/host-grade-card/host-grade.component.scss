@@ -1,0 +1,182 @@
+@import "variables";
+.home-content{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 5rem;
+  .flight-card {
+    display: flex;
+    justify-content: flex-start;
+    padding: 1.2rem;
+    background-color: $white-color;
+    border-radius: 15px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+    gap: 2rem;
+    .content-flight {
+      border-right: 3px solid $border-color;
+
+      .flight-details {
+        margin-left: 1rem;
+        margin-right: 1rem;
+        display: flex;
+
+        .flight-info {
+          display: flex;
+
+          img {
+            width: 250px;
+            height: 250px;
+            margin-right: 10px;
+          }
+        }
+
+        .flight-time {
+          margin-left: 1rem;
+          margin-top: 1rem;
+          font-size: 18px;
+
+          .time {
+            font-size: 24px;
+            font-weight: 700;
+            padding: .3rem;
+          }
+
+          .date {
+            padding: .3rem;
+            font-size: 20px;
+            font-weight: 500;
+          }
+        }
+
+        .flight-divider {
+          display: flex;
+          align-items: center;
+          margin: 20px;
+
+          .divider-line {
+            flex: 1;
+            width: 140px;
+            border-top: 2.5px solid $border-color;
+          }
+
+          img {
+            width: 35px;
+            height: 35px;
+            margin: 0 20px;
+          }
+        }
+      }
+
+      .flight-airline {
+        display: flex;
+        align-items: center;
+        margin-top: 1rem;
+        margin-left: 1rem;
+
+        img {
+          width: 50px;
+          height: 50px;
+          margin-right: 10px;
+        }
+
+        .airline-name {
+          font-size: 16px;
+          font-weight: bold;
+        }
+      }
+
+    }
+
+    .one-price {
+      display: flex;
+      flex-direction: column;
+      border-right: 3px solid $border-color;
+      align-items: flex-start;
+      justify-content: left;
+      padding-top: 2rem;
+
+      .price-text {
+        background: $gradient-blue;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 700;
+        font-size: 24px;
+        margin-right: 2rem;
+      }
+      .class-price {
+        padding: 2rem;
+        font-size: 17px;
+
+        span {
+          font-size: 20px;
+          font-weight: 700;
+        }
+      }
+    }
+
+    .total-price {
+      display: flex;
+      flex-direction: column;
+      padding-top:1rem;
+      align-items: center;
+      justify-content: center;
+      .price-text {
+        background: $gradient-blue;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 700;
+        font-size: 24px;
+        margin-right: 2rem;
+      }
+      .class-price {
+        padding: 2rem;
+        font-size: 17px;
+
+        span {
+          font-size: 20px;
+          font-weight: 700;
+        }
+      }
+      .price-h {
+        background: $gradient-blue;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 700;
+        font-size: 24px;
+      }
+
+      .total {
+        display: flex;
+        flex-direction: row;
+
+        .price-text {
+          font-weight: 500;
+          font-size: 20px;
+
+          .price {
+            font-size: 24px;
+            font-weight: 700;
+          }
+        }
+      }
+
+      .price-group {
+        flex-direction: row;
+
+        img {
+          width: 35px;
+          height: 35px;
+          margin: 0 20px;
+        }
+      }
+
+      .book {
+        margin-top: 1rem;
+      }
+    }
+
+    &:hover {
+      transform: scale(1.02);
+    }
+  }
+}

@@ -23,6 +23,7 @@ public static class UserEndpoints
         application.MapPut("api/v1/users/updateGrade", UpdateGrade);
         application.MapPost("api/v1/users/getGradesByHost", GetGradesByHost);
         application.MapPost("api/v1/users/getGradesByGuest", GetGradesByGuest);
+        application.MapGet("api/v1/users/getUser/{id:Guid}", GetUser);
     }
 
     private static async Task<IResult> DeleteGrade([FromBody]DeleteHostGradeRequest request, [FromServices]GradesGrpcService gradesGrpcService)
@@ -30,7 +31,13 @@ public static class UserEndpoints
         var response = await gradesGrpcService.DeleteHostGrade(request);
         return Results.Ok(response);
     }
-    
+
+    private static async Task<IResult> GetUser([FromRoute]Guid id, [FromServices] MyUserGrpcService myUserGrpcService)
+    {
+        var response = await myUserGrpcService.GetUser(id);
+        return Results.Ok(response);
+    }
+
     private static async Task<IResult> UpdateGrade([FromBody]UpdateHostGradeRequest request, [FromServices]GradesGrpcService gradesGrpcService)
     {
         var response = await gradesGrpcService.UpdateHostGrade(request);
