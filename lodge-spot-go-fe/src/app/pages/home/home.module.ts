@@ -14,7 +14,11 @@ import {CoreModule} from "../../core/core.module";
 import {
   AccommodationCardComponent
 } from "../../search-accomodations-component/accommodation-card/accommodation-card.component";
-//import { LoadingAnimationComponent } from 'path/to/loading-animation.component';
+import {
+  FilterSearchAccommodationComponent
+} from "../../search-accomodations-component/filter-search-accommodation/filter-search-accommodation.component";
+import {MatSelectModule} from "@angular/material/select";
+
 
 
 
@@ -22,23 +26,27 @@ import {
   declarations: [
     HomePageComponent,
     SearchAccomodationsComponentComponent,
+    FilterSearchAccommodationComponent,
     AccommodationCardComponent
   ],
-    imports: [
-        CommonModule,
-        MatIconModule,
-        MatAutocompleteModule,
-        MatOptionModule,
-        MatNativeDateModule,
-        FormsModule,
-        MatDatepickerModule,
-        MatFormFieldModule,
-        MatInputModule,
-        ReactiveFormsModule,
-        CoreModule,
-        NgOptimizedImage
-    ],
+  imports: [
+    CommonModule,
+    MatIconModule,
+    MatAutocompleteModule,
+    MatOptionModule,
+    MatNativeDateModule,
+    FormsModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    CoreModule,
+    NgOptimizedImage,
+    MatSelectModule
+  ],
   exports:
-    [SearchAccomodationsComponentComponent, AccommodationCardComponent]
+    [SearchAccomodationsComponentComponent,
+      AccommodationCardComponent,
+    FilterSearchAccommodationComponent]
 })
 export class HomeModule { }

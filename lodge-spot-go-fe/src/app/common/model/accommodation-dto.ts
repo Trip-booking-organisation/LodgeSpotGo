@@ -10,5 +10,5 @@ export interface IAccommodationDto {
   amenities?:string[];
   photos?:string[];
   specialPrices?:SpecialPrice[];
-  hostId:string;
+  hostId?:string;
 }

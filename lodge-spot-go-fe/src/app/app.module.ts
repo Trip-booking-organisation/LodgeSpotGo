@@ -22,36 +22,48 @@ import {AllAccommodationsModule} from "./pages/all-accommodations/all-accommodat
 import {ViewAccommodationModule} from "./pages/view-accommodation/view-accommodation.module";
 import {GradeAccommodationModule} from "./pages/grade-accommodation/grade-accommodation.module";
 import {GuestGradesModule} from "./pages/guest-grades/guest-grades.module";
+import { FilterSearchAccommodationComponent } from './search-accomodations-component/filter-search-accommodation/filter-search-accommodation.component';
+import {FormsModule} from "@angular/forms";
+import {MatAutocompleteModule} from "@angular/material/autocomplete";
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MatOptionModule} from "@angular/material/core";
 
 @NgModule({
-    declarations: [
-        AppComponent
-    ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        CoreModule,
-        KeycloakAngularModule,
-        HttpClientModule,
-        BrowserAnimationsModule,
-        CommonModule,
-        MatInputModule,
-        GradeAccommodationModule,
-        GuestGradesModule,
-        HostsAccomodationsModule,
-        MatIconModule,
-        AccommodationCreateModule,
-        ToastrModule.forRoot(),
-        HomeModule,
-        AllAccommodationsModule,
-        ViewAccommodationModule
-    ],
-    providers: [{
-        provide: APP_INITIALIZER,
-        useFactory: initializeKeycloak,
-        multi: true,
-        deps: [KeycloakService]
-    }],
-    bootstrap: [AppComponent]
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    CoreModule,
+    KeycloakAngularModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    CommonModule,
+    MatInputModule,
+    GradeAccommodationModule,
+    GuestGradesModule,
+    HostsAccomodationsModule,
+    MatIconModule,
+    AccommodationCreateModule,
+    ToastrModule.forRoot(),
+    HomeModule,
+    AllAccommodationsModule,
+    ViewAccommodationModule,
+    FormsModule,
+    MatAutocompleteModule,
+    MatDatepickerModule,
+    MatOptionModule
+  ],
+  providers: [{
+    provide: APP_INITIALIZER,
+    useFactory: initializeKeycloak,
+    multi: true,
+    deps: [KeycloakService]
+  }],
+  exports: [
+    FilterSearchAccommodationComponent
+  ],
+  bootstrap: [AppComponent]
 })
 export class AppModule { }

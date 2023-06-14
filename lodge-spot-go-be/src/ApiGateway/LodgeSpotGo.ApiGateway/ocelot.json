@@ -206,6 +206,24 @@
         }
       ]
     }
+  ,
+    {
+      "UpstreamPathTemplate": "/api/filter",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "DownstreamPathTemplate": "/api/v1/filter",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7231
+        }
+      ]
+    }
   ],
   "GlobalConfiguration": {
     "BaseUrl": "http://localhost:5294"

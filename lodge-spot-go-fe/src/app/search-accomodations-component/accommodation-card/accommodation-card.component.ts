@@ -40,6 +40,7 @@ export class AccommodationCardComponent implements OnInit{
   ngOnInit(): void {
     this.user = this.authService.getUser()
     this.findCurrentPrice()
+    console.log(this.accommodation.id)
   }
 
   onBook() {
