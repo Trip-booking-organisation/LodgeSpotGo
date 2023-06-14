@@ -18,6 +18,7 @@
     </ItemGroup>
     <ItemGroup>
         <Protobuf Include="Protos\users.proto" GrpcServices="Client" />
+        <Protobuf Include="Protos\get_user.proto" GrpcServices="Server" />
     </ItemGroup>
 
     <ItemGroup>

@@ -1,4 +1,4 @@
-﻿namespace JetSetGo.AccommodationManagement.Grpc.Clients;
+﻿namespace JetSetGo.AccommodationManagement.Grpc.Clients.Reservations;
 
 public interface IReservationClient
 {

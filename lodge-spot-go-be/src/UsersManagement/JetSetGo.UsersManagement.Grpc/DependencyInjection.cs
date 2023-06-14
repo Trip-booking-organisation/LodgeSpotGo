@@ -12,8 +12,11 @@ public static class DependencyInjection
         , ConfigurationManager builder)
     {
         services.Configure<KeycloakAdmin>(builder.GetSection(KeycloakAdmin.SectionName));
+        services.AddGrpc();
         services.AddScoped<MessageLogger>();
+        services.AddHttpClient();
         services.AddScoped<MyUserGrpcService>();
         services.AddScoped<TokenService>();
+        services.AddScoped<KeyCloakConnections>();
     }
 }

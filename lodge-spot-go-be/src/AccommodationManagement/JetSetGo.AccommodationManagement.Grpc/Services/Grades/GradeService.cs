@@ -3,6 +3,8 @@ using Grpc.Core;
 using JetSetGo.AccommodationManagement.Application.Common.Persistence;
 using JetSetGo.AccommodationManagement.Domain.Accommodations.Entities;
 using JetSetGo.AccommodationManagement.Grpc.Clients;
+using JetSetGo.AccommodationManagement.Grpc.Clients.Reservations;
+using JetSetGo.AccommodationManagement.Grpc.Clients.Users;
 
 namespace JetSetGo.AccommodationManagement.Grpc.Services.Grades;
 
@@ -12,14 +14,16 @@ public class GradeService : GradeApp.GradeAppBase
     private readonly IAccommodationRepository _accommodationRepository;
     private readonly IMapper _mapper;
     private readonly IReservationClient _reservationClient;
+    private readonly IUserClient _userClient;
 
 
-    public GradeService(IGradeRepository gradeRepository, IAccommodationRepository accommodationRepository, IMapper mapper, IReservationClient reservationClient)
+    public GradeService(IGradeRepository gradeRepository, IAccommodationRepository accommodationRepository, IMapper mapper, IReservationClient reservationClient, IUserClient userClient)
     {
         _gradeRepository = gradeRepository;
         _accommodationRepository = accommodationRepository;
         _mapper = mapper;
         _reservationClient = reservationClient;
+        _userClient = userClient;
     }
 
     public override async Task<CreateGradeResponse> CreateGradeForAccommodation(CreateGradeRequest request,
@@ -120,22 +124,30 @@ public class GradeService : GradeApp.GradeAppBase
         return response;
     }
 
-    /*public override async Task<GetGradesByAccommodationResponse> GetGradesByAccommodation(GetGradesByAccommodationRequest request, ServerCallContext context)
+    public override async Task<GetGradesByAccommodationResponse> GetGradesByAccommodation(GetGradesByAccommodationRequest request, ServerCallContext context)
     {
         var grades = await _gradeRepository.GetByAccommodation(Guid.Parse(request.AccommodationId));
-        var responseList = new List<AccommodationGradeResponse>();
+        var response = new GetGradesByAccommodationResponse();
         grades.ForEach(x =>
         {
+            var user = _userClient.GetUserById(x.GuestId);
+            var grader = new Grader
+            {
+                Id = user.User.Id,
+                Mail = user.User.Mail,
+                Name = user.User.Name,
+                Surname = user.User.LastName
+            };
             var res = new AccommodationGradeResponse()
             {
                 Id = x.Id.ToString(),
                 Number = x.Number,
                 AccommodationId = x.AccommodationId.ToString(),
-                Guest = 
-                
-            }
+                Guest = grader
+            };
+            response.AccommodationGrade.Add(res);
         });
-        var response = new GetGradesByAccommodationResponse();
         
-    }*/
+        return response;
+    }
 }
