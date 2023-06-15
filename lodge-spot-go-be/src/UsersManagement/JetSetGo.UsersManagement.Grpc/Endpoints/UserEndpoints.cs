@@ -14,7 +14,7 @@ namespace JetSetGo.UsersManagement.Grpc.Endpoints;
 
 public static class UserEndpoints
 {
-    
+
     public static void MapUserEndpoints(this WebApplication application)
     {
         application.MapDelete("api/v1/users", DeleteUser);
@@ -24,6 +24,7 @@ public static class UserEndpoints
         application.MapPost("api/v1/users/getGradesByHost", GetGradesByHost);
         application.MapPost("api/v1/users/getGradesByGuest", GetGradesByGuest);
         application.MapGet("api/v1/users/host", GetOutstandingHost);
+        application.MapGet("api/v1/users/getUser/{id:Guid}", GetUser);
     }
 
     private static async Task<IResult> GetOutstandingHost([FromQuery] Guid id,
@@ -31,6 +32,7 @@ public static class UserEndpoints
     {
         var response = await service.GetOutstandingHost(id);
         return Results.Ok(response);
+        
     }
 
     private static async Task<IResult> DeleteGrade([FromBody]DeleteHostGradeRequest request, [FromServices]GradesGrpcService gradesGrpcService)
@@ -38,7 +40,13 @@ public static class UserEndpoints
         var response = await gradesGrpcService.DeleteHostGrade(request);
         return Results.Ok(response);
     }
-    
+
+    private static async Task<IResult> GetUser([FromRoute]Guid id, [FromServices] MyUserGrpcService myUserGrpcService)
+    {
+        var response = await myUserGrpcService.GetUser(id);
+        return Results.Ok(response);
+    }
+
     private static async Task<IResult> UpdateGrade([FromBody]UpdateHostGradeRequest request, [FromServices]GradesGrpcService gradesGrpcService)
     {
         var response = await gradesGrpcService.UpdateHostGrade(request);

@@ -7,6 +7,7 @@ import {MatDialogModule} from "@angular/material/dialog";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {ReactiveFormsModule} from "@angular/forms";
+import {GradeHostCardModule} from "../grade-host-card/grade-host-card.module";
 
 
 
@@ -16,12 +17,13 @@ import {ReactiveFormsModule} from "@angular/forms";
     AccommodationGradeCardComponent,
     EditAccommodationGradeComponent
   ],
-  imports: [
-    CommonModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatInputModule,
-    ReactiveFormsModule
-  ]
+    imports: [
+        CommonModule,
+        MatDialogModule,
+        MatFormFieldModule,
+        MatInputModule,
+        ReactiveFormsModule,
+        GradeHostCardModule
+    ]
 })
 export class GuestGradesModule { }

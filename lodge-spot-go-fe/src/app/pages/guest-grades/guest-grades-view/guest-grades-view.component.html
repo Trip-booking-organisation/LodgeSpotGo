@@ -2,4 +2,14 @@
   <div *ngFor="let grade of grades">
    <app-accommodation-grade-card [accommodationGrade]="grade" (gradeEmit)="onDelete($event)"/>
   </div>
+  <div class="guest-grades-title">
+    Your host grades:
+  </div>
+  <div class="grades" *ngIf="(hostGrades$ | async) as hs">
+    <div *ngFor="let grade of hs.hostGrades">
+      <div class="host-grade">
+        <app-grade-host-card [canEdit]="true" [hostGrade]="grade"/>
+      </div>
+    </div>
+  </div>
 </div>
