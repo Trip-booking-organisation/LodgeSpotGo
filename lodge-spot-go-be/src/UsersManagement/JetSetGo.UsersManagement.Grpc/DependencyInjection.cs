@@ -1,5 +1,4 @@
-﻿using JetSetGo.UserManagement.Grpc;
-using JetSetGo.UsersManagement.Application.Common.Persistence;
+﻿using JetSetGo.UsersManagement.Application.Common.Persistence;
 using JetSetGo.UsersManagement.Grpc.Client;
 using JetSetGo.UsersManagement.Grpc.Client.Accommodations;
 using JetSetGo.UsersManagement.Grpc.Common.Logger;

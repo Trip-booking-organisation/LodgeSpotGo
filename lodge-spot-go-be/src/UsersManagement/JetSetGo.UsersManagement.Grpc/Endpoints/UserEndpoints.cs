@@ -1,14 +1,11 @@
-﻿using System.Diagnostics;
-using JetSetGo.UserManagement.Grpc;
+﻿using JetSetGo.UserManagement.Grpc;
 using JetSetGo.UsersManagement.Grpc.Common.Logger;
 using JetSetGo.UsersManagement.Grpc.Common.Utility;
 using JetSetGo.UsersManagement.Grpc.Dto;
 using JetSetGo.UsersManagement.Grpc.Keycloak;
 using JetSetGo.UsersManagement.Grpc.Services;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 
 namespace JetSetGo.UsersManagement.Grpc.Endpoints;
 
