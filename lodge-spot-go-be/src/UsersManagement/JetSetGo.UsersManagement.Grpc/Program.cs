@@ -1,4 +1,5 @@
 using JetSetGo.UsersManagement.Grpc;
+using JetSetGo.UsersManagement.Grpc.Services;
 using JetSetGo.UsersManagement.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -69,7 +70,7 @@ if (app.Environment.IsDevelopment())
 }
 app.UseHttpsRedirection();
 app.UseCors("AllowOrigin");
-
+app.MapGrpcService<GetUserService>();
 app.UseAuthentication();
 app.UseAuthorization();
 

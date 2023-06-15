@@ -107,6 +107,7 @@ app.MapGrpcService<ReservationService>();
 app.MapGrpcService<SearchReservationService>();
 app.MapGrpcService<UserReservationService>();
 app.MapGrpcService<GetReservationByAccomAndGuestService>();
+app.MapGrpcService<ReservationAccommodationHost>();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapGet("/",

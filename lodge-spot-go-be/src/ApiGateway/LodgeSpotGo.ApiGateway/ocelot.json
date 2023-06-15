@@ -9,11 +9,11 @@
         "DELETE"
       ],
       "DownstreamPathTemplate": "/api/v1/accommodations",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5020
+          "Port": 7132
         }
       ]
     },
@@ -26,11 +26,11 @@
         "DELETE"
       ],
       "DownstreamPathTemplate": "/api/v1/accommodations/{everything}",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5020
+          "Port": 7132
         }
       ]
     },
@@ -43,11 +43,96 @@
         "DELETE"
       ],
       "DownstreamPathTemplate": "/api/v1/users/gradeHost",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5228
+          "Port": 7169
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/users/getUser",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "DownstreamPathTemplate": "/api/v1/users/getUser",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7169
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/users/getGradesByHost",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "DownstreamPathTemplate": "/api/v1/users/getGradesByHost",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7169
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/users/getGradesByGuest",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "DownstreamPathTemplate": "/api/v1/users/getGradesByGuest",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7169
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/users/deleteGrade",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "DownstreamPathTemplate": "/api/v1/users/deleteGrade",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7169
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/users/updateGrade",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "DownstreamPathTemplate": "/api/v1/users/updateGrade",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7169
         }
       ]
     },
@@ -61,11 +146,11 @@
         "DELETE"
       ],
       "DownstreamPathTemplate": "/api/v1/accommodations/host/{hostId}",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5020
+          "Port": 7132
         }
       ]
     },
@@ -186,6 +271,41 @@
         {
           "Host": "localhost",
           "Port": 7132
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/grades/{guestId}",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "DownstreamPathTemplate": "/api/v1/grades/{guestId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7132
+        }
+      ]
+    }
+  ,
+    {
+      "UpstreamPathTemplate": "/api/filter",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "DownstreamPathTemplate": "/api/v1/filter",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7231
         }
       ]
     }

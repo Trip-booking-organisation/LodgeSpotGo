@@ -1,5 +1,6 @@
 ﻿syntax = "proto3";
 import "Dto/accommodation.proto";
+import "google/protobuf/timestamp.proto";
 option csharp_namespace = "JetSetGo.AccommodationManagement.Grpc";
 
 message GradeRequest{
@@ -28,6 +29,7 @@ message AccommodationGradeResponse {
   int32 number = 2;
   Grader guest  = 3;
   string accommodationId = 4;
+  google.protobuf.Timestamp date = 5;
 }
 message GradeByGuest{
   string id = 1;

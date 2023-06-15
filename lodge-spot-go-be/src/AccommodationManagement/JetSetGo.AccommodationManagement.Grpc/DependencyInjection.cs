@@ -1,4 +1,6 @@
 ﻿using JetSetGo.AccommodationManagement.Grpc.Clients;
+using JetSetGo.AccommodationManagement.Grpc.Clients.Reservations;
+using JetSetGo.AccommodationManagement.Grpc.Clients.Users;
 using JetSetGo.AccommodationManagement.Grpc.Mapping;
 using JetSetGo.AccommodationManagement.Grpc.Mapping.MappingToGrpcResponse;
 
@@ -11,6 +13,7 @@ public static class DependencyInjection
         services.AddAutoMapper(typeof(MappingConfiguration));
         services.AddScoped<IMappingToGrpcResponse, MappingToGrpcResponse>();
         services.AddScoped<IReservationClient, ReservationClient>();
+        services.AddScoped<IUserClient, UserClient>();
         //services.AddCorsPolicy(builderConfiguration);
         return services;
     }

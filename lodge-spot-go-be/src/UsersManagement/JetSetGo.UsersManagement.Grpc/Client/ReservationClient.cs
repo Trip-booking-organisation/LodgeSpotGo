@@ -38,4 +38,28 @@ public class ReservationClient : IReservationClient
             return null!;
         }
     }
+
+    public GetReservationAccommodationHostResponse GetReservationsAccommodation(Guid accommodationId)
+    {
+        _logger.LogInformation(@"---------------Calling reservation microservice : {}",_configuration["ReservationUrl"]);
+        _logger.LogInformation(@"---------------Calling reservation microservice : {}",accommodationId.ToString());
+        var channel = GrpcChannel.ForAddress(_configuration["ReservationUrl"]!);
+        var client = new GetReservationAccommodationApp.GetReservationAccommodationAppClient(channel);
+        var request = new GetReservationAccommodationRequest
+        {
+            AccommodationId = accommodationId.ToString()
+        };
+        try
+        {
+           
+            var reply = client.GetReservationByGuestAndAccomRequest(request);
+            _logger.LogInformation(@"---------------------Reservation returns : {}",reply.ToString());
+            return reply;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogInformation(@"-------------Couldn't call Reservation microservice: {}", ex.Message);
+            return null!;
+        }
+    }
 }

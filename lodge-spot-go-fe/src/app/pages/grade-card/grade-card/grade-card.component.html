@@ -1,0 +1,31 @@
+<div class="container-main">
+  <div class="home-content">
+    <div class="flight-card" >
+      <div class="content-flight">
+        <div class="flight-details">
+          <div class="flight-info">
+            <div class="flight-time">
+              <p class="time">{{accommodationGrade.guest.name}}</p>
+              <p class="place">{{accommodationGrade.guest.surname}}</p>
+              <p class="place">{{accommodationGrade.guest.mail}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="one-price">
+        <h4 class="price-text">Grade</h4>
+        <div class="class-price">
+          <p> <span>{{accommodationGrade.number}}</span></p>
+        </div>
+      </div>
+
+      <div class="total-price">
+        <h4 class="price-text">Date of submission</h4>
+        <div class="class-price">
+          <p> <span>{{accommodationGrade.date | date:'yyyy-MM-dd'}}</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -1,6 +1,6 @@
 ﻿using Grpc.Net.Client;
 
-namespace JetSetGo.AccommodationManagement.Grpc.Clients;
+namespace JetSetGo.AccommodationManagement.Grpc.Clients.Reservations;
 
 public class ReservationClient : IReservationClient
 {

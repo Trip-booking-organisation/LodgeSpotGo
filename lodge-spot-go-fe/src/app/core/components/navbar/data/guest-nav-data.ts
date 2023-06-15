@@ -12,6 +12,10 @@ export const guestNavData = [
     routerLink: 'all-accommodations'
   },
   {
+    label: 'Grades',
+    routerLink: 'all-grades'
+  },
+  {
     label: 'About',
     routerLink: ''
   }

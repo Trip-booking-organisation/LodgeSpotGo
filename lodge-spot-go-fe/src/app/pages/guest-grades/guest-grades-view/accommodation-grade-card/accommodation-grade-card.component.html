@@ -1,0 +1,42 @@
+<div class="container-main">
+  <div class="home-content">
+    <div class="flight-card" >
+      <div class="content-flight">
+        <div class="flight-details">
+          <div class="flight-info">
+            <img [src]="'data:image/jpeg;base64,' + accommodationGrade.accommodation.photos[0]" class="img-a" alt="A beautiful landscape image" width="280" height="280"/>
+          </div>
+          <div class="flight-divider">
+          </div>
+          <div class="flight-info">
+            <div class="flight-time">
+              <p class="time">{{accommodationGrade.accommodation.name}}</p>
+              <p class="place">{{accommodationGrade.accommodation.address?.street}}, {{accommodationGrade.accommodation.address?.city}}, {{accommodationGrade.accommodation.address?.country}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="one-price">
+        <h4 class="price-text">Amentities</h4>
+        <div class="class-price">
+          <div *ngFor="let a of accommodationGrade.accommodation.amenities">
+            <p>{{a}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="one-price">
+        <h4 class="price-text">Grade</h4>
+        <div class="class-price">
+          <p> <span>{{accommodationGrade.number}}</span></p>
+        </div>
+      </div>
+      <div class="total-price">
+
+        <button *ngIf="user!.roles.includes('guest')" class="btn book" (click)="onDeleteGrade()">Delete grade</button>
+        <button *ngIf="user!.roles.includes('guest')" class="btn book" (click)="onEditGrade()">Edit Grade</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+

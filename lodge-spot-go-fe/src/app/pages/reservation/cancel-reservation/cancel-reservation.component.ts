@@ -21,7 +21,7 @@ constructor(@Inject(MAT_DIALOG_DATA) public data: any,
   onYes() {
     this.dialogRef.close()
     this.reservationClient.cancelReservation(this.reservation.id!).subscribe({
-      next: response =>{
+      next: _ =>{
         this.dataService.sendData(this.reservation.id)
       }
     })

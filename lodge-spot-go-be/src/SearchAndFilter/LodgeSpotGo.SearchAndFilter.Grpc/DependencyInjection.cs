@@ -1,4 +1,5 @@
-﻿using LodgeSpotGo.SearchAndFilter.Grpc.Clients.SearchAccommodationClient;
+﻿using LodgeSpotGo.SearchAndFilter.Grpc.Clients.FilterAverageGradeAccommodation;
+using LodgeSpotGo.SearchAndFilter.Grpc.Clients.SearchAccommodationClient;
 using LodgeSpotGo.SearchAndFilter.Grpc.Clients.SearchReservationClient;
 using LodgeSpotGo.SearchAndFilter.Grpc.Mapper;
 
@@ -11,6 +12,7 @@ public static class DependencyInjection
         services.AddAutoMapper(typeof(MappingConfiguration));
         services.AddScoped<ISearchAccommodationClient, SearchAccommodationClient>();
         services.AddScoped<ISearchReservationClient, SearchReservationClient>();
+        services.AddScoped<IFilterAverageGradeClient, FilterAverageGradeClient>();
         return services;
     }
 }

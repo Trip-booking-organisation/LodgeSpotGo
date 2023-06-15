@@ -1,0 +1,20 @@
+﻿syntax = "proto3";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "Dto/search.proto";
+option csharp_namespace = "LodgeSpotGo.SearchAndFilter.Grpc";
+message GetAverageGradeByAccommodationRequest{
+  string accommodationId = 1;
+}
+
+message GetAverageGradeByAccommodationResponse{
+ int32 averageGradeNumber = 1;
+}
+
+service FilterGradeApp{
+  rpc GetAverageGrade(GetAverageGradeByAccommodationRequest) returns (GetAverageGradeByAccommodationResponse){
+    option(google.api.http) = {
+      get: "/api/v1/filter-grade/{accommodationId}"
+    };
+  }
+}

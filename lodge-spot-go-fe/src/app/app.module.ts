@@ -21,6 +21,8 @@ import {HomeModule} from "./pages/home/home.module";
 import {AllAccommodationsModule} from "./pages/all-accommodations/all-accommodations.module";
 import {ViewAccommodationModule} from "./pages/view-accommodation/view-accommodation.module";
 import {GradeAccommodationModule} from "./pages/grade-accommodation/grade-accommodation.module";
+import {GuestGradesModule} from "./pages/guest-grades/guest-grades.module";
+import {ViewHostModule} from "./pages/view-host/view-host.module";
 import {NotificationsModule} from "./pages/notifications/notifications.module";
 
 @NgModule({
@@ -37,12 +39,15 @@ import {NotificationsModule} from "./pages/notifications/notifications.module";
         CommonModule,
         MatInputModule,
         GradeAccommodationModule,
+        GuestGradesModule,
         HostsAccomodationsModule,
         MatIconModule,
         AccommodationCreateModule,
         ToastrModule.forRoot(),
         HomeModule,
         AllAccommodationsModule,
+        ViewAccommodationModule,
+        ViewHostModule,
         ViewAccommodationModule,
         NotificationsModule
     ],
@@ -53,5 +58,6 @@ import {NotificationsModule} from "./pages/notifications/notifications.module";
         deps: [KeycloakService]
     }],
     bootstrap: [AppComponent]
+
 })
 export class AppModule { }

@@ -44,6 +44,13 @@ ul {
   justify-content: flex-start;
   align-content: flex-start;
 }
+.grades{
+  padding-top: 3rem;
+  padding-right: 15rem;
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 1rem;
+}
 .field{
   font-weight:bolder;
   margin-top: 1%;
@@ -105,6 +112,7 @@ ul {
 }
 .button-row{
   display: flex;
+  gap: 1.5rem;
   justify-content: flex-end;
   padding-right: 2rem;
 }
