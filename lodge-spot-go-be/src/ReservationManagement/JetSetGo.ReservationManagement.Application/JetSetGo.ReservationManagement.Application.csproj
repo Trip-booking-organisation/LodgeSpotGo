@@ -16,6 +16,7 @@
     
 
     <ItemGroup>
+      <ProjectReference Include="..\..\SharedEvents\LodgeSpotGo.Shared.Events\LodgeSpotGo.Shared.Events.csproj" />
       <ProjectReference Include="..\JetSetGo.ReservationManagement.Domain\JetSetGo.ReservationManagement.Domain.csproj" />
     </ItemGroup>
 

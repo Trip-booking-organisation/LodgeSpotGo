@@ -3,9 +3,10 @@ using JetSetGo.AccommodationManagement.Grpc;
 using JetSetGo.AccommodationManagement.Grpc.Services;
 using JetSetGo.AccommodationManagement.Grpc.Services.Grades;
 using JetSetGo.AccommodationManagement.Infrastructure;
-using Keycloak.AuthServices.Authentication;
-using Keycloak.AuthServices.Authorization;
+using JetSetGo.ReservationManagement.Infrastructure.MessageBroker.Settings;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
@@ -98,12 +99,36 @@ var builder = WebApplication.CreateBuilder(args);
         c.AddSecurityDefinition(securityScheme.Reference.Id, securityScheme);
         c.AddSecurityRequirement(new OpenApiSecurityRequirement{{securityScheme, new string[] { }}});
     });
+    
+// #### mass transit ####
+    builder.Services.Configure<MessageBrokerSettings>
+        (builder.Configuration.GetSection(MessageBrokerSettings.SectionName));
+    builder.Services.AddSingleton(provider => 
+        provider.GetRequiredService<IOptions<MessageBrokerSettings>>().Value);
+    builder.Services.AddMassTransit(busConfigurator =>
+    {
+        var assembly = typeof(IAssemblyMarker).Assembly;
+        busConfigurator.AddConsumers(assembly);
+        busConfigurator.AddSagaStateMachines(assembly);
+        busConfigurator.AddSagas(assembly);
+        busConfigurator.AddActivities(assembly);
+        busConfigurator.SetKebabCaseEndpointNameFormatter();
+        busConfigurator.UsingRabbitMq((context, configurator) =>
+        {
+            var messageBrokerSettings = context.GetRequiredService<MessageBrokerSettings>();
+            configurator.Host(new Uri(messageBrokerSettings.Host), hostConfigurator =>
+            {
+                hostConfigurator.Username(messageBrokerSettings.Username);   
+                hostConfigurator.Password(messageBrokerSettings.Password);   
+            });
+            configurator.ConfigureEndpoints(context, KebabCaseEndpointNameFormatter.Instance);
+        });
+    });
 }
 
 var app = builder.Build();
 {
     app.UseRouting();
-    app.UseCors("AllowOrigin");
     app.UseSwagger().UseSwaggerUI(c =>
     {
         c.OAuthClientId(builder.Configuration["Jwt:ClientId"]);
@@ -112,6 +137,7 @@ var app = builder.Build();
         c.OAuthAppName("KEYCLOAK");
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "AccommodationManagementMicroservice v1");
     });
+    app.UseCors("AllowOrigin");
     app.MapGrpcService<GreeterService>()/*.RequireAuthorization()*/;
     app.MapGrpcService<AccommodationService>();
     app.MapGrpcService<GetAccommodationService>();

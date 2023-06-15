@@ -1,0 +1,55 @@
+@import "src/sass/variables";
+.notification-container{
+  padding: 8px;
+  border-radius: 12px;
+  background-color: $gray-background;
+  border: 3px solid $primary-color;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  .header{
+    padding: .3rem;
+    display: flex;
+    justify-content: space-between;
+    .date {
+      padding-top: 1.4rem;
+      font-size: 18px;
+      opacity: 0.8;
+    }
+    .title{
+      background: $gradient-blue;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 700;
+      font-size: 20px;
+      text-align: center;
+    }
+  }
+  &:hover {
+    transform: scale(1.04);
+  }
+  .notification-card {
+    padding: .8rem;
+    display: flex;
+    align-items: flex-start;
+
+    .image-container {
+      width: 50%;
+      margin-right: 16px;
+      img {
+        width: 100px;
+        border-radius: 4px;
+      }
+    }
+
+    .info-container {
+      width: 50%;
+    }
+
+    .content {
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+  }
+
+}

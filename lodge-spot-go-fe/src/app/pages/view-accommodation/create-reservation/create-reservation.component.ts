@@ -56,7 +56,8 @@ export class CreateReservationComponent {
         },
         status: 'Waiting',
         numberOfGuests: this.reservationForm.value.numberOfGuests,
-        guestId: this.user.id
+        guestId: this.user.id,
+        guestEmail: this.user.email
       };
       console.log(reservation)
       this.reservationService.createReservation(reservation).subscribe({
@@ -67,7 +68,7 @@ export class CreateReservationComponent {
         },
         error: err => {
           console.log(err)
-          this.toast.error("You cannot create reservation for this accommodation","Overlapping dates")
+          this.toast.error("You cannot create reservation for this accommodation","Failure")
         }
       });
       this.dialogRef.close();

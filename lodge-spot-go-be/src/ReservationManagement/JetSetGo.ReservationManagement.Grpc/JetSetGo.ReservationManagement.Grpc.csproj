@@ -24,7 +24,7 @@
         <Protobuf Include="Routes\get_reservations.proto" GrpcServices="Server" />
         <Protobuf Include="Protos\users.proto" GrpcServices="Server" />
         <Protobuf Include="Protos\accommodation.proto" GrpcServices="Client" />
-        <Protobuf Include="Protos\grades.proto" GrpcServices="Server"/>
+        <Protobuf Include="Protos\grades.proto" GrpcServices="Server" />
     </ItemGroup>
 
     <ItemGroup>

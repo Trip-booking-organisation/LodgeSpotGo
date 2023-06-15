@@ -57,6 +57,7 @@ builder.Services.AddMassTransit(busConfigurator =>
             hostConfigurator.Username(messageBrokerSettings.Username);   
             hostConfigurator.Password(messageBrokerSettings.Password);   
         });
+        configurator.ConfigureEndpoints(context, KebabCaseEndpointNameFormatter.Instance);
     });
 });
 builder.Services.AddAuthentication(options =>

@@ -21,6 +21,7 @@ import {HomeModule} from "./pages/home/home.module";
 import {AllAccommodationsModule} from "./pages/all-accommodations/all-accommodations.module";
 import {ViewAccommodationModule} from "./pages/view-accommodation/view-accommodation.module";
 import {GradeAccommodationModule} from "./pages/grade-accommodation/grade-accommodation.module";
+import {NotificationsModule} from "./pages/notifications/notifications.module";
 
 @NgModule({
     declarations: [
@@ -42,7 +43,8 @@ import {GradeAccommodationModule} from "./pages/grade-accommodation/grade-accomm
         ToastrModule.forRoot(),
         HomeModule,
         AllAccommodationsModule,
-        ViewAccommodationModule
+        ViewAccommodationModule,
+        NotificationsModule
     ],
     providers: [{
         provide: APP_INITIALIZER,

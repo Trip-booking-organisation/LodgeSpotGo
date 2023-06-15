@@ -115,6 +115,11 @@
     .total-price {
       display: flex;
       flex-direction: column;
+      .btn-delete-lg{
+        &:disabled{
+          background: $text-color;
+        }
+      }
 
       .price-h {
         background: $gradient-blue;
