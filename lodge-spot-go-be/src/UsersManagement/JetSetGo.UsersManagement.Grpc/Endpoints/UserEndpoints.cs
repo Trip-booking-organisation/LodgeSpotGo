@@ -2,6 +2,7 @@
 using JetSetGo.UsersManagement.Grpc.Common.Logger;
 using JetSetGo.UsersManagement.Grpc.Common.Utility;
 using JetSetGo.UsersManagement.Grpc.Dto;
+using JetSetGo.UsersManagement.Grpc.Dto.Response;
 using JetSetGo.UsersManagement.Grpc.Keycloak;
 using JetSetGo.UsersManagement.Grpc.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -20,14 +21,15 @@ public static class UserEndpoints
         application.MapPut("api/v1/users/updateGrade", UpdateGrade);
         application.MapPost("api/v1/users/getGradesByHost", GetGradesByHost);
         application.MapPost("api/v1/users/getGradesByGuest", GetGradesByGuest);
-        application.MapGet("api/v1/users/host", GetOutstandingHost);
+        application.MapGet("api/v1/users/host/{id:Guid}", GetOutstandingHost);
         application.MapGet("api/v1/users/getUser/{id:Guid}", GetUser);
     }
 
-    private static async Task<IResult> GetOutstandingHost([FromQuery] Guid id,
+    private static async Task<IResult> GetOutstandingHost([FromRoute] Guid id,
         [FromServices]HostService service)
     {
-        var response = await service.GetOutstandingHost(id);
+        var result = await service.GetOutstandingHost(id);
+        var response = new IsOutStandingResponse { IsOutstanding = result };
         return Results.Ok(response);
         
     }
