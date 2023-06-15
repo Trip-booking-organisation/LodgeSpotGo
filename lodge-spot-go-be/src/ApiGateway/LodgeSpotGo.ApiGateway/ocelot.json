@@ -172,6 +172,23 @@
       ]
     },
     {
+      "UpstreamPathTemplate": "/api/users/getUser/{id}",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "DownstreamPathTemplate": "/api/v1/users/getUser/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7169
+        }
+      ]
+    },
+    {
       "UpstreamPathTemplate": "/api/reservations",
       "UpstreamHttpMethod": [
         "GET",

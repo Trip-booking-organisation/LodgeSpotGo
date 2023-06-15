@@ -1,0 +1,21 @@
+﻿syntax = "proto3";
+import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+
+option csharp_namespace = "JetSetGo.UsersManagement.Grpc";
+message AccommodationHost{
+  string id = 1;
+}
+message GetAccommodationHostRequest{
+  string hostId = 1;
+}
+message GetAccommodationHostResponse{
+  repeated AccommodationHost accommodations = 1;
+}
+service HostAccommodationApp{
+  rpc GetAccommodationsByHost(GetAccommodationHostRequest) returns (GetAccommodationHostResponse){
+    option(google.api.http) = {
+      get: "/api/v1/accommodation-host/{hostId}"
+    };
+  }
+}

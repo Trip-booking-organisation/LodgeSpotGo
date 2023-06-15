@@ -16,6 +16,7 @@
         <Protobuf Include="Routes\get_accommodation.proto" GrpcServices="Server" />
         <Protobuf Include="Routes\get_reservations.proto" GrpcServices="Client" />
         <Protobuf Include="Routes\get_accommodation_grades.proto" GrpcServices="Server" />
+        <Protobuf Include="Routes\get_host_accommodation.proto" GrpcServices="Server" />
         <Protobuf Include="Routes\get_user.proto" GrpcServices="Client" />
         <Protobuf Include="Routes\search_accommodation.proto" GrpcServices="Server">
           <GrpcServices>Server</GrpcServices>

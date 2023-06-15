@@ -1,0 +1,30 @@
+﻿syntax = "proto3";
+import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+
+option csharp_namespace = "JetSetGo.UsersManagement.Grpc";
+message DateRangeReservationHost {
+  google.protobuf.Timestamp from = 1;
+  google.protobuf.Timestamp to = 2;
+}
+message GetReservationAccommodation{
+  string id = 1;
+  string accommodationId = 2;
+  DateRangeReservationHost dateRange =3;
+  string status = 4;
+  string guestId = 5;
+  bool deleted = 6;
+}
+message GetReservationAccommodationRequest{
+  string accommodationId = 1;
+}
+message GetReservationAccommodationHostResponse{
+  repeated GetReservationAccommodation reservations = 1;
+}
+service GetReservationAccommodationApp{
+  rpc GetReservationByGuestAndAccomRequest(GetReservationAccommodationRequest) returns (GetReservationAccommodationHostResponse){
+    option(google.api.http) = {
+      get: "/api/v1/get-reservations-host/{accommodationId}"
+    };
+  }
+}

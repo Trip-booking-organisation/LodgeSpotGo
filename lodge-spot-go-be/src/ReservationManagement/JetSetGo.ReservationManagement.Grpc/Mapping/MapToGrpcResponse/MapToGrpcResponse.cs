@@ -45,6 +45,15 @@ public class MapToGrpcResponse : IMapToGrpcResponse
         return Task.FromResult(response);
     }
 
+    public Task<GetReservationAccommodationHostResponse> MapToHostResponse(List<Reservation> list)
+    {
+       
+        var response = new GetReservationAccommodationHostResponse();
+        var responseList = list.Select(reservation => _mapper.Map<GetReservationAccommodation>(reservation)).ToList();
+        responseList.ForEach(dto => response.Reservations.Add(dto));
+        return Task.FromResult(response);
+    }
+
     public GetDeletedReservationsByGuestResponse MapDeletedCountToGrpcResponse(List<Reservation> list)
     {
         var response = new GetDeletedReservationsByGuestResponse

@@ -46,5 +46,8 @@ export class UserManagementService {
     };
     return this.http.delete<any>(this.baseHttpsUrl+'/deleteGrade' , options);
   }
+  public getOutstanding(id: string):Observable<any>{
+    return this.http.get(this.baseHttpsUrl+'/host/'+id , {headers : this.headers});
+  }
 
 }

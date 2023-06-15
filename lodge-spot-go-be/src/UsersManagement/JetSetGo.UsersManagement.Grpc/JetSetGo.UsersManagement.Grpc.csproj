@@ -27,6 +27,11 @@
         <Protobuf Include="Protos\get_user.proto" GrpcServices="Server" />
         <Protobuf Include="Protos\get_reservations.proto" GrpcServices="Client" />
         <Protobuf Include="Protos\get_user.proto" GrpcServices="Server" />
+        <Protobuf Include="Protos\outstanding_host.proto" GrpcServices="Server" />
+        <Protobuf Include="Protos\filter_outstading_host.proto" GrpcServices="Server" />
+        <Protobuf Include="Protos\filter_outstading_host.proto" GrpcServices="Server" />
+        <Protobuf Include="Protos\get_reservation_accommodation.proto" GrpcServices="Client" />
+        <Protobuf Include="Protos\get_host_accommodations.proto" GrpcServices="Client" />
     </ItemGroup>
 
     <ItemGroup>

@@ -118,6 +118,7 @@ var app = builder.Build();
     app.MapGrpcService<SearchAccommodationService>();
     app.MapGrpcService<GradeService>();
     app.MapGrpcService<FilterGrades>();
+    app.MapGrpcService<HostAccommodationService>();
     app.UseAuthentication();
     app.UseAuthorization();
     app.MapGet("/",

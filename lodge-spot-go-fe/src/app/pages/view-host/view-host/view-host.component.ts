@@ -18,6 +18,8 @@ export class ViewHostComponent implements OnInit,AfterViewInit{
   hostId: string | null;
   host:KeycloakUser
   hostGrades$: Observable<HostGrades>
+  isOutstandingHost : Observable<any>
+
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       this.hostId = params['hostId'] || null;
@@ -29,6 +31,7 @@ export class ViewHostComponent implements OnInit,AfterViewInit{
             hostId: value.id
           })
         }))
+      this.isOutstandingHost = this.userService.getOutstanding(this.hostId)
 
     });
 
