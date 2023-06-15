@@ -24,6 +24,7 @@ export class FilterSearchAccommodationComponent implements OnInit{
   constructor(private filterClient : SearchAndFilterService) {
   }
   ngOnInit(): void {
+    console.log(this.accommodations)
   }
   filterAccommodations() {
     console.log(this.outstandingHost.value)

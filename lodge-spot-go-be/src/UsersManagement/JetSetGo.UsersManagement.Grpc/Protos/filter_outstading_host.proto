@@ -1,0 +1,19 @@
+﻿syntax = "proto3";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+option csharp_namespace = "LodgeSpotGo.UserManagement.Grpc";
+message FilterOutstandingHostRequest{
+  string hostId = 1;
+}
+
+message FiletOutstandingHostResponse{
+  bool isOutstanding = 1;
+}
+
+service FilterOutstandingHostApp{
+  rpc IsOutstanding(FilterOutstandingHostRequest) returns (FiletOutstandingHostResponse){
+    option(google.api.http) = {
+      get: "/api/v1/filter-host/{hostId}"
+    };
+  }
+}

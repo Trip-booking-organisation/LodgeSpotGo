@@ -1,25 +1,46 @@
 ﻿using Google.Protobuf.Collections;
 using Grpc.Core;
 using LodgeSpotGo.SearchAndFilter.Grpc.Clients.FilterAverageGradeAccommodation;
+using LodgeSpotGo.SearchAndFilter.Grpc.Clients.User;
 
 namespace LodgeSpotGo.SearchAndFilter.Grpc.Services;
 
 public class FilterService : FilterApp.FilterAppBase
 {
     private readonly IFilterAverageGradeClient _gradeClient;
+    private readonly IUserClient _userClient;
 
-    public FilterService(IFilterAverageGradeClient gradeClient)
+    public FilterService(IFilterAverageGradeClient gradeClient, IUserClient userClient)
     {
         _gradeClient = gradeClient;
+        _userClient = userClient;
     }
 
     public override Task<FilterReservationListResponse> Filter(ReservationFilterRequest request, ServerCallContext context)
     {
         var filteredByAmenities = FilterAccommodationsByAmenities(request.Filter);
-        var filterByGrades = FilterByGrades(request, filteredByAmenities);
+        if (request.Filter.OutstandingHost)
+        {
+            filteredByAmenities =  FilterOutstandingHost(filteredByAmenities);
+        }
+        filteredByAmenities = FilterByGrades(request, filteredByAmenities);
+       
         var response = new FilterReservationListResponse();
-        response.Accommodations.AddRange(filterByGrades);
+        response.Accommodations.AddRange(filteredByAmenities);
         return Task.FromResult(response);
+    }
+
+    private RepeatedField<AccommodationDto> FilterOutstandingHost(RepeatedField<AccommodationDto> filteredByAmenities)
+    {
+        var filterByHost = filteredByAmenities;
+        foreach (var accom in filteredByAmenities)
+        {
+            var isOutstanding = _userClient.IsHostOutstanding(Guid.Parse(accom.HostId));
+            if (!isOutstanding.IsOutstanding)
+                filterByHost.Remove(accom);
+        }
+
+        return filterByHost;
     }
 
     private RepeatedField<AccommodationDto> FilterByGrades(ReservationFilterRequest request, RepeatedField<AccommodationDto> filteredByAmenities)
