@@ -23,6 +23,14 @@ public static class UserEndpoints
         application.MapPut("api/v1/users/updateGrade", UpdateGrade);
         application.MapPost("api/v1/users/getGradesByHost", GetGradesByHost);
         application.MapPost("api/v1/users/getGradesByGuest", GetGradesByGuest);
+        application.MapGet("api/v1/users/host", GetOutstandingHost);
+    }
+
+    private static async Task<IResult> GetOutstandingHost([FromQuery] Guid id,
+        [FromServices]HostService service)
+    {
+        var response = await service.GetOutstandingHost(id);
+        return Results.Ok(response);
     }
 
     private static async Task<IResult> DeleteGrade([FromBody]DeleteHostGradeRequest request, [FromServices]GradesGrpcService gradesGrpcService)

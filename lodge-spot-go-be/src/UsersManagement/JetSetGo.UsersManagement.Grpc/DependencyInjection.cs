@@ -1,5 +1,6 @@
 ﻿using JetSetGo.UserManagement.Grpc;
 using JetSetGo.UsersManagement.Grpc.Client;
+using JetSetGo.UsersManagement.Grpc.Client.Accommodations;
 using JetSetGo.UsersManagement.Grpc.Common.Logger;
 using JetSetGo.UsersManagement.Grpc.Common.Utility;
 using JetSetGo.UsersManagement.Grpc.Keycloak;
@@ -19,7 +20,9 @@ public static class DependencyInjection
         services.AddScoped<MyUserGrpcService>();
         services.AddScoped<TokenService>();
         services.AddScoped<GradesGrpcService>();
-        services.AddSingleton < IReservationClient,ReservationClient>();
+        services.AddScoped<HostService>();
+        services.AddScoped< IReservationClient,ReservationClient>();
+        services.AddScoped< IAccommodationClient,AccommodationClient>();
         services.AddScoped<KeyCloakConnections>();
     }
 }

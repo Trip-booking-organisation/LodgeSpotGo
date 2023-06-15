@@ -60,11 +60,24 @@ public class MappingConfiguration:Profile
                     opt.MapFrom(src => src.From.ToTimestamp()))
             .ForMember(dest => dest.To,
                 opt => 
-                    opt.MapFrom(src => src.To.ToTimestamp()));;
+                    opt.MapFrom(src => src.To.ToTimestamp()));
         CreateMap<Reservation, GetReservationDto>()
             .ForMember(dest => dest.DateRange,
                 opt =>
                     opt.MapFrom(src => src.DateRange));
+        CreateMap<DateRange, DateRangeReservationHost>()
+            .ForMember(dest => dest.From,
+                opt =>
+                    opt.MapFrom(src => src.From.ToTimestamp()))
+            .ForMember(dest => dest.To,
+                opt => 
+                    opt.MapFrom(src => src.To.ToTimestamp()));;
+        CreateMap<Reservation, GetReservationAccommodation>()
+            .ForMember(dest => dest.DateRange,
+                opt =>
+                    opt.MapFrom(src => src.DateRange))
+            .ForMember(dest => dest.Deleted,  
+                opt =>opt.MapFrom(src => src.Deleted));
     }
 
     public string MapEnumToString(ReservationStatus status)
