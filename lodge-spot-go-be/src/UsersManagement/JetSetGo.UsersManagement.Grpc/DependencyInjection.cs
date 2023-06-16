@@ -22,6 +22,7 @@ public static class DependencyInjection
         services.AddScoped<TokenService>();
         services.AddScoped<GradesGrpcService>();
         services.AddScoped<HostService>();
+        services.AddScoped<JetSetGoService>();
         services.AddScoped< IReservationClient,ReservationClient>();
         services.AddScoped< IAccommodationClient,AccommodationClient>();
         services.AddSingleton < IHostGradeRepository,HostGradeRepository>();

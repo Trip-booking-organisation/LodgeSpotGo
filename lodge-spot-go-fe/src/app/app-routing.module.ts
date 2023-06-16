@@ -14,6 +14,7 @@ import {
 import {ViewAccommodationComponent} from "./pages/view-accommodation/view-accommodation/view-accommodation.component";
 import {GuestGradesViewComponent} from "./pages/guest-grades/guest-grades-view/guest-grades-view.component";
 import {ViewHostComponent} from "./pages/view-host/view-host/view-host.component";
+import {ViewFlightsComponent} from "./pages/flights/view-flights/view-flights.component";
 
 const routes: Routes = [
   {path: '', component: HomePageComponent},
@@ -25,6 +26,7 @@ const routes: Routes = [
   {path:'accommodation-view', component:ViewAccommodationComponent},
   {path:'all-grades', component:GuestGradesViewComponent},
   {path:'view-host', component:ViewHostComponent},
+  {path:'flights', component:ViewFlightsComponent},
 ];
 
 @NgModule({
