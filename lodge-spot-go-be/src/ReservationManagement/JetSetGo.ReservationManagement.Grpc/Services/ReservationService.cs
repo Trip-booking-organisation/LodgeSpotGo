@@ -130,7 +130,7 @@ public class ReservationService : ReservationApp.ReservationAppBase
         var result = await _sender.Send(cancelRequest);
         _logger.LogInformation(@"------------------Cancel reservation status : {}",result.ToString());
         await SendCanceledNotification(new Guid(request.Id));
-       return _mapper.Map<CancelReservationResponse>(result);
+        return _mapper.Map<CancelReservationResponse>(result);
     }
     /*[Authorize(Roles = "guest")]*/
     public override async Task<UpdateReservationStatusResponse> UpdateReservation(UpdateReservationStatusRequest request, ServerCallContext context)
@@ -164,6 +164,7 @@ public class ReservationService : ReservationApp.ReservationAppBase
 
     public override async Task<DeleteReservationResponse> DeleteReservation(DeleteReservationRequest request, ServerCallContext context)
     {
+        _logger.LogInformation("-------- ");
         var id = Guid.Parse(request.Id);
         await _reservationRepository.DeleteReservation(id);
         await SendCanceledNotification(id);

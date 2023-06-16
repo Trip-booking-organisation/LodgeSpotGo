@@ -29,7 +29,7 @@ public class CanceledReservationConsumer: IConsumer<CanceledReservationEvent>
     {
         _logger.LogInformation("---------- Canceled Reservation Event Guest------ {}",context.Message.GuestEmail);
         var content = $@"User with email {context.Message.GuestEmail} canceled reservation for accommodation 
-        {context.Message.AccommodationName} at date {context.Message.CancelTime}";
+        {context.Message.AccommodationName} at date {context.Message.CancelTime}.";
         var notification = new HostNotification
         {
             HostId = context.Message.HostId,

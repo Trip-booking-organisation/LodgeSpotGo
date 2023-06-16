@@ -17,7 +17,7 @@ export class NotificationsService {
   private http: HttpClient = inject(HttpClient)
   private toast: ToastrService = inject(ToastrService)
   private notificationSubject: Subject<NotificationResponse[]> = new Subject<NotificationResponse[]>();
-  private notificationUrl: string = "https://localhost:7283/notifications"
+  private notificationUrl: string = "http://localhost:5259/notifications"
   private notificationUrlHttp: string = "https://localhost:7283"
   connectionState$: BehaviorSubject<HubConnectionStatus> = new BehaviorSubject(null);
   constructor() { }

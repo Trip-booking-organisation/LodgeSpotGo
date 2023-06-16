@@ -1,8 +1,10 @@
 ﻿using Google.Protobuf.Collections;
 using Grpc.Core;
 using JetSetGo.UserManagement.Grpc;
+using JetSetGo.UsersManagement.Application.MessageBroker;
 using JetSetGo.UsersManagement.Grpc.Client;
 using JetSetGo.UsersManagement.Grpc.Client.Accommodations;
+using JetSetGo.UsersManagement.Grpc.Dto.Request;
 
 namespace JetSetGo.UsersManagement.Grpc.Services;
 
@@ -10,15 +12,20 @@ public class HostService
 {
     private readonly IAccommodationClient _accommodationClient;
     private readonly IReservationClient _reservationClient;
+    private readonly IEventBus _eventBus;
 
-    public HostService(IAccommodationClient accommodationClient, IReservationClient reservationClient)
+    public HostService(
+        IAccommodationClient accommodationClient, 
+        IReservationClient reservationClient, IEventBus eventBus)
     {
         _accommodationClient = accommodationClient;
         _reservationClient = reservationClient;
+        _eventBus = eventBus;
     }
 
     public async Task<bool> GetOutstandingHost(Guid id)
     {
+        await Task.CompletedTask;
         var accommodations = _accommodationClient.GetAccommodationByHost(id);
         var reservations = new RepeatedField<GetReservationAccommodation>();
         foreach (var a in accommodations.Accommodations)
@@ -34,7 +41,7 @@ public class HostService
 
     private bool CheckIfCancelPercentageIsUnder5(RepeatedField<GetReservationAccommodation> reservations)
     {
-       var canceledRes =  reservations.Count(x => x.Deleted == true);
+       var canceledRes =  reservations.Count(x => x.Deleted);
        var totalRes =  reservations.Count;
        var percent = 100 * canceledRes / totalRes;
        return percent < 5;

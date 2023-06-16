@@ -68,6 +68,6 @@ export class ViewAccommodationComponent implements OnInit{
     const navigationExtras: NavigationExtras = {
       queryParams
     };
-    this.router.navigate(["view-host"],navigationExtras)
+    this.router.navigate(["view-host"], navigationExtras).then()
   }
 }

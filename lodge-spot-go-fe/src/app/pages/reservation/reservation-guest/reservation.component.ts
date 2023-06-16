@@ -29,12 +29,9 @@ export class ReservationComponent implements OnInit{
 
   ngOnInit(): void {
     this.dataService.getData().subscribe(data => {
-      // @ts-ignore
+
       let res = this.reservedAccommodations.filter(e => {
-        //@ts-ignore
-        if(e.reservation.id != data){
-          return true
-        }
+        return e.reservation.id != data;
       });
       this.reservedAccommodations =  [...res];
     })
@@ -116,18 +113,24 @@ export class ReservationComponent implements OnInit{
   private IsDisabled(r: IReservation) {
     if(r.status != "Confirmed")
       return true;
-    if(this.calculateDiff(r.dateRange?.from!) <=1)
-      return true
-    return false;
+    return this.calculateDiff(r.dateRange?.from!) <= 1;
+
   }
   calculateDiff(dateSent:Date){
     let currentDate = new Date();
     dateSent = new Date(dateSent);
     console.log(dateSent)
-    return Math.floor(( Date.UTC(dateSent.getFullYear(), dateSent.getMonth(), dateSent.getDate()) - Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()) ) /(1000 * 60 * 60 * 24));
+    return Math.floor((
+      Date.UTC(dateSent.getFullYear(),
+      dateSent.getMonth(),
+        dateSent.getDate()) - Date.UTC(currentDate.getFullYear(),
+        currentDate.getMonth(),
+        currentDate.getDate()) ) /(1000 * 60 * 60 * 24)
+    );
   }
 
   onDelete(reservation: IReservation ) {
+    console.log(reservation)
     this.reservationClient.deleteReservation(reservation.id!).subscribe({
       next: _ =>{
         const filter = this.reservedAccommodations.filter(r => r.reservation?.id !== reservation.id)

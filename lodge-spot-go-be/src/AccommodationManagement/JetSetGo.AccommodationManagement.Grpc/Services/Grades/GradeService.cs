@@ -2,9 +2,12 @@
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using JetSetGo.AccommodationManagement.Application.Common.Persistence;
+using JetSetGo.AccommodationManagement.Application.MessageBroker;
+using JetSetGo.AccommodationManagement.Domain.Accommodations;
 using JetSetGo.AccommodationManagement.Domain.Accommodations.Entities;
 using JetSetGo.AccommodationManagement.Grpc.Clients.Reservations;
 using JetSetGo.AccommodationManagement.Grpc.Clients.Users;
+using LodgeSpotGo.Shared.Events.Grades;
 
 namespace JetSetGo.AccommodationManagement.Grpc.Services.Grades;
 
@@ -15,35 +18,54 @@ public class GradeService : GradeApp.GradeAppBase
     private readonly IMapper _mapper;
     private readonly IReservationClient _reservationClient;
     private readonly IUserClient _userClient;
+    private readonly IEventBus _eventBus;
 
 
-    public GradeService(IGradeRepository gradeRepository, IAccommodationRepository accommodationRepository, IMapper mapper, IReservationClient reservationClient, IUserClient userClient)
+    public GradeService(IGradeRepository gradeRepository, 
+        IAccommodationRepository accommodationRepository, 
+        IMapper mapper, 
+        IReservationClient reservationClient, 
+        IUserClient userClient, 
+        IEventBus eventBus)
     {
         _gradeRepository = gradeRepository;
         _accommodationRepository = accommodationRepository;
         _mapper = mapper;
         _reservationClient = reservationClient;
         _userClient = userClient;
+        _eventBus = eventBus;
     }
 
     public override async Task<CreateGradeResponse> CreateGradeForAccommodation(CreateGradeRequest request,
         ServerCallContext context)
     {
-        await GetAccommodation(request);
+        var accommodation = await GetAccommodation(request);
         ValidateRequest(request.Grade.Number);
         var reservations = _reservationClient
             .GetReservationsByGuestAndHostId(Guid.Parse(request.Grade.GuestId),
                 Guid.Parse(request.Grade.AccommodationId));
         if (!CheckIfGuestHasStayedInAccommodation(reservations.Reservations))
             throw new RpcException(new Status(StatusCode.Cancelled, "You can't grade this accommodation!"));
+        var dateNow = new DateOnly(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day);
         var grade = new Grade
         {
             Number = request.Grade.Number,
             AccommodationId = Guid.Parse(request.Grade.AccommodationId),
             GuestId = Guid.Parse(request.Grade.GuestId),
-            Date = new DateOnly(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day)
+            Date = dateNow
         };
         await _gradeRepository.CreateGrade(grade);
+        var @event = new AccommodationGradeCreated
+        {
+            Grade = request.Grade.Number,
+            AccommodationId = accommodation.Id,
+            GuestId = Guid.Parse(request.Grade.GuestId),
+            GuestEmail = request.Grade.GuestEmail,
+            CreatedAt = DateTime.Now,
+            HostId = accommodation.HostId,
+            AccommodationName = accommodation.Name
+        };
+        await _eventBus.PublishAsync(@event);
         return new CreateGradeResponse { Success = true };
     }
 
@@ -59,12 +81,13 @@ public class GradeService : GradeApp.GradeAppBase
                 "Grade number should be greater between 1 and 5!"));
     }
 
-    private async Task GetAccommodation(CreateGradeRequest request)
+    private async Task<Accommodation> GetAccommodation(CreateGradeRequest request)
     {
         var accommodation = await _accommodationRepository
             .GetAsync(Guid.Parse(request.Grade.AccommodationId));
         if (accommodation is null)
             throw new RpcException(new Status(StatusCode.Cancelled, "Accommodation doesn't exists!"));
+        return accommodation;
     }
 
     public override async Task<UpdateGradeResponse> UpdateGradeForAccommodation(UpdateGradeRequest request, ServerCallContext context)

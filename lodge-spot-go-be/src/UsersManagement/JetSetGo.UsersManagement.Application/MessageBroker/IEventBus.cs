@@ -1,4 +1,4 @@
-﻿namespace JetSetGo.AccommodationManagement.Application.MessageBroker;
+﻿namespace JetSetGo.UsersManagement.Application.MessageBroker;
 
 public interface IEventBus
 {

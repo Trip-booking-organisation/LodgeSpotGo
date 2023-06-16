@@ -3,5 +3,7 @@
 public enum HostNotificationType
 {
     CreatedReservation,
-    CanceledReservation
+    CanceledReservation,
+    CreatedAccommodationGrade,
+    CreatedHostGrade,
 }

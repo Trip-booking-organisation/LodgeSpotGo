@@ -1,5 +1,7 @@
 ﻿using JetSetGo.UsersManagement.Application.Common.Persistence;
 using JetSetGo.UsersManagement.Application.Mapping;
+using JetSetGo.UsersManagement.Application.MessageBroker;
+using JetSetGo.UsersManagement.Infrastructure.MessageBroker.EventBus;
 using JetSetGo.UsersManagement.Infrastructure.Persistence.Configuration;
 using JetSetGo.UsersManagement.Infrastructure.Persistence.Repository;
 using JetSetGo.UsersManagement.Infrastructure.Persistence.Settings;
@@ -24,6 +26,7 @@ public static class DependencyInjection
         services.AddSingleton<IHostGradeRepository, HostGradeRepository>();
         services.AddAutoMapper(typeof(MappingConfiguration));
         AddDbConfig();
+        services.AddScoped<IEventBus, EventBus>();
         return services;
     }
 

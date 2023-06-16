@@ -1,7 +1,7 @@
-﻿using JetSetGo.AccommodationManagement.Application.MessageBroker;
+﻿using JetSetGo.UsersManagement.Application.MessageBroker;
 using MassTransit;
 
-namespace JetSetGo.AccommodationManagement.Infrastructure.MessageBroker.EventBus;
+namespace JetSetGo.UsersManagement.Infrastructure.MessageBroker.EventBus;
 
 public class EventBus: IEventBus
 {

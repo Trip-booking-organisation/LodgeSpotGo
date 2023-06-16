@@ -49,8 +49,4 @@
       <ProjectReference Include="..\JetSetGo.SearchAndFilter.Domain\JetSetGo.SearchAndFilter.Domain.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Dto\Responses" />
-    </ItemGroup>
-
 </Project>

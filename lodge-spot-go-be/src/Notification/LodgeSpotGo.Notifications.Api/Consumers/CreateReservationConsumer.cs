@@ -28,7 +28,7 @@ public class CreateReservationConsumer : IConsumer<CreatedReservationEvent>
     {
         _logger.LogInformation("---------- Created Reservation Event Guest------ {}", context.Message.GuestEmail);
         var content = $@"User with email {context.Message.GuestEmail} made reservation for accommodation 
-        {context.Message.AccommodationName} from date: {context.Message.From} to date: {context.Message.To}";
+        {context.Message.AccommodationName} from date: {context.Message.From} to date: {context.Message.To}.";
         var notification = new HostNotification
         {
             HostId = context.Message.HostId,

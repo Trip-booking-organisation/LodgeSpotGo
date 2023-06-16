@@ -1,8 +1,9 @@
 @import "src/sass/variables";
 .home-content{
-  padding-top: 12rem;
+  padding-top: 2rem;
   .flight-card {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
     justify-content: flex-start;
     padding: 1.2rem;
     background-color: $white-color;

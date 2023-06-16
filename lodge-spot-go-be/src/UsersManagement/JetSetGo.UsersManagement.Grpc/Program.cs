@@ -1,7 +1,10 @@
 using JetSetGo.UsersManagement.Grpc;
 using JetSetGo.UsersManagement.Grpc.Services;
 using JetSetGo.UsersManagement.Infrastructure;
+using JetSetGo.UsersManagement.Infrastructure.MessageBroker.Settings;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,8 +18,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
-builder.Services
-    .AddCors(options =>
+builder.Services.AddCors(options =>
     {
         options.AddPolicy("AllowOrigin",
             b =>
@@ -57,8 +59,31 @@ builder.Services.AddAuthentication(options =>
         }
     };
 });
-//builder.Services.AddKeycloakAuthentication(builder.Configuration, KeycloakAuthenticationOptions.Section);
 builder.Services.AddAuthorization();
+// #### mass transit ####
+builder.Services.Configure<MessageBrokerSettings>
+    (builder.Configuration.GetSection(MessageBrokerSettings.SectionName));
+builder.Services.AddSingleton(provider => 
+    provider.GetRequiredService<IOptions<MessageBrokerSettings>>().Value);
+builder.Services.AddMassTransit(busConfigurator =>
+{
+    var assembly = typeof(IMarker).Assembly;
+    busConfigurator.AddConsumers(assembly);
+    busConfigurator.AddSagaStateMachines(assembly);
+    busConfigurator.AddSagas(assembly);
+    busConfigurator.AddActivities(assembly);
+    busConfigurator.SetKebabCaseEndpointNameFormatter();
+    busConfigurator.UsingRabbitMq((context, configurator) =>
+    {
+        var messageBrokerSettings = context.GetRequiredService<MessageBrokerSettings>();
+        configurator.Host(new Uri(messageBrokerSettings.Host), hostConfigurator =>
+        {
+            hostConfigurator.Username(messageBrokerSettings.Username);   
+            hostConfigurator.Password(messageBrokerSettings.Password);   
+        });
+        configurator.ConfigureEndpoints(context, KebabCaseEndpointNameFormatter.Instance);
+    });
+});
 
 var app = builder.Build();
 
