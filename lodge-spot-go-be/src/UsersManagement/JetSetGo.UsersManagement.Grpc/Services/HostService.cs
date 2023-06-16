@@ -25,6 +25,7 @@ public class HostService
         _accommodationClient = accommodationClient;
         _reservationClient = reservationClient;
         _eventBus = eventBus;
+        _gradeRepository = gradeRepository;
     }
 
     public async Task<bool> GetOutstandingHost(Guid id)
