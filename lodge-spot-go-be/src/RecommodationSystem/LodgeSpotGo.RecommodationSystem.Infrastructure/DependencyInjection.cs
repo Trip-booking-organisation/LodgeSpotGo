@@ -21,13 +21,14 @@ public static class DependencyInjection
         services.AddSingleton<IGraphClient>(provider =>
         {
             var dbSettings = provider.GetRequiredService<DbSettings>();
+            Console.Out.Write(dbSettings.DbName);
             var client = new BoltGraphClient(new Uri(dbSettings.Neo4jDb),dbSettings.DbName,dbSettings.DbPassword);
-            client.ConnectAsync();
+            client.ConnectAsync().Wait();
             return client;
         });
         
         
-        services.AddSingleton<IRecommodationRepository, RecommodationRepository>();
+        services.AddScoped<IRecommodationRepository, RecommodationRepository>();
         return services;
     }
 }

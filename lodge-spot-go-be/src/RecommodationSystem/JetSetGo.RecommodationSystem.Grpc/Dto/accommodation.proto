@@ -1,0 +1,19 @@
+﻿syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "JetSetGo.RecommodationSystem.Grpc";
+
+message AccommodationDto
+{
+  string name =1;
+  string id =2;
+}
+message CreateAccommodationRequest
+{
+  AccommodationDto accommodation =1;
+}
+message CreateAccommodationResponse
+{
+  AccommodationDto accommodation =1;
+}
