@@ -31,7 +31,8 @@ var app = builder.Build();
     });
 }
 app.MapGrpcService<RecommodationService>();
-
+app.MapGrpcService<UserService>();
+app.MapGrpcService<AccommodationService>();
 // Configure the HTTP request pipeline.
 app.MapGrpcService<GreeterService>();
 app.MapGet("/",

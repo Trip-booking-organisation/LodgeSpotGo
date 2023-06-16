@@ -1,0 +1,20 @@
+﻿syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "JetSetGo.RecommodationSystem.Grpc";
+
+message User
+{
+  string gmail =1;
+  string name =2;
+  string surname =3;
+}
+message CreateUserRequest
+{
+  User user =1;
+}
+message CreateUserResponse
+{
+  User user =1;
+}
