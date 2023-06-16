@@ -42,11 +42,14 @@ export class GradeAccommodationDialogComponent implements OnInit{
       let request : GradeAccommodationRequest={
         accommodationId: this.accommodationId,
         guestId: this.user.id,
-        number: this.gradeFormControl.value
+        number: this.gradeFormControl.value,
+        guestEmail: this.user.email
       };
       this.gradeAccommodationClient.gradeAccommodation(request).subscribe({
-        next: _=>{
-          this.toastr.success("U have successfully rated this accommodation.","Thank you for your support.")
+        next: _ =>{
+          this.toastr.success("You have successfully rated this accommodation.","Thank you for your support.")
+        },error: _ =>{
+          this.toastr.error("You cannot rate this accommodation!","Failed to rate")
         }
       })
     }
@@ -55,16 +58,18 @@ export class GradeAccommodationDialogComponent implements OnInit{
         accomodationId: this.accommodationId,
         guestId: this.user.id,
         number: this.gradeFormControl.value,
-        hostId:this.hostId
+        hostId:this.hostId,
+        guestEmail: this.user.email
       }
       this.gradeHostClient.gradeAccommodation(request).subscribe({
-        next:res=>{
+        next:_ =>{
           this.toastr.success("U have successfully rated this host.","Thank you for your support.")
-        }
+        },
+        error: _ =>{
+        this.toastr.error("You cannot rate this host!","Failed to rate")
+      }
       })
     }
-
-
   }
 
   onCancel() {

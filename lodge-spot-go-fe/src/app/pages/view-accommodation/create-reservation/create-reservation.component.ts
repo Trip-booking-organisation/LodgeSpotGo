@@ -9,6 +9,7 @@ import {AuthService} from "../../../core/keycloak/auth.service";
 import {toIsoString} from "../../../common/utility/date.converter";
 import {ReservationService} from "../../../common/services/reservation.service";
 import {ToastrService} from "ngx-toastr";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-create-reservation',
@@ -23,7 +24,7 @@ export class CreateReservationComponent {
   constructor(
     private dialogRef: MatDialogRef<CreateReservationComponent>,
     private formBuilder: FormBuilder, private accommodationCurrentService:AccommodationCurrentService,
-    private auth:AuthService,private reservationService:ReservationService
+    private auth:AuthService,private reservationService:ReservationService, private router: Router
     ,private toast: ToastrService
   ) {
     this.reservationForm = this.formBuilder.group({
@@ -56,18 +57,19 @@ export class CreateReservationComponent {
         },
         status: 'Waiting',
         numberOfGuests: this.reservationForm.value.numberOfGuests,
-        guestId: this.user.id
+        guestId: this.user.id,
+        guestEmail: this.user.email
       };
       console.log(reservation)
       this.reservationService.createReservation(reservation).subscribe({
         next: value => {
           console.log(value)
+          this.router.navigate(['/reservations'])
           this.toast.success("You are successfully created reservation","Success")
-          window.location.reload()
         },
         error: err => {
           console.log(err)
-          this.toast.error("You cannot create reservation for this accommodation","Overlapping dates")
+          this.toast.error("You cannot create reservation for this accommodation","Failure")
         }
       });
       this.dialogRef.close();

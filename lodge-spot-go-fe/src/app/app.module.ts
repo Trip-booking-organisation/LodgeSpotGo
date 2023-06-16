@@ -24,6 +24,7 @@ import {GradeAccommodationModule} from "./pages/grade-accommodation/grade-accomm
 import {GuestGradesModule} from "./pages/guest-grades/guest-grades.module";
 import {ViewHostModule} from "./pages/view-host/view-host.module";
 import {FlightsModule} from "./pages/flights/flights.module";
+import {NotificationsModule} from "./pages/notifications/notifications.module";
 
 @NgModule({
     declarations: [
@@ -48,7 +49,9 @@ import {FlightsModule} from "./pages/flights/flights.module";
         HomeModule,
         AllAccommodationsModule,
         ViewAccommodationModule,
-        ViewHostModule
+        ViewHostModule,
+        ViewAccommodationModule,
+        NotificationsModule
     ],
     providers: [{
         provide: APP_INITIALIZER,

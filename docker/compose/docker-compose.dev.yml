@@ -97,10 +97,10 @@ services:
     volumes:
       - search-db-data:/data/db
       - ../entrypoint-initdb.d:/docker-entrypoint-initdb.d
-  we-do-mq:
+  lodge-spot-mq:
     image: rabbitmq:3.11.7-management
-    container_name: lodge-mq
-    hostname: lodge-queue
+    container_name: lodge-spot-mq
+    hostname: lodge-spot-mq
     environment:
       RABBITMQ_DEFAULT_USER: user
       RABBITMQ_DEFAULT_PASS: user

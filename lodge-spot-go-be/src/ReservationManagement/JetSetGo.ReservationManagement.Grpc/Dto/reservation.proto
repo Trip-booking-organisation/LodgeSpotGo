@@ -23,6 +23,7 @@ message CreateReservationDto{
   string status = 3;
   int32 numberOfGuests = 4;
   string guestId = 5;
+  string guestEmail = 6;
 }
 
 message GetReservationListRequest{}

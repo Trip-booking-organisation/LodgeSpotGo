@@ -12,6 +12,7 @@
       <p>Average grade: {{ averageGrade}}</p>
       <p >Special Prices:</p>
     </mat-card-content>
+    <div class="cols">
     <div  *ngFor="let specialPrice of accommodation.specialPrices">
       <div class="field" >
         <div class="filed-info"> Special price:</div>
@@ -22,9 +23,9 @@
         </div>
       </div>
     </div>
+    </div>
     <div class="button-row">
       <button (click)="onAccommodationGrades()">Accommodation grades</button>
-
       <button (click)="rateHost()">Rate host</button>
       <button (click)="viewHost()">View host</button>
     </div>

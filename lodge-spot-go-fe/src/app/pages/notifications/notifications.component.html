@@ -1,0 +1,10 @@
+<div class="notifications-container">
+  <div *ngIf="(notifications$ | async) as notifications"
+       class="notifications">
+    <ng-container *ngIf="notifications">
+      <div *ngFor="let n of notifications">
+        <app-notification-card [notification]="n"/>
+      </div>
+    </ng-container>
+  </div>
+</div>

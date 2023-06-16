@@ -4,10 +4,14 @@ using Grpc.Core;
 using Grpc.Net.Client;
 using JetSetGo.UserManagement.Grpc;
 using JetSetGo.UsersManagement.Application.Common.Persistence;
+using JetSetGo.UsersManagement.Application.MessageBroker;
 using JetSetGo.UsersManagement.Domain.HostGrade.Entities;
 using JetSetGo.UsersManagement.Domain.User.Entities;
 using JetSetGo.UsersManagement.Grpc.Client;
 using JetSetGo.UsersManagement.Grpc.Dto;
+using JetSetGo.UsersManagement.Grpc.Dto.Request;
+using JetSetGo.UsersManagement.Grpc.Dto.Response;
+using LodgeSpotGo.Shared.Events.Grades;
 
 namespace JetSetGo.UsersManagement.Grpc.Services;
 
@@ -16,11 +20,17 @@ public class GradesGrpcService
     private readonly IHostGradeRepository _hostGradeRepository;
     private readonly IMapper _mapper;
     private readonly IReservationClient _reservationClient;
-    public GradesGrpcService(IHostGradeRepository gradeRepository, IMapper mapper, IReservationClient reservationClient)
+    private readonly IEventBus _eventBus;
+    public GradesGrpcService(
+        IHostGradeRepository gradeRepository, 
+        IMapper mapper,
+        IReservationClient reservationClient,
+        IEventBus eventBus)
     {
         _hostGradeRepository = gradeRepository;
         _mapper = mapper;
         _reservationClient = reservationClient;
+        _eventBus = eventBus;
     }
 
     public async Task<DeleteHostGradeResponse> DeleteHostGrade(DeleteHostGradeRequest request)
@@ -85,13 +95,13 @@ public class GradesGrpcService
         };
     }
 
-    public async Task<HostGradeResponse> CreateGradeForHost(HostGradeRequest request)
+    public async Task<HostGradeResponse?> CreateGradeForHost(HostGradeRequest request)
     {
         var reservations = _reservationClient
             .GetReservationsByGuestAndHostId(request.GuestId,
                 request.AccomodationId);
         if (!CheckIfGuestHasStayedInAccommodation(reservations.Reservations))
-            throw new RpcException(new Status(StatusCode.Cancelled, "You can't grade this accommodation!"));
+            return null;
         var grade = new HostGrade
         {
             GuestId = request.GuestId,
@@ -100,6 +110,15 @@ public class GradesGrpcService
             HostId = request.HostId
         };
         await _hostGradeRepository.CreateGrade(grade);
+        var @event = new HostGradeCreatedEvent
+        {
+            GuestId = request.GuestId,
+            GuestEmail = request.GuestEmail,
+            Grade = request.Number,
+            HostId = request.HostId,
+            CreatedAt = DateTime.Now
+        };
+        await _eventBus.PublishAsync(@event);
         return new HostGradeResponse { success = true };
     }
     

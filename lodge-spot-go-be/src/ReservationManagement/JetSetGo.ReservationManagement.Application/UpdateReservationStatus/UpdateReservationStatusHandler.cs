@@ -1,4 +1,5 @@
 ﻿using JetSetGo.ReservationManagement.Application.Common.Persistence;
+using JetSetGo.ReservationManagement.Application.MessageBroker;
 using JetSetGo.ReservationManagement.Domain.Reservation;
 using JetSetGo.ReservationManagement.Domain.Reservation.Enums;
 using JetSetGo.ReservationManagement.Domain.Reservation.ValueObjects;
@@ -9,10 +10,12 @@ namespace JetSetGo.ReservationManagement.Application.UpdateReservationStatus;
 public class UpdateReservationStatusHandler : IRequestHandler<UpdateReservationStatusCommand,UpdateReservationStatusCommandResponse>
 {
     private readonly IReservationRepository _reservationRepository;
+    private readonly IEventBus _eventBus;
 
-    public UpdateReservationStatusHandler(IReservationRepository reservationRepository)
+    public UpdateReservationStatusHandler(IReservationRepository reservationRepository, IEventBus eventBus)
     {
         _reservationRepository = reservationRepository;
+        _eventBus = eventBus;
     }
 
     public async Task<UpdateReservationStatusCommandResponse> Handle(UpdateReservationStatusCommand request, CancellationToken cancellationToken)

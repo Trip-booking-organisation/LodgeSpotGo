@@ -18,9 +18,6 @@
         <PackageReference Include="Microsoft.AspNetCore.Grpc.JsonTranscoding" Version="7.0.5" />
         <PackageReference Include="Microsoft.AspNetCore.Grpc.Swagger" Version="0.3.5" />
         <PackageReference Include="AutoMapper" Version="12.0.1" />
-        <PackageReference Include="Microsoft.AspNetCore.Grpc.JsonTranscoding" Version="7.0.5" />
-        <PackageReference Include="Microsoft.AspNetCore.Grpc.Swagger" Version="0.3.5" />
-        <PackageReference Include="AutoMapper" Version="12.0.1" />
     </ItemGroup>
     <ItemGroup>
         <Protobuf Include="Protos\users.proto" GrpcServices="Client" />

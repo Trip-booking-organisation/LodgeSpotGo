@@ -53,18 +53,22 @@ ul {
 }
 .field{
   font-weight:bolder;
-  margin-top: 1%;
+  margin-top: 1rem;
   background-color: $primary-color;
   color: white;
   border-radius: 20px;
   display: flex;
+  font-size: .9rem;
   justify-content: center;
   align-items: center;
-  margin-left: 3rem;
-  margin-right: 3rem;
-  padding: 1rem 2rem 0.2rem 0.1rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  padding: 1rem .8rem 1rem 0.8rem;
 }
-
+.cols{
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+}
 
 .field-value{
   display: flex;
@@ -111,6 +115,7 @@ ul {
   justify-content: center;
 }
 .button-row{
+  padding-top: 2rem;
   display: flex;
   gap: 1.5rem;
   justify-content: flex-end;

@@ -10,4 +10,8 @@
       <PackageReference Include="MassTransit" Version="8.1.0-develop.1393" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\SharedEvents\LodgeSpotGo.Shared.Events\LodgeSpotGo.Shared.Events.csproj" />
+    </ItemGroup>
+
 </Project>
