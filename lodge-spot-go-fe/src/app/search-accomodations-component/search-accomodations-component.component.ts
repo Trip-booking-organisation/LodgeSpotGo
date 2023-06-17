@@ -68,9 +68,6 @@ export class SearchAccomodationsComponentComponent implements OnInit {
   }
 
   onFilter($event: IAccommodationDto[]) {
-    this.searchResults =   $event
-    console.log('filter')
-    console.log($event)
-    console.log(this.searchResults)
+    this.searchResults = $event
   }
 }

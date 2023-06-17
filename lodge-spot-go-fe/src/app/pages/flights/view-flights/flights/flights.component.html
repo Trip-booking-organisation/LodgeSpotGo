@@ -1,0 +1,14 @@
+<div class="flights">
+  <h1>Available flights</h1>
+  <div class="separate">
+    <div class="from">
+      <label>To accommodation</label>
+      <app-flights-card *ngFor="let flight of flightsFrom" [flight]="flight" [numberOfSeats]="reservation.numberOfGuest" [token]="token"/>
+    </div>
+    <div class="from">
+      <label>From accommodation</label>
+      <app-flights-card *ngFor="let flight of flightsTo" [flight]="flight" [numberOfSeats]="reservation.numberOfGuest" [token]="token"/>
+    </div>
+  </div>
+
+</div>

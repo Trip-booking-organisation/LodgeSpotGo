@@ -24,6 +24,13 @@ public static class UserEndpoints
         application.MapPost("api/v1/users/getGradesByGuest", GetGradesByGuest);
         application.MapGet("api/v1/users/host/{id:Guid}", GetOutstandingHost);
         application.MapGet("api/v1/users/getUser/{id:Guid}", GetUser);
+        application.MapPost("api/v1/users/tickets", BuyTickets);
+    }
+
+    private static async Task<IResult> BuyTickets(CreateTicketRequest request,[FromServices] JetSetGoService service)
+    {
+       var response  = await service.BuyTickets(request);
+       return Results.Ok(response);
     }
 
     private static async Task<IResult> GetOutstandingHost([FromRoute] Guid id,
