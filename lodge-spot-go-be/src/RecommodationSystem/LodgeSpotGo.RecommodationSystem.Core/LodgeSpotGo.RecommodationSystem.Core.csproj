@@ -6,4 +6,13 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="MassTransit" Version="8.1.0-develop.1397" />
+      <PackageReference Include="MassTransit.RabbitMQ" Version="8.1.0-develop.1397" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\SharedEvents\LodgeSpotGo.Shared.Events\LodgeSpotGo.Shared.Events.csproj" />
+    </ItemGroup>
+
 </Project>

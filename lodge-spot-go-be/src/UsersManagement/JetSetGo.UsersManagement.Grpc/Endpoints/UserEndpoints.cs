@@ -2,6 +2,7 @@
 using JetSetGo.UsersManagement.Grpc.Common.Logger;
 using JetSetGo.UsersManagement.Grpc.Common.Utility;
 using JetSetGo.UsersManagement.Grpc.Dto;
+using JetSetGo.UsersManagement.Grpc.Dto.Request;
 using JetSetGo.UsersManagement.Grpc.Dto.Response;
 using JetSetGo.UsersManagement.Grpc.Keycloak;
 using JetSetGo.UsersManagement.Grpc.Services;
@@ -65,7 +66,7 @@ public static class UserEndpoints
     }
     private static async Task<IResult> GradeHost(HostGradeRequest request,[FromServices] GradesGrpcService gradesGrpcService)
     {
-        HostGradeResponse response = await gradesGrpcService.CreateGradeForHost(request);
+        HostGradeResponse? response = await gradesGrpcService.CreateGradeForHost(request);
     
             return Results.Ok(response);
     }

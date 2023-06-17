@@ -4,7 +4,7 @@ import "google/protobuf/timestamp.proto";
 
 option csharp_namespace = "JetSetGo.RecommodationSystem.Grpc";
 
-message User
+message UserDto
 {
   string gmail =1;
   string name =2;
@@ -12,9 +12,9 @@ message User
 }
 message CreateUserRequest
 {
-  User user =1;
+  UserDto user =1;
 }
 message CreateUserResponse
 {
-  User user =1;
+  UserDto user =1;
 }
