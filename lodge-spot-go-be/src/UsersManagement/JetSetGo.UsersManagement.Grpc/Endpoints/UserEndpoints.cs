@@ -73,7 +73,7 @@ public static class UserEndpoints
     }
     private static async Task<IResult> GradeHost(HostGradeRequest request,[FromServices] GradesGrpcService gradesGrpcService)
     {
-        HostGradeResponse response = await gradesGrpcService.CreateGradeForHost(request);
+        HostGradeResponse? response = await gradesGrpcService.CreateGradeForHost(request);
     
             return Results.Ok(response);
     }

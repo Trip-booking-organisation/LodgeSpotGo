@@ -16,18 +16,16 @@ public class UserService : UserApp.UserAppBase
     {
         Guest guest = new Guest
         {
-            Gmail = request.User.Gmail,
-            Name = request.User.Name,
-            Surname = request.User.Surname
+            Name = request.User.Gmail,
+
         };
         var response = await _recommodationRepository.CreateGuest(guest);
         CreateUserResponse bla = new CreateUserResponse
         {
-            User = new User
+            User = new UserDto
             {
-                Gmail = response.Gmail,
                 Name = response.Name,
-                Surname = response.Surname
+
             }
         };
         return bla;
