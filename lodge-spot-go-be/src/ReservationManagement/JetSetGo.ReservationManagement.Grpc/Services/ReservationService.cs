@@ -2,6 +2,7 @@
 using Grpc.Core;
 using JetSetGo.ReservationManagement.Application.CancelReservation;
 using JetSetGo.ReservationManagement.Application.Common.Persistence;
+using JetSetGo.ReservationManagement.Application.Exceptions;
 using JetSetGo.ReservationManagement.Application.GetReservationsByGuestId;
 using JetSetGo.ReservationManagement.Application.MessageBroker;
 using JetSetGo.ReservationManagement.Application.UpdateReservationStatus;
@@ -76,15 +77,19 @@ public class ReservationService : ReservationApp.ReservationAppBase
             Id = request.Reservation.AccommodationId
         };
         var accommodationResponse = _accommodationClient.GetAccommodation(accommodationRequest);
-        // var isLap = await CheckOverlapping(reservation,accommodationResponse);
-        // if (isLap)
-        // {
-        //     throw new RpcException(new Status(StatusCode.Cancelled, "Overlapping dates!"));
-        // }
+        if (accommodationResponse is null)
+        {
+            throw new NotFound("Accommodation not found");
+        }
+        var isLap = await CheckOverlapping(reservation);
+        if (isLap)
+        {
+            throw new BadRequest("Overlapping dates!");
+        }
         if (accommodationResponse.Accommodation.MinGuests > request.Reservation.NumberOfGuests ||
             accommodationResponse.Accommodation.MaxGuests < request.Reservation.NumberOfGuests)
         {
-            throw new RpcException(new Status(StatusCode.Cancelled, "You specified wrong guest number"));
+            throw new BadRequest("You specified wrong guest number");
         }
         if (accommodationResponse.Accommodation.AutomaticConfirmation)
             reservation.ReservationStatus = ReservationStatus.Confirmed;
@@ -106,13 +111,13 @@ public class ReservationService : ReservationApp.ReservationAppBase
         };
     }
 
-    private async Task<bool> CheckOverlapping(Reservation reservation,
-        GetAccommodationResponse getAccommodationResponse)
+    private async Task<bool> CheckOverlapping(Reservation reservation)
     {
         var list = await _reservationRepository.GetAllAsync();
-        var laps = list.Select(reservation1 => reservation1.IsOverlapping(reservation.DateRange) 
-                                               && reservation.AccommodationId.ToString() == getAccommodationResponse.Accommodation.Id);
-        return laps.FirstOrDefault(lap => lap);
+        var laps = list.Select(reservation1 => reservation1.IsOverlapping(reservation.DateRange)
+                                               && reservation1.GuestId == reservation.GuestId
+                                               && reservation1.AccommodationId == reservation.AccommodationId);
+        return laps.Any(lap => lap);
     }
     private static ReservationStatus MapStringToEnum(string reservationStatus)
     {

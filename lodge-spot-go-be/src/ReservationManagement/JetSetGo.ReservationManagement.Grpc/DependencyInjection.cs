@@ -1,4 +1,5 @@
-﻿using JetSetGo.ReservationManagement.Grpc.Clients;
+﻿using JetSetGo.ReservationManagement.Application.Clients;
+using JetSetGo.ReservationManagement.Grpc.Clients;
 using JetSetGo.ReservationManagement.Grpc.Mapping;
 using JetSetGo.ReservationManagement.Grpc.Mapping.MapToGrpcResponse;
 
@@ -11,6 +12,7 @@ public static class DependencyInjection
         services.AddAutoMapper(typeof(MappingConfiguration));
         services.AddScoped<IMapToGrpcResponse, MapToGrpcResponse>();
         services.AddScoped<IGetAccommodationClient, GetAccommodationClient>();
+        services.AddScoped<IClientAccommodationMediator,GetAccommodationClientMediator>();
         return services;
     }
 }

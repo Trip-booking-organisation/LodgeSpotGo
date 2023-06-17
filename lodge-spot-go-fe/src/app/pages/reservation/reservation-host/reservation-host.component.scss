@@ -2,7 +2,8 @@
 .home-content{
   padding-top: 12rem;
   .flight-card {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
     justify-content: flex-start;
     padding: 1.2rem;
     background-color: $white-color;

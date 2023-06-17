@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Google.Protobuf.WellKnownTypes;
 using JetSetGo.ReservationManagement.Application.CancelReservation;
+using JetSetGo.ReservationManagement.Application.Clients.Responses;
 using JetSetGo.ReservationManagement.Application.GetReservationsByGuestId;
 using JetSetGo.ReservationManagement.Application.SearchReservations;
 using JetSetGo.ReservationManagement.Application.UpdateReservationStatus;
@@ -78,6 +79,11 @@ public class MappingConfiguration:Profile
                     opt.MapFrom(src => src.DateRange))
             .ForMember(dest => dest.Deleted,  
                 opt =>opt.MapFrom(src => src.Deleted));
+        CreateMap<AccommodationDtoResponse, GetAccommodationResponse>();
+        CreateMap<GetAccommodationResponse, AccommodationDtoResponse>()
+            .ForMember(destinationMember => 
+                destinationMember.Name, opt => 
+                opt.MapFrom(dest => dest.Accommodation.Name));
     }
 
     public string MapEnumToString(ReservationStatus status)

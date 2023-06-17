@@ -45,7 +45,7 @@ public class GradeService : GradeApp.GradeAppBase
             .GetReservationsByGuestAndHostId(Guid.Parse(request.Grade.GuestId),
                 Guid.Parse(request.Grade.AccommodationId));
         if (!CheckIfGuestHasStayedInAccommodation(reservations.Reservations))
-            throw new RpcException(new Status(StatusCode.Cancelled, "You can't grade this accommodation!"));
+            throw new RpcException(new Status(StatusCode.InvalidArgument, "You can't grade this accommodation!"));
         var dateNow = new DateOnly(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day);
         var grade = new Grade
         {
@@ -77,7 +77,7 @@ public class GradeService : GradeApp.GradeAppBase
     private static void ValidateRequest(int gradeNumber)
     {
         if (gradeNumber is < 1 or > 5)
-            throw new RpcException(new Status(StatusCode.Cancelled,
+            throw new RpcException(new Status(StatusCode.InvalidArgument,
                 "Grade number should be greater between 1 and 5!"));
     }
 
@@ -86,7 +86,7 @@ public class GradeService : GradeApp.GradeAppBase
         var accommodation = await _accommodationRepository
             .GetAsync(Guid.Parse(request.Grade.AccommodationId));
         if (accommodation is null)
-            throw new RpcException(new Status(StatusCode.Cancelled, "Accommodation doesn't exists!"));
+            throw new RpcException(new Status(StatusCode.InvalidArgument, "Accommodation doesn't exists!"));
         return accommodation;
     }
 
@@ -103,7 +103,7 @@ public class GradeService : GradeApp.GradeAppBase
     {
         var grade = await _gradeRepository.GetById(Guid.Parse(request.Grade.Id));
         if (grade is null)
-            throw new RpcException(new Status(StatusCode.Cancelled, "Grade doesn't exists!"));
+            throw new RpcException(new Status(StatusCode.NotFound, "Grade doesn't exists!"));
         return grade;
     }
 
@@ -121,7 +121,7 @@ public class GradeService : GradeApp.GradeAppBase
     {
         var grade = await _gradeRepository.GetById(Guid.Parse(request.Id));
         if (grade is null)
-            throw new RpcException(new Status(StatusCode.Cancelled, "Grade not found!"));
+            throw new RpcException(new Status(StatusCode.NotFound, "Grade not found!"));
         await _gradeRepository.DeleteGrade(grade.Id);
         return new DeleteGradeResponse { Success = true };
     }
@@ -174,7 +174,9 @@ public class GradeService : GradeApp.GradeAppBase
             grade += x.Number;
             response.AccommodationGrade.Add(res);
         });
-        var averageGrade = grade / grades.Count;
+        var averageGrade = 0;
+        if(grades.Count !=0)
+            averageGrade = grade / grades.Count;
         response.AverageGrade = averageGrade;
         return response;
     }

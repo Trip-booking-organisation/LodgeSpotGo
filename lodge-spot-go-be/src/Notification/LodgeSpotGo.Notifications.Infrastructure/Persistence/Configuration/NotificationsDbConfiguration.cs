@@ -14,5 +14,11 @@ public class NotificationsDbConfiguration
             map.SetIgnoreExtraElements(true);
             map.MapIdMember(x => x.Id).SetIdGenerator(new GuidGenerator());
         });
+        BsonClassMap.RegisterClassMap<GuestNotification>(map =>
+        {
+            map.AutoMap();
+            map.SetIgnoreExtraElements(true);
+            map.MapIdMember(x => x.Id).SetIdGenerator(new GuidGenerator());
+        });
     }
 }

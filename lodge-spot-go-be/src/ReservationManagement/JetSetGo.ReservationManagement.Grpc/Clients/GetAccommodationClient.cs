@@ -27,7 +27,7 @@ public class GetAccommodationClient : IGetAccommodationClient
             _logger.LogInformation(@"---------------------Accommodation returns : {}",reply.ToString());
             return reply;
         }
-        catch (Exception ex)
+        catch (System.Exception ex)
         {
             _logger.LogInformation(@"-------------Couldn't call Accommodation microservice: {}", ex.Message);
             return null!;

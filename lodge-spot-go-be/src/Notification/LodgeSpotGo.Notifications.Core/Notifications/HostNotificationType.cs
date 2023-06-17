@@ -6,4 +6,6 @@ public enum HostNotificationType
     CanceledReservation,
     CreatedAccommodationGrade,
     CreatedHostGrade,
+    LoseOutstandingHostStatus,
+    BecomeOutstandingHost,
 }
