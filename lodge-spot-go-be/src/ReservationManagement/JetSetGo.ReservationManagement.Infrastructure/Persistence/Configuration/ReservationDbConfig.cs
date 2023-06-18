@@ -12,7 +12,6 @@ public class ReservationDbConfig
         {
             map.AutoMap();
             map.SetIgnoreExtraElements(true);
-            map.MapIdMember(x => x.Id).SetIdGenerator(new GuidGenerator());
         });
     }
 }

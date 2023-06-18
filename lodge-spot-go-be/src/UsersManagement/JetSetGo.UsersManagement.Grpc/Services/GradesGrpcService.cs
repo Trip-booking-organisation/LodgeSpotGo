@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentResults;
 using Google.Protobuf.Collections;
 using Grpc.Core;
 using Grpc.Net.Client;
@@ -95,13 +96,13 @@ public class GradesGrpcService
         };
     }
 
-    public async Task<HostGradeResponse?> CreateGradeForHost(HostGradeRequest request)
+    public Result<HostGradeResponse> CreateGradeForHost(HostGradeRequest request)
     {
         var reservations = _reservationClient
             .GetReservationsByGuestAndHostId(request.GuestId,
                 request.AccomodationId);
         if (!CheckIfGuestHasStayedInAccommodation(reservations.Reservations))
-            return null;
+            return Result.Fail("You cannot grade this host");
         var grade = new HostGrade
         {
             GuestId = request.GuestId,
@@ -109,7 +110,7 @@ public class GradesGrpcService
             Number = request.Number,
             HostId = request.HostId
         };
-        await _hostGradeRepository.CreateGrade(grade);
+        _hostGradeRepository.CreateGrade(grade);
         var @event = new HostGradeCreatedEvent
         {
             GuestId = request.GuestId,
@@ -118,11 +119,11 @@ public class GradesGrpcService
             HostId = request.HostId,
             CreatedAt = DateTime.Now
         };
-        await _eventBus.PublishAsync(@event);
-        return new HostGradeResponse { success = true };
+        _eventBus.PublishAsync(@event);
+        return new HostGradeResponse {success = true};
     }
     
-    private bool CheckIfGuestHasStayedInAccommodation( RepeatedField<GetReservationDto> reservations)
+    private bool CheckIfGuestHasStayedInAccommodation(RepeatedField<GetReservationDto> reservations)
     {
         return reservations.Any(reservation => reservation.DateRange.To.ToDateTime() < DateTime.Now);
     }

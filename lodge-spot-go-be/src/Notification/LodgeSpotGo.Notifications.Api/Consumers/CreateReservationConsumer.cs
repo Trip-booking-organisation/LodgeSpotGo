@@ -2,6 +2,7 @@
 using LodgeSpotGo.Notifications.Api.Mappers;
 using LodgeSpotGo.Notifications.Core.Common.Interfaces.Repository;
 using LodgeSpotGo.Notifications.Core.Notifications;
+using LodgeSpotGo.Shared.Events.Notification;
 using LodgeSpotGo.Shared.Events.Reservation;
 using MassTransit;
 using Microsoft.AspNetCore.SignalR;
@@ -48,6 +49,6 @@ public class CreateReservationConsumer : IConsumer<CreatedReservationEvent>
         await _notificationRepository.CreateAsync(notification);
         var notifications = await _notificationRepository.GetAllNotificationsByHost(context.Message.HostId);
         var mapped = NotificationsMapper.MapNotificationsHost(notifications);
-        await _hubContext.Clients.All.SendAsync("ReceiveNotification", mapped);
+        await _hubContext.Clients.All.SendAsync($"ReceiveNotification/{context.Message.HostId}", mapped);
     }
 }

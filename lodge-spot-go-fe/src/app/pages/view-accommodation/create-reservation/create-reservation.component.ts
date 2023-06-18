@@ -69,7 +69,7 @@ export class CreateReservationComponent {
         },
         error: err => {
           console.log(err)
-          this.toast.error("You cannot create reservation for this accommodation","Failure")
+          this.toast.error(err.error.message,"Failure")
         }
       });
       this.dialogRef.close();

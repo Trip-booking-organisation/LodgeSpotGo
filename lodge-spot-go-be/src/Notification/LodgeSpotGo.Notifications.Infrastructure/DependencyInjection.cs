@@ -23,6 +23,7 @@ public static class DependencyInjection
             provider.GetRequiredService<IOptions<DbSettings>>().Value);
         NotificationsDbConfiguration.Configure();
         services.AddScoped<IHostNotificationRepository, HostNotificationRepository>();
+        services.AddScoped<IGuestNotificationRepository, GuestNotificationsRepository>();
         return services;
     }
 }

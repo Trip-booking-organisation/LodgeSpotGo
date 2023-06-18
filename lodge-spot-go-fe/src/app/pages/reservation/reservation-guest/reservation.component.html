@@ -44,6 +44,7 @@
                   (click)="onCancel(r.reservation)">Cancel</button>
           <button *ngIf="r.reservation?.status === 'Waiting'"
                   class="btn-delete-lg book"
+                  [disabled]="r.disabled"
                   (click)="onDelete(r.reservation!)">Delete</button>
           <button  class="btn-delete-lg book"
                    (click)="onViewFlights(r.reservation!)">View flights</button>

@@ -26,7 +26,6 @@ export class ViewHostComponent implements OnInit,AfterViewInit{
       this.hostGrades$ = this.userService.getUser(params['hostId']).pipe(
         switchMap(value => {
           this.host = value
-          console.log(value)
           return this.userService.getHostsGrades({
             hostId: value.id
           })

@@ -49,6 +49,6 @@ public class CanceledReservationConsumer: IConsumer<CanceledReservationEvent>
         await _notificationRepository.CreateAsync(notification);
         var notifications = await _notificationRepository.GetAllNotificationsByHost(context.Message.HostId);
         var mapped = NotificationsMapper.MapNotificationsHost(notifications);
-        await _hubContext.Clients.All.SendAsync("ReceiveNotification", mapped);
+        await _hubContext.Clients.All.SendAsync($"ReceiveNotification/{context.Message.HostId}", mapped);
     }
 }

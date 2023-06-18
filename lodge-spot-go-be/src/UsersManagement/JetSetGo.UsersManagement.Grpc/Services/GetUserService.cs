@@ -19,7 +19,7 @@ public class GetUserService : UserApp.UserAppBase
     {
         var user = await _connections.GetUserIdAsync(Guid.Parse(request.Id));
         
-        _logger.LogInformation(@"----------------------Request came in", request.Id);
+        _logger.LogInformation(@"----------------------Request came in -------------{}", request.Id);
         var result = new GetUserResponse { 
             User = new GetUserDto
             {
