@@ -8,6 +8,9 @@ import {IReservationAccommodation} from "../../../common/model/reservedAccommoda
 import {MatDialog} from "@angular/material/dialog";
 import {CancelReservationComponent} from "../cancel-reservation/cancel-reservation.component";
 import {DataService} from "../../../common/services/data.service";
+import {JetSetGoService} from "../../../common/services/jet-set-go.service";
+import {Flight} from "../../../common/model/flight";
+import {ViewFlightsComponent} from "../../flights/view-flights/view-flights.component";
 
 
 @Component({
@@ -18,16 +21,23 @@ import {DataService} from "../../../common/services/data.service";
 export class ReservationComponent implements OnInit{
   reservations! : IReservation[];
   reservedAccommodations: IReservationAccommodation[]=[];
+  flights : Flight[]=[]
 
   constructor(private router: Router,
               private authService:AuthService,
               private accommodationClient: AccommodationService,
               private reservationClient : ReservationService,
               private dialog : MatDialog,
+              private flightClient: JetSetGoService,
               private dataService: DataService) {
   }
 
   ngOnInit(): void {
+    this.flightClient.getFlights().subscribe({
+      next: response =>{
+        this.flights = response
+      }
+    })
     this.dataService.getData().subscribe(data => {
 
       let res = this.reservedAccommodations.filter(e => {
@@ -73,33 +83,21 @@ export class ReservationComponent implements OnInit{
     reservedAccommodation.accommodation.specialPrices.forEach( a => {
       let start= new Date(reservedAccommodation.reservation.dateRange.from)
       let end =  new Date( reservedAccommodation.reservation.dateRange.to)
-      console.log("rez", start)
-      console.log("cena", a.dateRange.from)
-      console.log("rez", end)
-      console.log("cena", a.dateRange.to)
-
-      console.log(new Date(a.dateRange.from).getTime() <= new Date(start).getTime())
-      console.log(new Date(end).getTime() <= new Date(a.dateRange.to).getTime())
       if(new Date(a.dateRange.from).getTime() <= new Date(start).getTime() &&  new Date(end).getTime() <= new Date(a.dateRange.to).getTime())
       {
-        console.log("aaaa")
         reservedAccommodation.pricePerPersonOneNight = a.price
         reservedAccommodation.priceInTotalOneNight = (a.price * reservedAccommodation.reservation.numberOfGuest)
         let differenceMs = new Date(end).getTime() - new Date(start).getTime();
         let daysDiff = Math.floor(differenceMs / (1000 * 60 * 60 * 24))
-        console.log(daysDiff)
         let priceTotal = (reservedAccommodation.reservation.numberOfGuest * a.price) * daysDiff
 
         reservedAccommodation.priceInTotalInTotal = priceTotal;
         reservedAccommodation.pricePerPersonInTotal = (daysDiff * a.price)
-        console.log(reservedAccommodation.pricePerPersonInTotal)
       }
     })
   }
   assignReservedAccommodations(resAccomm: IReservationAccommodation[]){
     this.reservedAccommodations = [...resAccomm]
-    console.log(this.reservedAccommodations)
-    console.log(this.reservedAccommodations[0].reservation?.status)
   }
 
   onCancel(reservation: IReservation | undefined) {
@@ -119,6 +117,7 @@ export class ReservationComponent implements OnInit{
   calculateDiff(dateSent:Date){
     let currentDate = new Date();
     dateSent = new Date(dateSent);
+    return Math.floor(( Date.UTC(dateSent.getFullYear(), dateSent.getMonth(), dateSent.getDate()) - Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()) ) /(1000 * 60 * 60 * 24));
     console.log(dateSent)
     return Math.floor((
       Date.UTC(dateSent.getFullYear(),
@@ -137,5 +136,12 @@ export class ReservationComponent implements OnInit{
         this.reservedAccommodations = [...filter]
       }
     })
+  }
+  onViewFlights(reservation: IReservation) {
+    this.dialog.open(ViewFlightsComponent, {
+      width: '600px',
+      height:'400px',
+      data: { reservation: reservation,flights:this.flights }
+    });
   }
 }

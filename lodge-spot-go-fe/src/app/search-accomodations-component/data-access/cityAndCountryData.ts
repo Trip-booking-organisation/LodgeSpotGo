@@ -1,4 +1,5 @@
 import {Address} from "../../core/model/Address";
+import {AddressFlight} from "../../common/model/AddressFlight";
 
 export const flightsAutoComplete: Address[] = [
   {

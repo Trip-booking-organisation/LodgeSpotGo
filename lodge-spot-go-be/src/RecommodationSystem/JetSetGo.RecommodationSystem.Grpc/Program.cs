@@ -1,5 +1,11 @@
+using JetSetGo.AccommodationManagement.Grpc.Mapping;
+using JetSetGo.RecommodationSystem.Grpc;
 using JetSetGo.RecommodationSystem.Grpc.Services;
+using LodgeSpotGo.RecommodationSystem.Core.Services;
 using LodgeSpotGo.RecommodationSystem.Infrastructure;
+using LodgeSpotGo.RecommodationSystem.Infrastructure.MessageBroker.Settings;
+using MassTransit;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +18,7 @@ builder.Configuration
 
 // Add services to the container.
 builder.Services.AddGrpc();
+builder.Services.AddAutoMapper(typeof(MappingConfiguration));
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddGrpcSwagger().AddSwaggerGen(c =>
 {
@@ -22,7 +29,31 @@ builder.Services.AddGrpcSwagger().AddSwaggerGen(c =>
         Description = "Recommendation Management Microservice"
     });
 });
-
+// #### mass transit ####
+builder.Services.Configure<MessageBrokerSettings>
+    (builder.Configuration.GetSection(MessageBrokerSettings.SectionName));
+builder.Services.AddSingleton(provider => 
+    provider.GetRequiredService<IOptions<MessageBrokerSettings>>().Value);
+builder.Services.AddMassTransit(busConfigurator =>
+{
+    var assembly = typeof(IAssemblyMarker).Assembly;
+    busConfigurator.AddConsumers(assembly);
+    busConfigurator.AddSagaStateMachines(assembly);
+    busConfigurator.AddSagas(assembly);
+    busConfigurator.AddActivities(assembly);
+    busConfigurator.SetKebabCaseEndpointNameFormatter();
+    busConfigurator.UsingRabbitMq((context, configurator) =>
+    {
+        var messageBrokerSettings = context.GetRequiredService<MessageBrokerSettings>();
+        configurator.Host(new Uri(messageBrokerSettings.Host), hostConfigurator =>
+        {
+            hostConfigurator.Username(messageBrokerSettings.Username);   
+            hostConfigurator.Password(messageBrokerSettings.Password);   
+        });
+        configurator.ConfigureEndpoints(context, KebabCaseEndpointNameFormatter.Instance);
+    });
+});
+builder.Services.AddScoped<RecommendationService>();
 var app = builder.Build();
 {
     app.UseSwagger().UseSwaggerUI(c =>

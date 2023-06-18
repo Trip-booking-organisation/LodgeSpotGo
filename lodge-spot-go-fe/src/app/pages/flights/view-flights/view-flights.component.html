@@ -1,0 +1,36 @@
+<div class="cancel">
+  <h2>Please enter necessary information</h2>
+  <div class="input-div">
+    <mat-form-field>
+      <mat-label>Location from</mat-label>
+      <input type="text" placeholder="Where are you going from?" matInput [formControl]="flightControlFrom"
+             [matAutocomplete]="autoFrom">
+      <mat-autocomplete #autoFrom="matAutocomplete">
+        <mat-option *ngFor="let flight of filteredFlightsFrom | async"
+                    [value]="flight.city + ',' + flight.country">
+          {{ flight.city }}, {{ flight.country }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Location to</mat-label>
+      <input type="text" placeholder="Where you want to go?" matInput [formControl]="flightControlTo"
+             [matAutocomplete]="autoTo">
+      <mat-autocomplete #autoTo="matAutocomplete">
+        <mat-option *ngFor="let flight of filteredFlightsTo | async"
+                    [value]="flight.city + ',' + flight.country">
+          {{ flight.city }}, {{ flight.country }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
+  <div class="space">
+    <div>
+      <button class="btn-delete-lg"  mat-dialog-close  (click)="onSubmit()">Submit</button>
+    </div>
+    <div>
+      <button class="btn-delete-lg" mat-dialog-close (click)="onCancel()">Cancel</button>
+    </div>
+  </div>
+</div>
+

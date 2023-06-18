@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using Grpc.Core;
 using JetSetGo.AccommodationManagement.Application.Common.Persistence;
+using JetSetGo.AccommodationManagement.Application.MessageBroker;
 using JetSetGo.AccommodationManagement.Domain.Accommodations;
 using JetSetGo.AccommodationManagement.Domain.Accommodations.ValueObjects;
 using JetSetGo.AccommodationManagement.Grpc.Mapping.MappingToGrpcResponse;
+using LodgeSpotGo.Shared.Events.Accommdation;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 
@@ -15,13 +17,20 @@ public class AccommodationService : AccommodationApp.AccommodationAppBase
     private readonly IAccommodationRepository _repository;
     private readonly IMappingToGrpcResponse _mappingToGrpcResponse;
     private readonly IMapper _mapper;
+    private readonly IEventBus _bus;
 
-    public AccommodationService(ILogger<AccommodationService> logger, IAccommodationRepository repository, IMapper mapper, IMappingToGrpcResponse mappingToGrpcResponse)
+    public AccommodationService(
+        ILogger<AccommodationService> logger, 
+        IAccommodationRepository repository, 
+        IMapper mapper, 
+        IMappingToGrpcResponse mappingToGrpcResponse, 
+        IEventBus bus)
     {
         _logger = logger;
         _repository = repository;
         _mapper = mapper;
         _mappingToGrpcResponse = mappingToGrpcResponse;
+        _bus = bus;
     }
     /*[Authorize(Roles = "guest,host")]*/
     public override async  Task<GetAccommodationListResponse> GetAccommodationList(GetAccommodationListRequest request, ServerCallContext context)
@@ -70,6 +79,12 @@ public class AccommodationService : AccommodationApp.AccommodationAppBase
             
         };
         _repository.CreateAsync(accommodation);
+        var @event = new AccommodationCreatedEvent
+        {
+            Name = accommodation.Name,
+            Id = accommodation.Id.ToString()
+        };
+        _bus.PublishAsync(@event);
         return Task.FromResult(new CreateAccommodationResponse
         {
             Location = "api/v1/accommodations/{id}"

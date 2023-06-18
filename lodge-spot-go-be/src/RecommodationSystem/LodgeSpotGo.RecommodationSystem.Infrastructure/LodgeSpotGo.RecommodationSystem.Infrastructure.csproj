@@ -18,4 +18,13 @@
       <ProjectReference Include="..\LodgeSpotGo.RecommodationSystem.Core\LodgeSpotGo.RecommodationSystem.Core.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Reference Include="Microsoft.AspNetCore.Http.Results">
+        <HintPath>..\..\..\..\..\..\Program Files\dotnet\shared\Microsoft.AspNetCore.App\7.0.5\Microsoft.AspNetCore.Http.Results.dll</HintPath>
+      </Reference>
+      <Reference Include="Microsoft.AspNetCore.Mvc.Abstractions">
+        <HintPath>..\..\..\..\..\..\Program Files\dotnet\shared\Microsoft.AspNetCore.App\7.0.5\Microsoft.AspNetCore.Mvc.Abstractions.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
 </Project>

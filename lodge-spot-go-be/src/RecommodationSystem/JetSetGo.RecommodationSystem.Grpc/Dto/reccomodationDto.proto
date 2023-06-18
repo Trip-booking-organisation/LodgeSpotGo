@@ -4,5 +4,15 @@ import "google/protobuf/timestamp.proto";
 
 option csharp_namespace = "JetSetGo.RecommodationSystem.Grpc";
 
-message GetRecommodationReqest{string id =1;}
-message getRecommodationsResponse{string response =1;}
+message UserRecDto
+{
+  string Name =1;
+}
+message AccommodationRecDto
+{
+  string name =1;
+  string id =2;
+}
+
+message GetRecommodationReqest{UserRecDto user =1;}
+message getRecommodationsResponse{ repeated UserRecDto response =1;}

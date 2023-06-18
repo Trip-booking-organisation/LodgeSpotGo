@@ -5,7 +5,8 @@ option csharp_namespace = "JetSetGo.RecommodationSystem.Grpc";
 service ReccomodationApp{
   rpc GetRecommodations(GetRecommodationReqest) returns (getRecommodationsResponse){
     option(google.api.http)={
-      get :"/api/v1/reccomodation/{id}"
+      post :"/api/v1/reccomodation",
+      body: "user"
     };
   }
 }
