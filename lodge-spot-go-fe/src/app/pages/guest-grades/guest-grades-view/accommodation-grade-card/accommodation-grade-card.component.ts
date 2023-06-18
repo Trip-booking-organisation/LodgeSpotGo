@@ -12,6 +12,7 @@ import {
 import {AccommodationGrade} from "../../../../common/model/accommodation-grade";
 import {GradeAccommodationService} from "../../../../common/services/grade-accommodation.service";
 import {EditAccommodationGradeComponent} from "../edit-accommodation-grade/edit-accommodation-grade.component";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-accommodation-grade-card',
@@ -22,11 +23,13 @@ export class AccommodationGradeCardComponent implements OnInit{
   @Input() accommodationGrade! : AccommodationGrade
   user : User | null;
   @Output() gradeEmit = new  EventEmitter<AccommodationGrade>;
+  @Output() gradeUpdateEmit = new  EventEmitter<any>;
   constructor(private authService: AuthService,
               private currentService:AccommodationCurrentService,
               private router:Router,
               private gradeClient : GradeAccommodationService,
-              private dialog: MatDialog) {
+              private dialog: MatDialog,
+              private toastrService: ToastrService) {
   }
   ngOnInit(): void {
     this.user = this.authService.getUser()
@@ -37,15 +40,22 @@ export class AccommodationGradeCardComponent implements OnInit{
     this.gradeClient.deleteGrade(this.accommodationGrade.id).subscribe({
       next: _=>{
         this.gradeEmit.emit(this.accommodationGrade)
+        this.toastrService.success("Successfully deleted")
+      },
+      error: _ => {
+        this.toastrService.error("Error when deleting")
       }
     })
   }
 
   onEditGrade() {
-    this.dialog.open(EditAccommodationGradeComponent, {
-      width: '400px',
-      height:'300px',
+    const ref = this.dialog.open(EditAccommodationGradeComponent, {
+      width: '30vw',
+      height:'30vh',
       data: { accommodationGrade: this.accommodationGrade, text : 'accommodation' }
     });
+    ref.afterClosed().subscribe(value => {
+      this.gradeUpdateEmit.emit(value)
+    })
   }
 }

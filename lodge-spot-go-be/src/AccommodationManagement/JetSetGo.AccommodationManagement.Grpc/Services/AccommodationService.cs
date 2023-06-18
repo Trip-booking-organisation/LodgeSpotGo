@@ -48,7 +48,7 @@ public class AccommodationService : AccommodationApp.AccommodationAppBase
         activity?.Stop();
         return list;
     }
-    /*[Authorize(Roles = "host")]*/
+    [Authorize(Roles = "host")]
     public override Task<CreateAccommodationResponse> CreateAccommodation(CreateAccommodationRequest request, ServerCallContext context)
     {
         var activity = ActivitySource.StartActivity();

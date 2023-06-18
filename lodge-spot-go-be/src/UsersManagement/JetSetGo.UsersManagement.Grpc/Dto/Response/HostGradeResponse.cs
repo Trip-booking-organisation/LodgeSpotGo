@@ -1,4 +1,4 @@
-﻿namespace JetSetGo.UsersManagement.Grpc.Dto;
+﻿namespace JetSetGo.UsersManagement.Grpc.Dto.Response;
 
 public class HostGradeResponse
 {

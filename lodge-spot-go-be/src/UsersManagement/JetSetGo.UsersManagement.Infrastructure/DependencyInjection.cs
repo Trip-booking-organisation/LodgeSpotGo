@@ -27,6 +27,7 @@ public static class DependencyInjection
         services.AddAutoMapper(typeof(MappingConfiguration));
         AddDbConfig();
         services.AddScoped<IEventBus, EventBus>();
+        services.AddScoped<IOutstandingHostRepository, OutstandingHostRepository>();
         return services;
     }
 

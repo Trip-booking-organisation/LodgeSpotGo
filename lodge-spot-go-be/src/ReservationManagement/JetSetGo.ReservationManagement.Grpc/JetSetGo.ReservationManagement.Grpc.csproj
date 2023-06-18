@@ -26,10 +26,14 @@
         <Protobuf Include="Protos\get_reservation_accommodation.proto" GrpcServices="Server" />
         <Protobuf Include="Protos\accommodation.proto" GrpcServices="Client" />
         <Protobuf Include="Protos\grades.proto" GrpcServices="Server" />
+        <Protobuf Include="Protos\get_user.proto" GrpcServices="Client" />
+        <Protobuf Include="Protos\get_user_keycloak.proto" GrpcServices="Client" />
     </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Google.Protobuf" Version="3.23.0" />
+        <PackageReference Include="Grpc.AspNetCore.Server.Reflection" Version="2.54.0" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     </ItemGroup>
 
     <ItemGroup>

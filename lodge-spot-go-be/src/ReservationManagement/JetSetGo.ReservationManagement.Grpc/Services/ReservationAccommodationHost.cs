@@ -17,7 +17,8 @@ public class ReservationAccommodationHost :GetReservationAccommodationApp.GetRes
 
     public override async Task<GetReservationAccommodationHostResponse> GetReservationByGuestAndAccomRequest(GetReservationAccommodationRequest request, ServerCallContext context)
     {
-        var reservations = await _reservationRepository.GetReservationsByAccommodation(Guid.Parse(request.AccommodationId));
+        
+        var reservations = await _reservationRepository.GetReservationsAllByAccommodation(Guid.Parse(request.AccommodationId));
         var response = new GetReservationAccommodationHostResponse();
         var result = _mapToGrpcResponse.MapToHostResponse(reservations);
         return await result;

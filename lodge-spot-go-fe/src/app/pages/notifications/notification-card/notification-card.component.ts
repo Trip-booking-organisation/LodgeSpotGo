@@ -21,7 +21,13 @@ export class NotificationCardComponent {
     if(this.notification.type === 'CreatedHostGrade'){
       return "You are graded"
     }
-    return "Notification"
+    if(this.notification.type === 'LoseOutstandingHostStatus'){
+      return "Lost status"
+    }
+    if(this.notification.type === 'BecomeOutstandingHost'){
+      return "Earned status"
+    }
+    return this.notification.type
   }
   chooseIcon() {
     if(this.notification.type === "CreatedReservation"){
@@ -36,6 +42,18 @@ export class NotificationCardComponent {
     if(this.notification.type === 'CreatedHostGrade'){
       return "assets/images/host-grade.png"
     }
-    return "assets/images/accommodation.png"
+    if(this.notification.type === 'LoseOutstandingHostStatus'){
+      return "assets/images/out-lose.png"
+    }
+    if(this.notification.type === 'BecomeOutstandingHost'){
+      return "assets/images/out-get.png"
+    }
+    if(this.notification.type === 'Reservation Refused'){
+      return "assets/images/refused.png"
+    }
+    if(this.notification.type === 'Reservation Confirmed'){
+      return "assets/images/verified.png"
+    }
+    return "assets/images/battery.png"
   }
 }

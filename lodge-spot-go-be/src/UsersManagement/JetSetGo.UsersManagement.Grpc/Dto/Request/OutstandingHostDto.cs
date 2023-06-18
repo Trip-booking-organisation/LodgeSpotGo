@@ -1,6 +1,6 @@
 ﻿namespace JetSetGo.UsersManagement.Grpc.Dto.Request;
 
-public class OutstandingHost
+public class OutstandingHostDto
 {
     public Guid HostId { get; set;}
     public string HostEmail { get; set; } = null!;

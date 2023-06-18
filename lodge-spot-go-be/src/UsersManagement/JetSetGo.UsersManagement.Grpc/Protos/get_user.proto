@@ -1,6 +1,6 @@
 ﻿syntax = "proto3";
 option csharp_namespace = "JetSetGo.UserManagement.Grpc";
-package routes;
+
 message GetUserDto{
   string id = 1;
   string name = 2;

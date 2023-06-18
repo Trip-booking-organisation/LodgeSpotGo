@@ -16,6 +16,7 @@ public static class DependencyInjection
         services.AddScoped<IMappingToGrpcResponse, MappingToGrpcResponse>();
         services.AddScoped<IReservationClient, ReservationClient>();
         services.AddScoped<IUserClient, UserClient>();
+        services.AddScoped<IGetUserClient, GetUserInfosClient>();
         //services.AddCorsPolicy(builderConfiguration);
         return services;
     }

@@ -1,5 +1,9 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
+using FluentResults;
 using JetSetGo.UserManagement.Grpc;
+using JetSetGo.UsersManagement.Application.Common.Persistence;
+using JetSetGo.UsersManagement.Application.MessageBroker;
+using JetSetGo.UsersManagement.Domain.Host;
 using JetSetGo.UsersManagement.Grpc.Common.Logger;
 using JetSetGo.UsersManagement.Grpc.Common.Utility;
 using JetSetGo.UsersManagement.Grpc.Dto;
@@ -7,6 +11,7 @@ using JetSetGo.UsersManagement.Grpc.Dto.Request;
 using JetSetGo.UsersManagement.Grpc.Dto.Response;
 using JetSetGo.UsersManagement.Grpc.Keycloak;
 using JetSetGo.UsersManagement.Grpc.Services;
+using LodgeSpotGo.Shared.Events.Host;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using OpenTelemetry.Trace;
@@ -51,16 +56,51 @@ public static class UserEndpoints
        return Results.Ok(response);
     }
 
-    private static async Task<IResult> GetOutstandingHost([FromRoute] Guid id,
-        [FromServices]HostService service)
+    private static async Task<IResult> GetOutstandingHost(
+        [FromRoute] Guid id,
+        [FromServices]HostService service, 
+        [FromServices] IOutstandingHostRepository repo,
+        [FromServices] IEventBus eventBus)
     {
         var activity = GetOutstandingHostActivity.StartActivity(); 
         activity?.SetTag("Id",id);
         var result = await service.GetOutstandingHost(id);
+        var host = repo.GetByHostId(id);
+        var isStatusChanged = await DeterminateOutstandingHostStatus(id, repo, host, result);
+        if (isStatusChanged)
+        {
+            var @event = new OutstandingHostStatusChanged
+            {
+                HostId = id,
+                IsOutstanding = result,
+                CreatedAt = DateTime.Now
+            };
+            await eventBus.PublishAsync(@event);
+        }
         var response = new IsOutStandingResponse { IsOutstanding = result };
         activity?.Stop();
         return Results.Ok(response);
         
+    }
+
+    private static async Task<bool> DeterminateOutstandingHostStatus(Guid id, IOutstandingHostRepository repo, OutStandingHost? host,
+        bool result)
+    {
+        if (host is null)
+        {
+            var newHost = new OutStandingHost
+            {
+                HostId = id,
+                IsOutStandingHost = result
+            };
+            await repo.CreateOutStandingHost(newHost);
+            return false;
+        }
+
+        if (host.IsOutStandingHost == result) return false;
+        host.IsOutStandingHost = result;
+        await repo.Update(host);
+        return true;
     }
 
     private static async Task<IResult> DeleteGrade([FromBody]DeleteHostGradeRequest request, [FromServices]GradesGrpcService gradesGrpcService)
@@ -113,11 +153,15 @@ public static class UserEndpoints
         var response = await gradesGrpcService.GetGradesByGuest(request);
         return Results.Ok(response);
     }
-    private static async Task<IResult> GradeHost(HostGradeRequest request,[FromServices] GradesGrpcService gradesGrpcService)
+    private static IResult GradeHost(HostGradeRequest request,[FromServices] GradesGrpcService gradesGrpcService)
     {
-        HostGradeResponse? response = await gradesGrpcService.CreateGradeForHost(request);
-    
-            return Results.Ok(response);
+        var response = gradesGrpcService.CreateGradeForHost(request);
+        if (response.IsFailed)
+        {
+            Results.BadRequest(response.Errors.ToString());
+        }
+
+        return Results.Ok(response.Value);
     }
 
     private static async Task<IResult> DeleteUser(Guid userId,string role,

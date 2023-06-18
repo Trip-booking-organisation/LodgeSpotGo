@@ -7,6 +7,7 @@ public interface IAccommodationRepository
 {
     Task<List<Accommodation>> GetAllAsync(CancellationToken cancellationToken = default);
     Task<Accommodation> GetAsync(Guid id, CancellationToken cancellationToken = default);
+    Accommodation Get(Guid id);
     Task CreateAsync(Accommodation accommodation);
     Task UpdateAsync(Accommodation accommodation);
     Task RemoveAsync(Guid id);

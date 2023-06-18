@@ -24,6 +24,9 @@ public class AccommodationRepository: IAccommodationRepository
     public async Task<Accommodation> GetAsync(Guid id,CancellationToken cancellationToken= default) =>
         await _accommodationCollection.Find(x => x.Id == id).FirstOrDefaultAsync(cancellationToken);
 
+    public Accommodation Get(Guid id) => 
+        _accommodationCollection.Find(x => x.Id == id).SingleOrDefault();
+
     public async Task CreateAsync(Accommodation accommodation) =>
         await _accommodationCollection.InsertOneAsync(accommodation);
 

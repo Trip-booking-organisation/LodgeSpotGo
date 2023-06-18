@@ -40,12 +40,16 @@ public class HostService
 
     private bool CheckIfAverageGradeIsOutstanding(List<HostGrade> grades)
     {
-        var gradesCount = 0.0; 
+        var gradesCount = 0.0;
+        var averageGrade = 0.0;
         grades.ForEach(x =>
         {
             gradesCount += x.Number;
         });
-        var averageGrade = gradesCount / grades.Count;
+        if (grades.Count != 0)
+        {
+            averageGrade = gradesCount / grades.Count;
+        }
         return averageGrade > 4.7;
     }
 
@@ -53,7 +57,11 @@ public class HostService
     {
        var canceledRes =  reservations.Count(x => x.Deleted == true);
        var totalRes =  reservations.Count;
-       var percent = 100 * canceledRes / totalRes;
+       var percent = 0;
+       if (totalRes != 0)
+       {
+          percent = 100 * canceledRes / totalRes;
+       }
        return percent < 5;
     }
 

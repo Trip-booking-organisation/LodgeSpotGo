@@ -24,7 +24,7 @@ public class GetUserService : UserApp.UserAppBase
         activity?.SetTag("Id", request.Id);
         var user = await _connections.GetUserIdAsync(Guid.Parse(request.Id));
         
-        _logger.LogInformation(@"----------------------Request came in", request.Id);
+        _logger.LogInformation(@"----------------------Request came in -------------{}", request.Id);
         var result = new GetUserResponse { 
             User = new GetUserDto
             {
