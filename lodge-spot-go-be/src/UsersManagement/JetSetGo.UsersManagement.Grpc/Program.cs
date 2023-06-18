@@ -97,6 +97,7 @@ app.UseHttpsRedirection();
 app.UseCors("AllowOrigin");
 app.MapGrpcService<GetUserService>();
 app.MapGrpcService<FilterService>();
+app.MapGrpcService<GetUserInfoService>();
 app.UseAuthentication();
 app.UseAuthorization();
 

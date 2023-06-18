@@ -34,7 +34,7 @@ public class AccommodationService : AccommodationApp.AccommodationAppBase
         responseList.ForEach(dto => list.Accommodations.Add(dto));
         return list;
     }
-    /*[Authorize(Roles = "host")]*/
+    [Authorize(Roles = "host")]
     public override Task<CreateAccommodationResponse> CreateAccommodation(CreateAccommodationRequest request, ServerCallContext context)
     {
         _logger.LogInformation(@"Request {request.Accommodation}",request.Accommodation);

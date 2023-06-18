@@ -34,7 +34,8 @@ export class AccommodationCardComponent implements OnInit{
   pricePerPersonInTotal = 0
   priceInTotalOneNight = 0
   priceInTotalInTotal = 0
-  constructor(private authService: AuthService, private currentService:AccommodationCurrentService,
+  constructor(private authService: AuthService,
+              private currentService:AccommodationCurrentService,
               private router:Router, private dialog: MatDialog) {
   }
   ngOnInit(): void {

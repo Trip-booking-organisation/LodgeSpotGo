@@ -2,6 +2,8 @@ using JetSetGo.ReservationManagement.Application;
 using JetSetGo.ReservationManagement.Grpc;
 using JetSetGo.ReservationManagement.Grpc.Interceptors;
 using JetSetGo.ReservationManagement.Grpc.Middleware;
+using JetSetGo.ReservationManagement.Grpc.Saga;
+using JetSetGo.ReservationManagement.Grpc.Saga.States;
 using JetSetGo.ReservationManagement.Grpc.Services;
 using JetSetGo.ReservationManagement.Infrastructure;
 using JetSetGo.ReservationManagement.Infrastructure.MessageBroker.Settings;
@@ -51,7 +53,8 @@ builder.Services.AddSingleton(provider =>
 builder.Services.AddMassTransit(busConfigurator =>
 {
     var assembly = typeof(IAssemblyMarker).Assembly;
-    busConfigurator.AddSagaStateMachines(assembly);
+    // busConfigurator.AddSagaStateMachine<ReservationStateMachine,
+    //     ReservationState>().InMemoryRepository();
     busConfigurator.AddSagas(assembly);
     busConfigurator.AddActivities(assembly);
     busConfigurator.SetKebabCaseEndpointNameFormatter();

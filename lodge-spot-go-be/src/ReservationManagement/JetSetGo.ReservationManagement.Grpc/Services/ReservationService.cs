@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using Grpc.Core;
 using JetSetGo.ReservationManagement.Application.CancelReservation;
+using JetSetGo.ReservationManagement.Application.Clients;
 using JetSetGo.ReservationManagement.Application.Common.Persistence;
+using JetSetGo.ReservationManagement.Application.Dto.Response;
 using JetSetGo.ReservationManagement.Application.Exceptions;
 using JetSetGo.ReservationManagement.Application.GetReservationsByGuestId;
 using JetSetGo.ReservationManagement.Application.MessageBroker;
@@ -10,7 +12,9 @@ using JetSetGo.ReservationManagement.Domain.Reservation;
 using JetSetGo.ReservationManagement.Domain.Reservation.Enums;
 using JetSetGo.ReservationManagement.Domain.Reservation.ValueObjects;
 using JetSetGo.ReservationManagement.Grpc.Clients;
+using JetSetGo.ReservationManagement.Grpc.Handlers;
 using JetSetGo.ReservationManagement.Grpc.Mapping.MapToGrpcResponse;
+using JetSetGo.ReservationManagement.Grpc.Saga;
 using LodgeSpotGo.Shared.Events.Reservation;
 using MediatR;
 
@@ -25,6 +29,7 @@ public class ReservationService : ReservationApp.ReservationAppBase
     private readonly ISender _sender;
     private readonly IGetAccommodationClient _accommodationClient;
     private readonly IEventBus _bus;
+    private readonly CreateReservationHandler _createReservationHandler;
 
     public ReservationService(
         IReservationRepository reservationRepository, 
@@ -33,7 +38,8 @@ public class ReservationService : ReservationApp.ReservationAppBase
         ISender sender, 
         IMapToGrpcResponse mapToGrpcResponse, 
         IGetAccommodationClient accommodationClient, 
-        IEventBus bus)
+        IEventBus bus,
+        CreateReservationHandler createReservationHandler)
     {
         _logger = logger;
         _reservationRepository = reservationRepository;
@@ -42,6 +48,7 @@ public class ReservationService : ReservationApp.ReservationAppBase
         _mapToGrpcResponse = mapToGrpcResponse;
         _accommodationClient = accommodationClient;
         _bus = bus;
+        _createReservationHandler = createReservationHandler;
     }
     /*[Authorize(Roles = "host,guest")]*/
     public override async Task<GetReservationListResponse> GetReservationList(GetReservationListRequest request, ServerCallContext context)
@@ -54,78 +61,27 @@ public class ReservationService : ReservationApp.ReservationAppBase
         return list;
     }
     /*[Authorize(Roles = "guest")]*/
-    public override async Task<CreateReservationResponse> CreateReservation(CreateReservationRequest request, ServerCallContext context)
+    public override async Task<CreateReservationResponse> CreateReservation(
+        CreateReservationRequest request, 
+        ServerCallContext context)
     {
-        _logger.LogInformation(@"Request {request.Reservation}", request.Reservation);
-        var reservation = new Reservation
-        {
-            Id = new Guid(),
-            AccommodationId = Guid.Parse(request.Reservation.AccommodationId),
-            DateRange = new DateRange
-            {
-                From = request.Reservation.DateRange.From.ToDateTime(),
-                To = request.Reservation.DateRange.To.ToDateTime()
-            },
-            ReservationStatus = MapStringToEnum(request.Reservation.Status),
-            Deleted = false,
-            NumberOfGuests = request.Reservation.NumberOfGuests,
-            GuestId = Guid.Parse(request.Reservation.GuestId),
-            GuestEmail = request.Reservation.GuestEmail
-        };
-        var accommodationRequest = new GetAccommodationRequest
-        {
-            Id = request.Reservation.AccommodationId
-        };
-        var accommodationResponse = _accommodationClient.GetAccommodation(accommodationRequest);
-        if (accommodationResponse is null)
-        {
-            throw new NotFound("Accommodation not found");
-        }
-        var isLap = await CheckOverlapping(reservation);
-        if (isLap)
-        {
-            throw new BadRequest("Overlapping dates!");
-        }
-        if (accommodationResponse.Accommodation.MinGuests > request.Reservation.NumberOfGuests ||
-            accommodationResponse.Accommodation.MaxGuests < request.Reservation.NumberOfGuests)
-        {
-            throw new BadRequest("You specified wrong guest number");
-        }
-        if (accommodationResponse.Accommodation.AutomaticConfirmation)
-            reservation.ReservationStatus = ReservationStatus.Confirmed;
-        await _reservationRepository.CreateAsync(reservation);
+        var reservation = await _createReservationHandler.HandleCreateReservation(request);
+        await _reservationRepository.CreateAsync(reservation.Reservation);
         var @event = new CreatedReservationEvent
         {
-            GuestId = reservation.GuestId,
-            AccommodationName = accommodationResponse.Accommodation.Name,
-            AccommodationId = accommodationResponse.Accommodation.Id,
-            HostId = new Guid(accommodationResponse.Accommodation.HostId),
-            From = reservation.DateRange.From,
-            To = reservation.DateRange.To,
-            GuestEmail = reservation.GuestEmail,
+            ReservationId = reservation.Reservation.Id,
+            GuestId = reservation.Reservation.GuestId,
+            AccommodationName = reservation.AccommodationResponse.Accommodation.Name,
+            AccommodationId =  reservation.AccommodationResponse.Accommodation.Id,
+            HostId = new Guid(reservation.AccommodationResponse.Accommodation.HostId),
+            From = reservation.Reservation.DateRange.From,
+            To = reservation.Reservation.DateRange.To,
+            GuestEmail = reservation.Reservation.GuestEmail,
         };
         await _bus.PublishAsync(@event);
         return new CreateReservationResponse
         {
-            CreatedId = reservation.Id.ToString()
-        };
-    }
-
-    private async Task<bool> CheckOverlapping(Reservation reservation)
-    {
-        var list = await _reservationRepository.GetAllAsync();
-        var laps = list.Select(reservation1 => reservation1.IsOverlapping(reservation.DateRange)
-                                               && reservation1.GuestId == reservation.GuestId
-                                               && reservation1.AccommodationId == reservation.AccommodationId);
-        return laps.Any(lap => lap);
-    }
-    private static ReservationStatus MapStringToEnum(string reservationStatus)
-    {
-        return reservationStatus switch
-        {
-            "Confirmed" => ReservationStatus.Confirmed,
-            "Refused" => ReservationStatus.Refused,
-            _ => ReservationStatus.Waiting
+            CreatedId = $"/api/v1/reservations/{reservation.Reservation.Id.ToString()}"
         };
     }
     /*[Authorize(Roles = "guest")]*/

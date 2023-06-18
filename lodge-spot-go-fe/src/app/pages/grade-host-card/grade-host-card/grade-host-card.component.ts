@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {UserManagementService} from "../../../common/services/user-management.service";
 import {HostGrade} from "../../../common/model/host-grade";
 import {KeycloakUser} from "../../../common/model/keycloakUser";
@@ -8,6 +8,7 @@ import {
 } from "../../guest-grades/guest-grades-view/edit-accommodation-grade/edit-accommodation-grade.component";
 import {MatDialog} from "@angular/material/dialog";
 import {DeleteHostGradeRequest} from "../../../common/model/DeleteHostGradeRequest";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-grade-host-card',
@@ -15,8 +16,10 @@ import {DeleteHostGradeRequest} from "../../../common/model/DeleteHostGradeReque
   styleUrls: ['./grade-host-card.component.scss']
 })
 export class GradeHostCardComponent implements OnInit{
+  @Output() editAccommodationGrade: EventEmitter<any> = new EventEmitter();
+  @Output() deleteAccommodation: EventEmitter<string> = new EventEmitter<string>()
   constructor(private userService:UserManagementService,
-              private dialog: MatDialog) {
+              private dialog: MatDialog, private toasterService: ToastrService) {
   }
   ngOnInit(): void {
     this.guest$ = this.userService.getUser(this.hostGrade.guestId)
@@ -24,7 +27,6 @@ export class GradeHostCardComponent implements OnInit{
       next: res =>{
         this.guest = res
         console.log(this.hostGrade)
-
       }
     })
   }
@@ -34,11 +36,14 @@ export class GradeHostCardComponent implements OnInit{
   @Input()canEdit: boolean;
 
   editGrade() {
-    this.dialog.open(EditAccommodationGradeComponent, {
+    const ref = this.dialog.open(EditAccommodationGradeComponent, {
       width: '400px',
       height:'300px',
       data: { hostGrade: this.hostGrade, text : 'host' }
     });
+    ref.afterClosed().subscribe(value => {
+      this.editAccommodationGrade.emit(value)
+    })
   }
 
   deleteGrade() {
@@ -47,8 +52,12 @@ export class GradeHostCardComponent implements OnInit{
       guestId:this.hostGrade.guestId
     }
     this.userService.deleteHostGrade(request).subscribe({
-      next: res=>{
-
+      next: _ =>{
+        this.toasterService.success("Successfully deleted host grade", "Success")
+        this.deleteAccommodation.emit(this.hostGrade.id)
+      },
+      error: _ => {
+        this.toasterService.error("You cannot delete this grade", "Fail")
       }
     })
   }

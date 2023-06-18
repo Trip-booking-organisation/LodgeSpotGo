@@ -26,6 +26,8 @@
         <Protobuf Include="Protos\get_reservation_accommodation.proto" GrpcServices="Server" />
         <Protobuf Include="Protos\accommodation.proto" GrpcServices="Client" />
         <Protobuf Include="Protos\grades.proto" GrpcServices="Server" />
+        <Protobuf Include="Protos\get_user.proto" GrpcServices="Client" />
+        <Protobuf Include="Protos\get_user_keycloak.proto" GrpcServices="Client" />
     </ItemGroup>
 
     <ItemGroup>

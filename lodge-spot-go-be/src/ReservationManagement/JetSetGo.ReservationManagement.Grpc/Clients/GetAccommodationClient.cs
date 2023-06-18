@@ -29,7 +29,7 @@ public class GetAccommodationClient : IGetAccommodationClient
         }
         catch (System.Exception ex)
         {
-            _logger.LogInformation(@"-------------Couldn't call Accommodation microservice: {}", ex.Message);
+            _logger.LogInformation(@"-------------Couldn't process Accommodation microservice result: {}", ex.Message);
             return null!;
         }
     }

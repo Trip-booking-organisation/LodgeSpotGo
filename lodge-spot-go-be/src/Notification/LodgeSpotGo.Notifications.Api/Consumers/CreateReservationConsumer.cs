@@ -2,6 +2,7 @@
 using LodgeSpotGo.Notifications.Api.Mappers;
 using LodgeSpotGo.Notifications.Core.Common.Interfaces.Repository;
 using LodgeSpotGo.Notifications.Core.Notifications;
+using LodgeSpotGo.Shared.Events.Notification;
 using LodgeSpotGo.Shared.Events.Reservation;
 using MassTransit;
 using Microsoft.AspNetCore.SignalR;

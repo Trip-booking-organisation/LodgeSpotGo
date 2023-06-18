@@ -17,7 +17,7 @@ public class GradeService : GradeApp.GradeAppBase
     private readonly IAccommodationRepository _accommodationRepository;
     private readonly IMapper _mapper;
     private readonly IReservationClient _reservationClient;
-    private readonly IUserClient _userClient;
+    private readonly IGetUserClient _userClient;
     private readonly IEventBus _eventBus;
 
 
@@ -25,7 +25,7 @@ public class GradeService : GradeApp.GradeAppBase
         IAccommodationRepository accommodationRepository, 
         IMapper mapper, 
         IReservationClient reservationClient, 
-        IUserClient userClient, 
+        IGetUserClient userClient, 
         IEventBus eventBus)
     {
         _gradeRepository = gradeRepository;
@@ -131,7 +131,7 @@ public class GradeService : GradeApp.GradeAppBase
         var grades = await _gradeRepository.GetAllByGuest(Guid.Parse(request.GuestId));
         var response = new GetGradesByGuestResponse();
 
-        async void Action(Grade x)
+        /*async void Action(Grade x)
         {
             var accommodation = await _accommodationRepository.GetAsync(x.AccommodationId);
             var dto = new GradeByGuest
@@ -141,9 +141,19 @@ public class GradeService : GradeApp.GradeAppBase
                 Accommodation = _mapper.Map<AccommodationDto>(accommodation)
             };
             response.Grades.Add(dto);
-        }
+        }*/
 
-        grades.ForEach(Action);
+        grades.ForEach(x =>
+        {
+            var accommodation = _accommodationRepository.Get(x.AccommodationId);
+            var dto = new GradeByGuest
+            {
+                Number = x.Number,
+                Id = x.Id.ToString(), 
+                Accommodation = _mapper.Map<AccommodationDto>(accommodation)
+            };
+            response.Grades.Add(dto);
+        });
         return response;
     }
 
@@ -154,14 +164,14 @@ public class GradeService : GradeApp.GradeAppBase
         var grade = 0;
         grades.ForEach(x =>
         {
-            var user = _userClient.GetUserById(x.GuestId);
+            var user = _userClient.GetUserInfo(x.GuestId);
             var date = new DateTimeOffset(x.Date.ToDateTime(TimeOnly.MinValue));
             var grader = new Grader
             {
-                Id = user.User.Id,
-                Mail = user.User.Mail,
-                Name = user.User.Name,
-                Surname = user.User.LastName
+                Id = user.Id.ToString(),
+                Mail = user.Email,
+                Name = user.Name,
+                Surname = user.LastName
             };
             var res = new AccommodationGradeResponse()
             {
