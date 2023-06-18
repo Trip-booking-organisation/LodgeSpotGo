@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Diagnostics;
+using AutoMapper;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using JetSetGo.AccommodationManagement.Application.Common.Persistence;
@@ -8,6 +9,8 @@ using JetSetGo.AccommodationManagement.Domain.Accommodations.Entities;
 using JetSetGo.AccommodationManagement.Grpc.Clients.Reservations;
 using JetSetGo.AccommodationManagement.Grpc.Clients.Users;
 using LodgeSpotGo.Shared.Events.Grades;
+using Status = Grpc.Core.Status;
+using StatusCode = Grpc.Core.StatusCode;
 
 namespace JetSetGo.AccommodationManagement.Grpc.Services.Grades;
 
@@ -19,6 +22,8 @@ public class GradeService : GradeApp.GradeAppBase
     private readonly IReservationClient _reservationClient;
     private readonly IUserClient _userClient;
     private readonly IEventBus _eventBus;
+    public const string ServiceName = "GradesService";
+    public static readonly ActivitySource ActivitySource = new(ServiceName);
 
 
     public GradeService(IGradeRepository gradeRepository, 
@@ -39,6 +44,10 @@ public class GradeService : GradeApp.GradeAppBase
     public override async Task<CreateGradeResponse> CreateGradeForAccommodation(CreateGradeRequest request,
         ServerCallContext context)
     {
+        var activity = ActivitySource.StartActivity();
+        activity?.SetTag("GradeNumber", request.Grade.Number.ToString());
+        activity?.SetTag("AccommodationId", request.Grade.AccommodationId);
+        activity?.SetTag("GuestId", request.Grade.GuestId);
         var accommodation = await GetAccommodation(request);
         ValidateRequest(request.Grade.Number);
         var reservations = _reservationClient
@@ -66,7 +75,10 @@ public class GradeService : GradeApp.GradeAppBase
             AccommodationName = accommodation.Name
         };
         await _eventBus.PublishAsync(@event);
+        activity?.Stop();
         return new CreateGradeResponse { Success = true };
+        // Add attributes or events to the span as needed
+        
     }
 
     private bool CheckIfGuestHasStayedInAccommodation(IEnumerable<GetReservationDto> reservations)
@@ -84,19 +96,24 @@ public class GradeService : GradeApp.GradeAppBase
     private async Task<Accommodation> GetAccommodation(CreateGradeRequest request)
     {
         var accommodation = await _accommodationRepository
-            .GetAsync(Guid.Parse(request.Grade.AccommodationId));
-        if (accommodation is null)
-            throw new RpcException(new Status(StatusCode.Cancelled, "Accommodation doesn't exists!"));
-        return accommodation;
+                .GetAsync(Guid.Parse(request.Grade.AccommodationId));
+            if (accommodation is null)
+                throw new RpcException(new Status(StatusCode.Cancelled, "Accommodation doesn't exists!"));
+            return accommodation;
+       
     }
 
     public override async Task<UpdateGradeResponse> UpdateGradeForAccommodation(UpdateGradeRequest request, ServerCallContext context)
     {
-       var grade =  await GetGradeById(request);
-       ValidateRequest(request.Grade.Number);
-       grade.Number = request.Grade.Number;
-       await _gradeRepository.UpdateGrade(grade);
-       return new UpdateGradeResponse { Success = true };
+        var activity = ActivitySource.StartActivity();
+        activity?.SetTag("GradeNumber", request.Grade.Number.ToString());
+        activity?.SetTag("GradeId", request.Grade.Id);
+        var grade = await GetGradeById(request);
+        ValidateRequest(request.Grade.Number);
+        grade.Number = request.Grade.Number;
+        await _gradeRepository.UpdateGrade(grade);
+        activity?.Stop();
+        return new UpdateGradeResponse { Success = true };
     }
 
     private async Task<Grade> GetGradeById(UpdateGradeRequest request)
@@ -108,26 +125,33 @@ public class GradeService : GradeApp.GradeAppBase
     }
 
     public override async Task<GetAllGradesResponse> GetAllGrades(GetAllGradesRequest request, ServerCallContext context)
-    { 
-       var response = new GetAllGradesResponse();
-       var grades =  await _gradeRepository.GetAllAsync();
-       var responseList = grades.Select(grade => _mapper.Map<GradeDto>(grade)).ToList();
-        
-       responseList.ForEach(dto => response.Grades.Add(dto));
-       return response;
+    {
+        var activity = ActivitySource.StartActivity();
+        var response = new GetAllGradesResponse();
+        var grades = await _gradeRepository.GetAllAsync();
+        var responseList = grades.Select(grade => _mapper.Map<GradeDto>(grade)).ToList();
+
+        responseList.ForEach(dto => response.Grades.Add(dto));
+        activity?.Stop();
+        return response;
     }
 
     public override async Task<DeleteGradeResponse> DeleteGrade(DeleteGradeRequest request, ServerCallContext context)
     {
+        var activity = ActivitySource.StartActivity();
+        activity?.SetTag("GradeId", request.Id);
         var grade = await _gradeRepository.GetById(Guid.Parse(request.Id));
         if (grade is null)
             throw new RpcException(new Status(StatusCode.Cancelled, "Grade not found!"));
         await _gradeRepository.DeleteGrade(grade.Id);
+        activity?.Stop();
         return new DeleteGradeResponse { Success = true };
     }
 
     public override async Task<GetGradesByGuestResponse> GetGradesByGuest(GetGradesByGuestRequest request, ServerCallContext context)
     {
+        var activity = ActivitySource.StartActivity();
+        activity?.SetTag("GradeId", request.GuestId);
         var grades = await _gradeRepository.GetAllByGuest(Guid.Parse(request.GuestId));
         var response = new GetGradesByGuestResponse();
 
@@ -137,18 +161,21 @@ public class GradeService : GradeApp.GradeAppBase
             var dto = new GradeByGuest
             {
                 Number = x.Number,
-                Id = x.Id.ToString(), 
+                Id = x.Id.ToString(),
                 Accommodation = _mapper.Map<AccommodationDto>(accommodation)
             };
             response.Grades.Add(dto);
         }
 
         grades.ForEach(Action);
+        activity?.Stop();
         return response;
     }
 
     public override async Task<GetGradesByAccommodationResponse> GetGradesByAccommodation(GetGradesByAccommodationRequest request, ServerCallContext context)
     {
+        var activity = ActivitySource.StartActivity();
+        activity?.SetTag("AccommodationId", request.AccommodationId);
         var grades = await _gradeRepository.GetByAccommodation(Guid.Parse(request.AccommodationId));
         var response = new GetGradesByAccommodationResponse();
         var grade = 0;
@@ -176,6 +203,7 @@ public class GradeService : GradeApp.GradeAppBase
         });
         var averageGrade = grade / grades.Count;
         response.AverageGrade = averageGrade;
+        activity?.Stop();
         return response;
     }
 }

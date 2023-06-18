@@ -1,4 +1,7 @@
+using System.Diagnostics;
+using System.Runtime.InteropServices.JavaScript;
 using JetSetGo.UsersManagement.Grpc;
+using JetSetGo.UsersManagement.Grpc.Endpoints;
 using JetSetGo.UsersManagement.Grpc.Services;
 using JetSetGo.UsersManagement.Infrastructure;
 using JetSetGo.UsersManagement.Infrastructure.MessageBroker.Settings;
@@ -6,8 +9,35 @@ using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddOpenTelemetry()
+    .WithTracing(services =>
+{
+    services
+        /*.*//*AddSource(UserEndpoints.GetUserService)
+        .SetResourceBuilder(TracingResourceBuilder.GetUserServiceResource())
+        .AddSource(UserEndpoints.BuyTicketsService)
+        .SetResourceBuilder(TracingResourceBuilder.BuyTicketsServiceResource())
+        .AddSource(UserEndpoints.DeleteGradeService)
+        .SetResourceBuilder(TracingResourceBuilder.DeleteGradeServiceResource())*/
+        .AddSource(UserEndpoints.GetOutstandingHostService)
+        .SetResourceBuilder(TracingResourceBuilder.GetOutstandingHostServiceResource())
+        /*.AddSource(UserEndpoints.UpdateGradeService)
+        .SetResourceBuilder(TracingResourceBuilder.BuyTicketsServiceResource())
+        .AddSource(UserEndpoints.GetGradesByHostService)
+        .SetResourceBuilder(TracingResourceBuilder.GetGradesByHostServiceResource())
+        .AddSource(FilterService.FilterUserService)
+        .SetResourceBuilder(TracingResourceBuilder.FiletServiceResource())
+        .AddSource(GetUserService.UserService)*/
+        /*.SetResourceBuilder(TracingResourceBuilder.UserServiceResource())*/
+        .AddAspNetCoreInstrumentation()
+        .AddHttpClientInstrumentation()
+        .AddJaegerExporter()
+        .SetSampler(new AlwaysOnSampler());
+});
 builder.Configuration
     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
     .AddEnvironmentVariables();

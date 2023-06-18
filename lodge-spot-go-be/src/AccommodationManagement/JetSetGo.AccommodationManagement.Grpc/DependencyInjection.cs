@@ -2,6 +2,9 @@
 using JetSetGo.AccommodationManagement.Grpc.Clients.Users;
 using JetSetGo.AccommodationManagement.Grpc.Mapping;
 using JetSetGo.AccommodationManagement.Grpc.Mapping.MappingToGrpcResponse;
+using JetSetGo.AccommodationManagement.Grpc.Services;
+using JetSetGo.AccommodationManagement.Grpc.Services.Grades;
+using OpenTelemetry.Trace;
 
 namespace JetSetGo.AccommodationManagement.Grpc;
 

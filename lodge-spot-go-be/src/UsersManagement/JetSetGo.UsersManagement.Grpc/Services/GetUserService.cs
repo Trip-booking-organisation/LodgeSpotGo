@@ -1,4 +1,5 @@
-﻿using Grpc.Core;
+﻿using System.Diagnostics;
+using Grpc.Core;
 using JetSetGo.UserManagement.Grpc;
 using JetSetGo.UsersManagement.Grpc.Common.Utility;
 using JetSetGo.UsersManagement.Grpc.Keycloak;
@@ -9,6 +10,8 @@ public class GetUserService : UserApp.UserAppBase
 {
     private readonly ILogger<GetUserService> _logger;
     private readonly KeyCloakConnections _connections;
+    public const string UserService = "FilterUser";
+    public static ActivitySource Activity = new(UserService);
     public GetUserService(ILogger<GetUserService> logger, KeyCloakConnections connections)
     {
         _logger = logger;
@@ -17,6 +20,8 @@ public class GetUserService : UserApp.UserAppBase
 
     public override async Task<GetUserResponse> GetUserById(GetUserRequest request, ServerCallContext context)
     {
+        var activity = Activity.StartActivity();
+        activity?.SetTag("Id", request.Id);
         var user = await _connections.GetUserIdAsync(Guid.Parse(request.Id));
         
         _logger.LogInformation(@"----------------------Request came in", request.Id);
@@ -29,6 +34,7 @@ public class GetUserService : UserApp.UserAppBase
                 Name = user.FirstName
             }
         };
+        activity?.Stop();
         return result;
     }
 }
