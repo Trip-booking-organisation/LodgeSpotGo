@@ -18,6 +18,7 @@ public static class DependencyInjection
         services.AddScoped<IClientAccommodationMediator,GetAccommodationClientMediator>();
         services.AddScoped<IGetUserClient,GetUserInfosClient>();
         services.AddScoped<CreateReservationHandler>();
+        services.AddScoped<ReservationSagaOrchestrator>();
         return services;
     }
 }

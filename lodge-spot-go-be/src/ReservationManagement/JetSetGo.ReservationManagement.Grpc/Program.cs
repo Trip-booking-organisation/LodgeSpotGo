@@ -7,6 +7,9 @@ using JetSetGo.ReservationManagement.Grpc.Saga.States;
 using JetSetGo.ReservationManagement.Grpc.Services;
 using JetSetGo.ReservationManagement.Infrastructure;
 using JetSetGo.ReservationManagement.Infrastructure.MessageBroker.Settings;
+using LodgeSpotGo.Shared.Events.Email;
+using LodgeSpotGo.Shared.Events.Notification;
+using LodgeSpotGo.Shared.Events.Reservation;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
@@ -53,8 +56,10 @@ builder.Services.AddSingleton(provider =>
 builder.Services.AddMassTransit(busConfigurator =>
 {
     var assembly = typeof(IAssemblyMarker).Assembly;
-    // busConfigurator.AddSagaStateMachine<ReservationStateMachine,
-    //     ReservationState>().InMemoryRepository();
+    busConfigurator.AddSagaStateMachine<ReservationStateMachine,
+        ReservationState>().InMemoryRepository();
+    busConfigurator.AddRequestClient<CreateNotificationCommand>(new Uri("exchange:notification-status"));
+    busConfigurator.AddRequestClient<NotificationCreatedEvent>(new Uri("exchange:email-status"));
     busConfigurator.AddSagas(assembly);
     busConfigurator.AddActivities(assembly);
     busConfigurator.SetKebabCaseEndpointNameFormatter();

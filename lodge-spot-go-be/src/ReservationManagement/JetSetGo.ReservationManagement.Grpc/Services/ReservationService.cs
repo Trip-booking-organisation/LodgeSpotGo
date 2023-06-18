@@ -15,7 +15,9 @@ using JetSetGo.ReservationManagement.Grpc.Clients;
 using JetSetGo.ReservationManagement.Grpc.Handlers;
 using JetSetGo.ReservationManagement.Grpc.Mapping.MapToGrpcResponse;
 using JetSetGo.ReservationManagement.Grpc.Saga;
+using LodgeSpotGo.Shared.Events.Notification;
 using LodgeSpotGo.Shared.Events.Reservation;
+using MassTransit;
 using MediatR;
 
 namespace JetSetGo.ReservationManagement.Grpc.Services;
@@ -30,6 +32,7 @@ public class ReservationService : ReservationApp.ReservationAppBase
     private readonly IGetAccommodationClient _accommodationClient;
     private readonly IEventBus _bus;
     private readonly CreateReservationHandler _createReservationHandler;
+    private readonly ReservationSagaOrchestrator _sagaOrchestrator;
 
     public ReservationService(
         IReservationRepository reservationRepository, 
@@ -39,7 +42,8 @@ public class ReservationService : ReservationApp.ReservationAppBase
         IMapToGrpcResponse mapToGrpcResponse, 
         IGetAccommodationClient accommodationClient, 
         IEventBus bus,
-        CreateReservationHandler createReservationHandler)
+        CreateReservationHandler createReservationHandler,
+        ReservationSagaOrchestrator sagaOrchestrator)
     {
         _logger = logger;
         _reservationRepository = reservationRepository;
@@ -49,6 +53,7 @@ public class ReservationService : ReservationApp.ReservationAppBase
         _accommodationClient = accommodationClient;
         _bus = bus;
         _createReservationHandler = createReservationHandler;
+        _sagaOrchestrator = sagaOrchestrator;
     }
     /*[Authorize(Roles = "host,guest")]*/
     public override async Task<GetReservationListResponse> GetReservationList(GetReservationListRequest request, ServerCallContext context)
@@ -65,23 +70,10 @@ public class ReservationService : ReservationApp.ReservationAppBase
         CreateReservationRequest request, 
         ServerCallContext context)
     {
-        var reservation = await _createReservationHandler.HandleCreateReservation(request);
-        await _reservationRepository.CreateAsync(reservation.Reservation);
-        var @event = new CreatedReservationEvent
-        {
-            ReservationId = reservation.Reservation.Id,
-            GuestId = reservation.Reservation.GuestId,
-            AccommodationName = reservation.AccommodationResponse.Accommodation.Name,
-            AccommodationId =  reservation.AccommodationResponse.Accommodation.Id,
-            HostId = new Guid(reservation.AccommodationResponse.Accommodation.HostId),
-            From = reservation.Reservation.DateRange.From,
-            To = reservation.Reservation.DateRange.To,
-            GuestEmail = reservation.Reservation.GuestEmail,
-        };
-        await _bus.PublishAsync(@event);
+        var result = await _sagaOrchestrator.CreateSaga(request);
         return new CreateReservationResponse
         {
-            CreatedId = $"/api/v1/reservations/{reservation.Reservation.Id.ToString()}"
+            CreatedId = $"/api/v1/reservations/{result.ReservationId}"
         };
     }
     /*[Authorize(Roles = "guest")]*/
