@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Diagnostics;
+using AutoMapper;
 using Grpc.Core;
 using JetSetGo.ReservationManagement.Application.CancelReservation;
 using JetSetGo.ReservationManagement.Application.Clients;
@@ -30,6 +31,10 @@ public class ReservationService : ReservationApp.ReservationAppBase
     private readonly IGetAccommodationClient _accommodationClient;
     private readonly IEventBus _bus;
     private readonly CreateReservationHandler _createReservationHandler;
+    public const string ServiceName = "ReservationService";
+    public static readonly ActivitySource ActivitySource = new("Reservation activity");
+
+
 
     public ReservationService(
         IReservationRepository reservationRepository, 
@@ -53,11 +58,13 @@ public class ReservationService : ReservationApp.ReservationAppBase
     /*[Authorize(Roles = "host,guest")]*/
     public override async Task<GetReservationListResponse> GetReservationList(GetReservationListRequest request, ServerCallContext context)
     {
+        var activity = ActivitySource.StartActivity();
         var list = new GetReservationListResponse();
         var reservations = await _reservationRepository.GetAllAsync();
         _logger.LogInformation(@"List {}", reservations.ToString());
         var responseList = reservations.Select(res => _mapper.Map<ReadReservationDto>(res)).ToList();
         responseList.ForEach( dto => list.Reservations.Add(dto));
+        activity?.Stop();
         return list;
     }
     /*[Authorize(Roles = "guest")]*/
@@ -65,6 +72,7 @@ public class ReservationService : ReservationApp.ReservationAppBase
         CreateReservationRequest request, 
         ServerCallContext context)
     {
+        var activity = ActivitySource.StartActivity();
         var reservation = await _createReservationHandler.HandleCreateReservation(request);
         await _reservationRepository.CreateAsync(reservation.Reservation);
         var @event = new CreatedReservationEvent
@@ -79,6 +87,7 @@ public class ReservationService : ReservationApp.ReservationAppBase
             GuestEmail = reservation.Reservation.GuestEmail,
         };
         await _bus.PublishAsync(@event);
+        activity?.Stop();
         return new CreateReservationResponse
         {
             CreatedId = $"/api/v1/reservations/{reservation.Reservation.Id.ToString()}"
@@ -87,48 +96,60 @@ public class ReservationService : ReservationApp.ReservationAppBase
     /*[Authorize(Roles = "guest")]*/
     public override async Task<CancelReservationResponse> CancelReservation(CancelReservationRequest request, ServerCallContext context)
     {
+        var activity = ActivitySource.StartActivity();
         var cancelRequest =  _mapper.Map<CancelReservationCommand>(request);
         var result = await _sender.Send(cancelRequest);
         _logger.LogInformation(@"------------------Cancel reservation status : {}",result.ToString());
         await SendCanceledNotification(new Guid(request.Id));
+        activity?.Stop();
         return _mapper.Map<CancelReservationResponse>(result);
     }
     /*[Authorize(Roles = "guest")]*/
     public override async Task<UpdateReservationStatusResponse> UpdateReservation(UpdateReservationStatusRequest request, ServerCallContext context)
     {
+        var activity = ActivitySource.StartActivity();
         var command = _mapper.Map<UpdateReservationStatusCommand>(request.Reservation);
         var result = await _sender.Send(command);
+        activity?.Stop();
         return _mapper.Map<UpdateReservationStatusResponse>(result);
     }
     /*[Authorize(Roles = "guest")]*/
     public override async Task<GetReservationsByGuestIdResponse> GetReservationsByGuestId(GetReservationsByGuestIdRequest request, ServerCallContext context)
     {
+        var activity = ActivitySource.StartActivity();
         var query = _mapper.Map<GetReservationsByGuestIdQuery>(request);
         var response = await _sender.Send(query);
         var result = _mapToGrpcResponse.MapGetByGuestIdToGrpcResponse(response);
+        activity?.Stop();
         return await result;
     }
 
     public override async Task<GetReservationByAccommodationResponse> GetReservationsByAccommodationId(GetReservationByAccommodationRequest request, ServerCallContext context)
     {
+        var activity = ActivitySource.StartActivity();
         var reservations = await _reservationRepository.GetReservationsByAccommodation(Guid.Parse(request.AccommodationId));
         var result = _mapToGrpcResponse.MapGetByAccommodationToGrpcResponse(reservations);
+        activity?.Stop();
         return await result;
     }
 
     public override async Task<GetDeletedReservationsByGuestResponse> GetDeletedReservationsByGuestId(GetDeletedReservationsByGuestRequest request, ServerCallContext context)
     {
+        var activity = ActivitySource.StartActivity();
         var reservations = await _reservationRepository.GetDeletedByGuest(Guid.Parse(request.GuestId));
+        activity?.Stop();
         return  _mapToGrpcResponse.MapDeletedCountToGrpcResponse(reservations);
         
     }
 
     public override async Task<DeleteReservationResponse> DeleteReservation(DeleteReservationRequest request, ServerCallContext context)
     {
+        var activity = ActivitySource.StartActivity();
         _logger.LogInformation("-------- ");
         var id = Guid.Parse(request.Id);
         await _reservationRepository.DeleteReservation(id);
         await SendCanceledNotification(id);
+        activity?.Stop();
         return new DeleteReservationResponse
         {
             Success = true

@@ -13,8 +13,7 @@ public class SearchAccommodationService : SearchAccommodationApp.SearchAccommoda
     private readonly ISender _sender;
     private readonly IMapper _mapper;
     private readonly IMappingToGrpcResponse _mappingToGrpcResponse;
-    public const string ServiceName = "GradesService";
-    public static readonly ActivitySource ActivitySource = new(ServiceName);
+    public static readonly ActivitySource ActivitySource = new("SearchAccommodationActivity");
 
     public SearchAccommodationService(ILogger<SearchAccommodationService> logger, ISender sender, IMapper mapper, IMappingToGrpcResponse mappingToGrpcResponse)
     {

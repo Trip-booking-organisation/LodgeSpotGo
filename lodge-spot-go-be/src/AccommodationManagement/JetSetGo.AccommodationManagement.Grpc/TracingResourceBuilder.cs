@@ -14,7 +14,7 @@ public static class TracingResourceBuilder
     }
     public static ResourceBuilder AccommodationServiceResource()
     {
-        return ResourceBuilder.CreateDefault().AddService(AccommodationService.ActivitySource.Name);
+        return ResourceBuilder.CreateDefault().AddService(AccommodationService.ServiceName);
     }
     public static ResourceBuilder GetAccommodationServiceResource()
     {

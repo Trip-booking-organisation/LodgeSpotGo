@@ -1,4 +1,5 @@
-﻿using Google.Protobuf.Collections;
+﻿using System.Diagnostics;
+using Google.Protobuf.Collections;
 using Grpc.Core;
 using LodgeSpotGo.SearchAndFilter.Grpc.Clients.FilterAverageGradeAccommodation;
 using LodgeSpotGo.SearchAndFilter.Grpc.Clients.User;
@@ -9,6 +10,7 @@ public class FilterService : FilterApp.FilterAppBase
 {
     private readonly IFilterAverageGradeClient _gradeClient;
     private readonly IUserClient _userClient;
+    public static readonly ActivitySource ActivitySource = new("Filter activity");
 
     public FilterService(IFilterAverageGradeClient gradeClient, IUserClient userClient)
     {
@@ -18,6 +20,7 @@ public class FilterService : FilterApp.FilterAppBase
 
     public override Task<FilterReservationListResponse> Filter(ReservationFilterRequest request, ServerCallContext context)
     {
+        var activity = ActivitySource.StartActivity();
         var filteredByAmenities = FilterAccommodationsByAmenities(request.Filter);
         if (request.Filter.OutstandingHost)
         {
@@ -27,6 +30,7 @@ public class FilterService : FilterApp.FilterAppBase
        
         var response = new FilterReservationListResponse();
         response.Accommodations.AddRange(filteredByAmenities);
+        activity?.Stop();
         return Task.FromResult(response);
     }
 

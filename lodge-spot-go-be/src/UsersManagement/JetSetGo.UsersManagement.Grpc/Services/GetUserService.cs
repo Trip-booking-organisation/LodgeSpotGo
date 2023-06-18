@@ -10,8 +10,7 @@ public class GetUserService : UserApp.UserAppBase
 {
     private readonly ILogger<GetUserService> _logger;
     private readonly KeyCloakConnections _connections;
-    public const string UserService = "FilterUser";
-    public static ActivitySource Activity = new(UserService);
+    public static ActivitySource Activity = new("GetUserActivity");
     public GetUserService(ILogger<GetUserService> logger, KeyCloakConnections connections)
     {
         _logger = logger;

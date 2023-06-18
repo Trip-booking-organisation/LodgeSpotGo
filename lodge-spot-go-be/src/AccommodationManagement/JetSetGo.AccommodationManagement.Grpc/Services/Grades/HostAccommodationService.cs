@@ -7,8 +7,7 @@ namespace JetSetGo.AccommodationManagement.Grpc.Services.Grades;
 public class HostAccommodationService :HostAccommodationApp.HostAccommodationAppBase
 {
     private readonly IAccommodationRepository _accommodationRepository;
-    public const string ServiceName = "HostAccommodationService";
-    public static readonly ActivitySource ActivitySource = new(ServiceName);
+    public static readonly ActivitySource ActivitySource = new("HostAccommodationActivity");
 
     public HostAccommodationService(IAccommodationRepository accommodationRepository)
     {

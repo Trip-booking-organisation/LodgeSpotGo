@@ -19,22 +19,8 @@ var builder = WebApplication.CreateBuilder(args);
         .WithTracing(services =>
         {
             services
-                .AddSource(GradeService.ServiceName)
-                .SetResourceBuilder(TracingResourceBuilder.GradeServiceResource())
-               .AddSource(AccommodationService.ServiceName)
+                .AddSource(AccommodationService.ServiceName)
                 .SetResourceBuilder(TracingResourceBuilder.AccommodationServiceResource())
-                .AddSource(GetAccommodationService.ServiceName)
-               .SetResourceBuilder(TracingResourceBuilder.GetAccommodationServiceResource())
-               .AddSource(HostAccommodationService.ServiceName)
-               .SetResourceBuilder(TracingResourceBuilder.HostAccommodationServiceResource())
-               .AddSource(SearchAccommodationService.ServiceName)
-               .SetResourceBuilder(TracingResourceBuilder.SearchAccommodationServiceResource())
-               .AddSource(FilterGrades.ServiceName)
-               .SetResourceBuilder(TracingResourceBuilder.FilterGradesServiceResource())
-               .AddSource(ReservationClient.ServiceName)
-               .SetResourceBuilder(TracingResourceBuilder.ReservationClientResource())
-               .AddSource(UserClient.ServiceName)
-               .SetResourceBuilder(TracingResourceBuilder.UserClientResource())
                 .AddAspNetCoreInstrumentation()
                 .AddGrpcClientInstrumentation()
                 .AddJaegerExporter()

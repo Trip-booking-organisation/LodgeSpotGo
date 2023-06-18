@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using FluentResults;
 using JetSetGo.UserManagement.Grpc;
 using JetSetGo.UsersManagement.Application.Common.Persistence;
 using JetSetGo.UsersManagement.Application.MessageBroker;
@@ -14,15 +13,14 @@ using JetSetGo.UsersManagement.Grpc.Services;
 using LodgeSpotGo.Shared.Events.Host;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using OpenTelemetry.Trace;
 
 namespace JetSetGo.UsersManagement.Grpc.Endpoints;
 
 public static class UserEndpoints
 {
-    public const string GetUserService = "GetUser";
-    public static  ActivitySource GetUserActivity = new(GetUserService);
-    public const string BuyTicketsService = "BuyTickets";
+    public const string UserService = "UserService";
+    public static  ActivitySource GetUserActivity = new("UserActivity");
+    /*public const string BuyTicketsService = "BuyTickets";
     public static  ActivitySource BuyTicketsActivity = new(BuyTicketsService);
     public const string DeleteGradeService = "DeleteGrade";
     public static  ActivitySource DeleteGradeActivity = new(DeleteGradeService);
@@ -31,7 +29,7 @@ public static class UserEndpoints
     public const string UpdateGradeService = "UpdateGrade";
     public static  ActivitySource UpdateGradeActivity = new(UpdateGradeService);
     public const string GetGradesByHostService = "GetGradesByHost";
-    public static  ActivitySource GetGradesByHostServiceActivity = new(GetGradesByHostService);
+    public static  ActivitySource GetGradesByHostServiceActivity = new(GetGradesByHostService);*/
 
     public static void MapUserEndpoints(this WebApplication application)
     {
@@ -49,7 +47,7 @@ public static class UserEndpoints
 
     private static async Task<IResult> BuyTickets(CreateTicketRequest request,[FromServices] JetSetGoService service)
     {
-       var activity = BuyTicketsActivity.StartActivity(); 
+       var activity = GetUserActivity.StartActivity(); 
        activity?.SetTag("Token", request.Token);
        var response  = await service.BuyTickets(request);
        activity?.Stop();
@@ -62,7 +60,7 @@ public static class UserEndpoints
         [FromServices] IOutstandingHostRepository repo,
         [FromServices] IEventBus eventBus)
     {
-        var activity = GetOutstandingHostActivity.StartActivity(); 
+        var activity = GetUserActivity.StartActivity(); 
         activity?.SetTag("Id",id);
         var result = await service.GetOutstandingHost(id);
         var host = repo.GetByHostId(id);
@@ -105,7 +103,7 @@ public static class UserEndpoints
 
     private static async Task<IResult> DeleteGrade([FromBody]DeleteHostGradeRequest request, [FromServices]GradesGrpcService gradesGrpcService)
     {
-        var activity = DeleteGradeActivity.StartActivity(); 
+        var activity = GetUserActivity.StartActivity(); 
         activity?.SetTag("GradeId",request.gradeId);
         var response = await gradesGrpcService.DeleteHostGrade(request);
         activity?.Stop();
@@ -132,7 +130,7 @@ public static class UserEndpoints
 
     private static async Task<IResult> UpdateGrade([FromBody]UpdateHostGradeRequest request, [FromServices]GradesGrpcService gradesGrpcService)
     {
-        var activity = UpdateGradeActivity.StartActivity();
+        var activity = GetUserActivity.StartActivity();
         activity?.SetTag("Id", request.Id.ToString());
         var response = await gradesGrpcService.UpdateHostGrade(request);
         activity?.Stop();
@@ -141,7 +139,7 @@ public static class UserEndpoints
     
     private static async Task<IResult> GetGradesByHost([FromBody]GetGradesByHostRequest request, [FromServices]GradesGrpcService gradesGrpcService)
     {
-        var activity = GetOutstandingHostActivity.StartActivity();
+        var activity = GetUserActivity.StartActivity();
         activity?.SetTag("HostId", request.HostId.ToString());
         var response = await gradesGrpcService.GetGradesByHost(request);
         activity?.Stop();
