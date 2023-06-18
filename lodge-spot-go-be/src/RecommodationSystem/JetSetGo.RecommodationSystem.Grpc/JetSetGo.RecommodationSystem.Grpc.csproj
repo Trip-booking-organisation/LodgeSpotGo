@@ -24,6 +24,7 @@
         <PackageReference Include="Grpc.AspNetCore" Version="2.49.0" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.5" />
         <PackageReference Include="Microsoft.AspNetCore.Grpc.Swagger" Version="0.3.5" />
+        <PackageReference Include="Neo4j.Driver" Version="5.9.0" />
         <PackageReference Include="Neo4jClient" Version="5.1.11" />
     </ItemGroup>
 

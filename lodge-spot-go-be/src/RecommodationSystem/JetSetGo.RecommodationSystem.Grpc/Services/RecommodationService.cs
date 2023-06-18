@@ -18,17 +18,17 @@ public class RecommodationService : ReccomodationApp.ReccomodationAppBase
         _mapper = mapper;
     }
 
-    public override async Task<getRecommodationsResponse> GetRecommodations(GetRecommodationReqest request, ServerCallContext context)
+    public override async Task<GetRecommodationsResponse> GetRecommodations(GetRecommodationReqest request, ServerCallContext context)
     {
         var guest = new Guest
         {
             Name = request.User.Name
         };
 
-        var guests = await _recommendationService.GetRecommendedAccommodations(guest);
-        return new getRecommodationsResponse()
+        var accommodations = await _recommendationService.GetRecommendedAccommodations(guest);
+        return new GetRecommodationsResponse()
         {
-            Response = { guests.Select(x => _mapper.Map<UserRecDto>(x)).ToList() }
+            Response = { accommodations.Select(x => _mapper.Map<RecAccommodationResponse>(x)).ToList() }
         };
         
 

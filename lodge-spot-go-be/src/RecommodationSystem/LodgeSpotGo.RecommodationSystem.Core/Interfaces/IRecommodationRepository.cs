@@ -11,10 +11,10 @@ public interface IRecommodationRepository
     Task<Guest?> GetGuestByMail(string mail);
 
     Task<Accommodation?> GetAccommodationById(string id);
-    
-    Task<bool> MakeAccommodationGrade(Guest guest, string accommodationId,int grade);
-    
-    Task<List<Guest>> GetGuestsByReservedAccommodations(string guestName);
-    Task<List<Guest>> GetGuestsByGradedAccommodations(string guestName);
 
+    Task<bool> MakeAccommodationGrade(Guest guest, string accommodationId, int grade);
+
+    Task<List<Guest>> GetGuestsByReservedAccommodations(string guestName);
+    Task<List<Accommodation>> GetGuestsReservedAccommodations(string guestName);
+    Task<List<Guest>> GetGuestsByGradedAccommodations1(string guestName);
 }

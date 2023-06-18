@@ -57,10 +57,15 @@ public class RecommendationService
         return await _recommodationRepository.CreateGuest(request);
     }
 
-    public async Task<List<Guest>> GetRecommendedAccommodations(Guest request)
+    public async Task<List<Accommodation>> GetRecommendedAccommodations(Guest request)
     {
         List<Guest> similarGuests = await GetSimilarGuests(request);
-        return similarGuests;
+        List<Accommodation> accommodations = new List<Accommodation>();
+        foreach (var guest in similarGuests)
+        {
+            accommodations.AddRange(await _recommodationRepository.GetGuestsReservedAccommodations(guest.Name));
+        }
+        return FilterRecommendedAccommodations(accommodations);
     }
 
     public async Task<List<Accommodation>> GetSimilarGuestsResservedAccommodations()
@@ -69,10 +74,10 @@ public class RecommendationService
     }
 
 
-    private async Task<List<Guest>> GetSimilarGuests(Guest request)
+    public async Task<List<Guest>> GetSimilarGuests(Guest request)
     {
         List<Guest> similarGuests = await _recommodationRepository.GetGuestsByReservedAccommodations(request.Name);
-        similarGuests.AddRange(await _recommodationRepository.GetGuestsByGradedAccommodations(request.Name));
+        similarGuests.AddRange(await _recommodationRepository.GetGuestsByGradedAccommodations1(request.Name));
         return FilterSimlarGuests(request,similarGuests);
     }
 
@@ -89,6 +94,33 @@ public class RecommendationService
         }
 
         return filtered;
+    }
+    
+    private List<Accommodation> FilterRecommendedAccommodations(List<Accommodation> accommodations)
+    {
+        List<Accommodation> filtered = new List<Accommodation>();
+        foreach (var acc in accommodations)
+        {
+            if (!CheckIfContains(filtered,acc))
+            {
+                filtered.Add(acc);
+            }
+        }
+
+        return filtered;
+    }
+
+    private Boolean CheckIfContains(List<Accommodation> accommodations, Accommodation accommodation)
+    {
+        foreach (var acc in accommodations)
+        {
+            if (acc.Id == accommodation.Id)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
     
 }

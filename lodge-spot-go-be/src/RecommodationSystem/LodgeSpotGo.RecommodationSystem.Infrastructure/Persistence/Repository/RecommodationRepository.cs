@@ -1,5 +1,6 @@
 ﻿using LodgeSpotGo.RecommodationSystem.Core.Model;
-
+using MassTransit.Initializers;
+using Neo4j.Driver;
 using Neo4jClient;
 
 
@@ -7,107 +8,237 @@ namespace LodgeSpotGo.RecommodationSystem.Infrastructure.Persistence.Repository;
 
 public class RecommodationRepository : IRecommodationRepository
 {
-    private readonly IGraphClient _client;
-
-    public RecommodationRepository(IGraphClient client)
+    // private readonly IGraphClient _client;
+    
+    private readonly IDriver driver;
+    private DbSettings _dbSettings;
+    public RecommodationRepository(DbSettings dbSettings)
     {
-        _client = client;
+        
+        // _client = client;
+        _dbSettings = dbSettings;
+        driver = GraphDatabase.Driver(_dbSettings.Neo4jDb, AuthTokens.Basic(dbSettings.DbName, dbSettings.DbPassword));
     }
 
     public async Task<bool> getRecommodations()
+{
+    await using var session = driver.AsyncSession();
+    await session.WriteTransactionAsync(async tx =>
     {
-        // var recommodations = await _client.Cypher.Match("(n:Recommodation)")
-        //     .Return(n => n.As<Recommodation>()).ResultsAsync;
         var rec = new Recommodation
         {
             name = "asgdsdasfdsfd"
         };
-        await _client.Cypher.Create("(r:Recommodation $rec)")
-            .WithParam("rec", rec)
-            .ExecuteWithoutResultsAsync();
-        return true;
+
+        var queryText = @"
+        CREATE (r:Recommodation $rec)
+        ";
+        await tx.RunAsync(queryText, new { rec });
+    });
+
+    return true;
+}
+
+public async Task<bool> MakeReservation(Guest guest, string accommodationId)
+{
+    await using var session = driver.AsyncSession();
+    await session.WriteTransactionAsync(async tx =>
+    {
+        var queryText = @"
+        MATCH (a:Accommodation),(u:Guest)
+        WHERE a.Id = $accommodationId AND u.Name = $guestName
+        CREATE (u)-[r:hasReserved]->(a)
+        ";
+        await tx.RunAsync(queryText, new { accommodationId, guestName = guest.Name });
+    });
+
+    return true;
+}
+
+public async Task<Guest> CreateGuest(Guest request)
+{
+    await using var session = driver.AsyncSession();
+    await session.WriteTransactionAsync(async tx =>
+    {
+        var queryText = @"
+        CREATE (r:Guest $request)
+        ";
+        await tx.RunAsync(queryText, new { request });
+    });
+
+    return request;
+}
+
+public async Task<Guest?> GetGuestByMail(string mail)
+{
+    await using var session = driver.AsyncSession();
+    var result = await session.ReadTransactionAsync(async tx =>
+    {
+        var queryText = @"
+        MATCH (g:Guest)
+        WHERE g.Name = $mail
+        RETURN g
+        ";
+        var queryResult = await tx.RunAsync(queryText, new { mail });
+        return await queryResult.ToListAsync();
+    });
+
+    var guestNode = result.FirstOrDefault();
+    if (guestNode != null)
+    {
+        var guestProperties = guestNode["g"].As<INode>().Properties;
+        return new Guest
+        {
+            Name = guestProperties["Name"].As<string>()
+            // Set other properties as needed
+        };
     }
 
-    public async Task<bool> MakeReservation(Guest guest, string accommodationId)
+    return null;
+}
+
+public async Task<Accommodation?> GetAccommodationById(string id)
+{
+    await using var session = driver.AsyncSession();
+    var result = await session.ReadTransactionAsync(async tx =>
     {
-        await _client.Cypher.Match("(a:Accommodation),(u:Guest)")
-            .Where((Accommodation a, Guest u) => a.Id == accommodationId && u.Name == guest.Name)
-            .Create("(u) - [r:hasReserved]->(a)")
-            .ExecuteWithoutResultsAsync();
-        return true;
+        var queryText = @"
+        MATCH (a:Accommodation)
+        WHERE a.Id = $id
+        RETURN a
+        ";
+        var queryResult = await tx.RunAsync(queryText, new { id });
+        return await queryResult.ToListAsync();
+    });
+
+    var accommodationNode = result.FirstOrDefault();
+    if (accommodationNode != null)
+    {
+        var accommodationProperties = accommodationNode["a"].As<INode>().Properties;
+        return new Accommodation
+        {
+            Id = accommodationProperties["Id"].As<string>(),
+            // Set other properties as needed
+        };
     }
 
-    public async Task<Guest> CreateGuest(Guest request)
-    {
-        await _client.Cypher.Create("(r:Guest $request)")
-            .WithParam("request", request)
-            .ExecuteWithoutResultsAsync();
-        return request;
-    }
-
-    public async Task<Guest?> GetGuestByMail(string mail)
-    {
-        var guests = await _client.Cypher.Match("(g:Guest)")
-            .Where((Guest g) => g.Name == mail)
-            .Return(g => g.As<Guest>()).ResultsAsync;
-        return guests.FirstOrDefault();
-    }
+    return null;
+}
     
-    public async Task<Accommodation?> GetAccommodationById(string id)
+public async Task<List<Guest>> GetGuestsByReservedAccommodations(string guestEmail)
+{
+    await using var session = driver.AsyncSession();
+    var guestList  = await session.ExecuteReadAsync(async tx =>
     {
-        var accommodations = await _client.Cypher.Match("(a:Accommodation)")
-            .Where((Accommodation a) => a.Id == id)
-            .Return(a => a.As<Accommodation>()).ResultsAsync;
-        return accommodations.FirstOrDefault();
+        var queryText = @"
+        MATCH (givenGuest:Guest {Name: $email})-[:hasReserved]->(accommodation:Accommodation)<-[:hasReserved]-(guest:Guest) 
+        WHERE givenGuest <> guest WITH guest, COUNT(DISTINCT accommodation) AS reservationCount 
+        WHERE reservationCount >= 2 
+        RETURN guest";
+        var result = await tx.RunAsync(queryText, new { email = guestEmail });
+
+
+        return await result.ToListAsync(record =>
+        {
+            var guest = record["guest"].As<INode>();
+            var name = guest.Properties["Name"].As<string>();
+            return new Guest { Name = name };
+        });
+    });
+    return guestList;
+}
+
+public async Task<List<Accommodation>> GetGuestsReservedAccommodations(string guestName)
+{
+    await using var session = driver.AsyncSession();
+    var accommodationList = await session.ExecuteReadAsync(async qr =>
+    {
+        var queryText =
+            @"MATCH (givenGuest:Guest {Name: $email})-[reserved:hasReserved]->(accommodation:Accommodation)  " +
+            "Return accommodation";
+        var result = await qr.RunAsync(queryText, new { email = guestName });
+        return await result.ToListAsync(record =>
+        {
+            var accommodation = record["accommodation"].As<INode>();
+            var id = accommodation.Properties["Id"].As<string>();
+            var name = accommodation.Properties["Name"].As<string>();
+            return new Accommodation { Id = id, Name = name };
+        });
+    });
+    return accommodationList;
+}
+
+
+public async Task<List<Guest>> GetGuestsByGradedAccommodations1(string guestEmail)
+    {
+        await using var session = driver.AsyncSession();
+        var guestList  = await session.ExecuteReadAsync(async tx =>
+        {
+            var queryText = @"
+            MATCH (givenGuest:Guest {Name: $email})-[grade1:hasGraded]->(accommodation:Accommodation)<-[grade:hasGraded]-(guest:Guest)
+            WHERE givenGuest <> guest AND (grade1.grade = grade.grade OR abs(grade1.grade - grade.grade) = 1)
+            RETURN guest
+            ";
+            var result = await tx.RunAsync(queryText, new { email = guestEmail });
+
+
+            return await result.ToListAsync(record =>
+            {
+                var guest = record["guest"].As<INode>();
+                var name = guest.Properties["Name"].As<string>();
+                return new Guest { Name = name };
+            });
+        });
+        return guestList;
     }
-
-    public async Task<List<Guest>> GetGuestsByReservedAccommodations(string guestEmail)
+    // string cypherQuery = @"
+    //         MATCH (givenGuest:Guest {Name: $email})-[grade1:hasGraded]->(accommodation:Accommodation)<-[grade:hasGraded]-(guest:Guest)
+    //         Where givenGuest <> guest 
+    //         and (grade1.grade = grade.grade OR abs(grade1.grade - grade.grade) = 1) 
+    //         Return guest";
+    // var cursor = await tx.RunAsync(query, new { email });
+    // var result = await _client.Cypher
+    //     .WithParam("email", guestEmail)
+    //     .Match(cypherQuery)
+    //     .ReturnDistinct(guest => guest.As<Guest>())
+    //     .ResultsAsync;
+    //
+    // List<Guest> guests = result
+    //     .Select(record => new Guest { Name = record.Name })
+    //     .ToList();
+    public async Task<bool> MakeAccommodationGrade(Guest guest, string accommodationId, int grade)
     {
-        var guests = await _client.Cypher
-            .Match("(givenGuest:Guest)-[:hasReserved]->(accommodation:Accommodation)<-[:hasReserved]-(guest:Guest)")
-            .Where((Guest givenGuest)=> givenGuest.Name == guestEmail)
-            .AndWhere((Guest guest)=> guest.Name != guestEmail)
-            .With("givenGuest, guest, accommodation, COUNT(accommodation) AS reservations")
-            .Where("reservations >= 2")
-            .ReturnDistinct(guest => guest.As<Guest>())
-            .ResultsAsync;
+        await using var session = driver.AsyncSession();
+        await session.WriteTransactionAsync(async tx =>
+        {
+            var queryText = @"
+        MATCH (a:Accommodation), (u:Guest)
+        WHERE a.Id = $accommodationId AND u.Name = $guestName
+        CREATE (u)-[r:hasGraded { grade: $grade }]->(a)
+        ";
+            var parameters = new { accommodationId, guestName = guest.Name, grade };
+            await tx.RunAsync(queryText, parameters);
+        });
 
-        return guests.ToList();
-    }
-
-    public async Task<List<Guest>> GetGuestsByGradedAccommodations(string guestEmail)
-    {
-        var guests = await _client.Cypher
-            .Match("(guest1:Guest)-[grade1:hasGraded]->(accommodation:Accommodation)<-[grade:hasGraded]-(guest:Guest)")
-            .Where((Guest guest1)=> guest1.Name == guestEmail)
-            .AndWhere((Guest guest)=> guest.Name != guestEmail)
-            .AndWhere("grade1.grade = grade.grade OR abs(grade1.grade - grade.grade) = 1")
-            .WithParam("guestEmail", guestEmail)
-            .ReturnDistinct(guest => guest.As<Guest>())
-            .ResultsAsync;
-
-        return guests.ToList();
-    }
-
-    public async Task<bool> MakeAccommodationGrade(Guest guest, string accommodationId,int grade)
-    {
-        await _client.Cypher.Match("(a:Accommodation),(u:Guest)")
-            .Where((Accommodation a, Guest u) => a.Id == accommodationId && u.Name == guest.Name)
-            .Create("(u) - [r:hasGraded {grade: $grade}]->(a)")
-            .WithParam("grade", grade)
-            .ExecuteWithoutResultsAsync();
         return true;
     }
-
+    //
     public async Task<Accommodation> CreateAccommodation(Accommodation request)
     {
-        await _client.Cypher.Create("(r:Accommodation $request)")
-            .WithParam("request", request)
-            .ExecuteWithoutResultsAsync();
+        await using var session = driver.AsyncSession();
+        await session.WriteTransactionAsync(async tx =>
+        {
+            var queryText = @"
+        CREATE (r:Accommodation $request)
+        ";
+            var parameters = new { request };
+            await tx.RunAsync(queryText, parameters);
+        });
+
         return request;
     }
-    
-    // MATCH (givenGuest:Guest {Name: "a@gmail.com"})-[:hasGraded]->(accommodation:Accommodation)<-[:hasGraded]-(guest:Guest)
-    // Where givenGuest <> guest And give
-    //     Return guest
+    //
+    // MATCH (givenGuest:Guest {Name: "s@gmail.com"})-[grade1:hasGraded]->(accommodation:Accommodation)<-[grade:hasGraded]-(guest:Guest)
+    // Where givenGuest <> guest and (grade1.grade = grade.grade OR abs(grade1.grade - grade.grade) = 1)
+    // Return guest
 }

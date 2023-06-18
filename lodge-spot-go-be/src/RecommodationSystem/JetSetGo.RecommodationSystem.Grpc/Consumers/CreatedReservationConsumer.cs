@@ -30,8 +30,6 @@ public class CreatedReservationConsumer : IConsumer<CreatedReservationEvent>
             Name = context.Message.AccommodationName
         };
         await recommendationService.MakeReservation(guest, acc);
-        var bla = await recommendationService.GetRecommendedAccommodations(guest);
-        // _logger.LogInformation(@"Recommendeeeeeeeeed {}",bla.ToString());
         await Task.CompletedTask;
     }
 }

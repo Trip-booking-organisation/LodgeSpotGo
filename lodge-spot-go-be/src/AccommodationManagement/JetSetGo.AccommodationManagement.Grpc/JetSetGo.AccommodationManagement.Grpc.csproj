@@ -8,12 +8,31 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Protobuf Include="Dto\reccomodationDto.proto">
+          <GrpcServices>None</GrpcServices>
+          <Access>Public</Access>
+          <ProtoCompile>True</ProtoCompile>
+          <CompileOutputs>True</CompileOutputs>
+          <OutputDir>obj\Debug\net7.0\</OutputDir>
+          <Generator>MSBuild:Compile</Generator>
+        </Protobuf>
+        <Protobuf Include="Protos\recommodation.proto">
+          <GrpcServices>Server</GrpcServices>
+          <Access>Public</Access>
+          <ProtoCompile>True</ProtoCompile>
+          <CompileOutputs>True</CompileOutputs>
+          <OutputDir>obj\Debug\net7.0\</OutputDir>
+          <Generator>MSBuild:Compile</Generator>
+        </Protobuf>
         <Protobuf Include="Routes\greet.proto" GrpcServices="Server" />
         <Protobuf Include="Dto\accommodation.proto" GrpcServices="None" />
         <Protobuf Include="Dto\grade.proto" GrpcServices="None" />
         <Protobuf Include="Routes\routes.proto" GrpcServices="Server" />
         <Protobuf Include="Routes\grades.proto" GrpcServices="Server" />
         <Protobuf Include="Routes\get_accommodation.proto" GrpcServices="Server" />
+        
+        <Protobuf Include="Protos\recommodation.proto" GrpcServices="Client" />
+        
         <Protobuf Include="Routes\get_reservations.proto" GrpcServices="Client" />
         <Protobuf Include="Routes\get_accommodation_grades.proto" GrpcServices="Server" />
         <Protobuf Include="Routes\get_host_accommodation.proto" GrpcServices="Server" />

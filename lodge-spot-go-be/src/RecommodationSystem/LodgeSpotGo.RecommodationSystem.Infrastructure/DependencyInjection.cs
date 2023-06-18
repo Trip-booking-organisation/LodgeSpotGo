@@ -18,14 +18,14 @@ public static class DependencyInjection
         });
         services.AddSingleton(provider => 
             provider.GetRequiredService<IOptions<DbSettings>>().Value);
-        services.AddSingleton<IGraphClient>(provider =>
-        {
-            var dbSettings = provider.GetRequiredService<DbSettings>();
-            Console.Out.Write(dbSettings.DbName);
-            var client = new BoltGraphClient(new Uri(dbSettings.Neo4jDb),dbSettings.DbName,dbSettings.DbPassword);
-            client.ConnectAsync().Wait();
-            return client;
-        });
+        // services.AddSingleton<IGraphClient>(provider =>
+        // {
+        //     var dbSettings = provider.GetRequiredService<DbSettings>();
+        //     Console.Out.Write(dbSettings.DbName);
+        //     var client = new BoltGraphClient(new Uri(dbSettings.Neo4jDb),dbSettings.DbName,dbSettings.DbPassword);
+        //     client.ConnectAsync().Wait();
+        //     return client;
+        // });
         
         
         services.AddScoped<IRecommodationRepository, RecommodationRepository>();

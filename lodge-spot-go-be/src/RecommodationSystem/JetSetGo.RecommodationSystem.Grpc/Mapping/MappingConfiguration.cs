@@ -11,5 +11,7 @@ public class MappingConfiguration : Profile
     {
         CreateMap<Guest, UserRecDto>();
         CreateMap<UserRecDto, Guest>();
+        CreateMap<Accommodation, RecAccommodationResponse>();
+        CreateMap<RecAccommodationResponse, Accommodation>();
     }
 }
