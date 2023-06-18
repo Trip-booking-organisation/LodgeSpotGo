@@ -7,6 +7,7 @@ using JetSetGo.AccommodationManagement.Domain.Accommodations;
 using JetSetGo.AccommodationManagement.Domain.Accommodations.ValueObjects;
 using JetSetGo.AccommodationManagement.Grpc.Mapping.MappingToGrpcResponse;
 using LodgeSpotGo.Shared.Events.Accommdation;
+using Microsoft.AspNetCore.Authorization;
 
 namespace JetSetGo.AccommodationManagement.Grpc.Services;
 
