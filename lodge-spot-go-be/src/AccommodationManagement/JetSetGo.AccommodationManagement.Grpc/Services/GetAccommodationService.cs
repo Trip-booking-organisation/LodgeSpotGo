@@ -1,4 +1,5 @@
-﻿using Grpc.Core;
+﻿using System.Diagnostics;
+using Grpc.Core;
 using JetSetGo.AccommodationManagement.Application.Common.Persistence;
 using JetSetGo.AccommodationManagement.Grpc.Mapping.MappingToGrpcResponse;
 
@@ -9,6 +10,8 @@ public class GetAccommodationService : GetAccommodationApp.GetAccommodationAppBa
     private readonly ILogger<GetAccommodationService> _logger;
     private readonly IAccommodationRepository _accommodationRepository;
     private readonly IMappingToGrpcResponse _mappingToGrpcResponse;
+    public const string ServiceName = "GetAccommodationService";
+    public static readonly ActivitySource ActivitySource = new(ServiceName);
 
     public GetAccommodationService(ILogger<GetAccommodationService> logger, IAccommodationRepository accommodationRepository, IMappingToGrpcResponse mappingToGrpcResponse)
     {
@@ -19,11 +22,14 @@ public class GetAccommodationService : GetAccommodationApp.GetAccommodationAppBa
 
     public override async Task<GetAccommodationResponse> GetAccommodation(GetAccommodationRequest request, ServerCallContext context)
     {
+        var activity = ActivitySource.StartActivity();
+        activity?.SetTag("AccommodationID", request.Id);
         _logger.LogInformation(@"REQUEST CAME IN");
         _logger.LogInformation(@"Request {}",request.Id);
         var accommodation = await _accommodationRepository.GetAsync(Guid.Parse(request.Id));
         var response = _mappingToGrpcResponse.MapAccommodationToGrpcResponse(accommodation);
         _logger.LogInformation(@"Request {}",response.Result.Accommodation.ToString());
+        activity?.Stop();
         return await response;
     }
 }

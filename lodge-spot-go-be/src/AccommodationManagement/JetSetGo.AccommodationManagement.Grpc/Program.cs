@@ -1,5 +1,7 @@
 using JetSetGo.AccommodationManagement.Application;
 using JetSetGo.AccommodationManagement.Grpc;
+using JetSetGo.AccommodationManagement.Grpc.Clients.Reservations;
+using JetSetGo.AccommodationManagement.Grpc.Clients.Users;
 using JetSetGo.AccommodationManagement.Grpc.Services;
 using JetSetGo.AccommodationManagement.Grpc.Services.Grades;
 using JetSetGo.AccommodationManagement.Infrastructure;
@@ -9,9 +11,35 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using OpenTelemetry.Trace;
 
 var builder = WebApplication.CreateBuilder(args);
 {
+    builder.Services.AddOpenTelemetry()
+        .WithTracing(services =>
+        {
+            services
+                .AddSource(GradeService.ServiceName)
+                .SetResourceBuilder(TracingResourceBuilder.GradeServiceResource())
+               .AddSource(AccommodationService.ServiceName)
+                .SetResourceBuilder(TracingResourceBuilder.AccommodationServiceResource())
+                .AddSource(GetAccommodationService.ServiceName)
+               .SetResourceBuilder(TracingResourceBuilder.GetAccommodationServiceResource())
+               .AddSource(HostAccommodationService.ServiceName)
+               .SetResourceBuilder(TracingResourceBuilder.HostAccommodationServiceResource())
+               .AddSource(SearchAccommodationService.ServiceName)
+               .SetResourceBuilder(TracingResourceBuilder.SearchAccommodationServiceResource())
+               .AddSource(FilterGrades.ServiceName)
+               .SetResourceBuilder(TracingResourceBuilder.FilterGradesServiceResource())
+               .AddSource(ReservationClient.ServiceName)
+               .SetResourceBuilder(TracingResourceBuilder.ReservationClientResource())
+               .AddSource(UserClient.ServiceName)
+               .SetResourceBuilder(TracingResourceBuilder.UserClientResource())
+                .AddAspNetCoreInstrumentation()
+                .AddGrpcClientInstrumentation()
+                .AddJaegerExporter()
+                .SetSampler(new AlwaysOnSampler());
+        });
     builder.Services.AddGrpc().AddJsonTranscoding();
     builder.Configuration
         .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
