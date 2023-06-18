@@ -59,10 +59,36 @@ public class RecommendationService
 
     public async Task<List<Guest>> GetRecommendedAccommodations(Guest request)
     {
-        return await _recommodationRepository.GetGuestsByGradedAccommodations(request.Name);
+        List<Guest> similarGuests = await GetSimilarGuests(request);
+        return similarGuests;
     }
 
-  
-    
+    public async Task<List<Accommodation>> GetSimilarGuestsResservedAccommodations()
+    {
+        return  null;
+    }
+
+
+    private async Task<List<Guest>> GetSimilarGuests(Guest request)
+    {
+        List<Guest> similarGuests = await _recommodationRepository.GetGuestsByReservedAccommodations(request.Name);
+        similarGuests.AddRange(await _recommodationRepository.GetGuestsByGradedAccommodations(request.Name));
+        return FilterSimlarGuests(request,similarGuests);
+    }
+
+
+    private List<Guest> FilterSimlarGuests(Guest request, List<Guest> guests)
+    {
+        List<Guest> filtered = new List<Guest>();
+        foreach (var guest in guests)
+        {
+            if (guest != request)
+            {
+                filtered.Add(guest);
+            }
+        }
+
+        return filtered;
+    }
     
 }

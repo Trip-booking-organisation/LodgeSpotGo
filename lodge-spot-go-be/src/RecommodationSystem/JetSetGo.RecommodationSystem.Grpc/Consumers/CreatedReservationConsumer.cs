@@ -31,7 +31,7 @@ public class CreatedReservationConsumer : IConsumer<CreatedReservationEvent>
         };
         await recommendationService.MakeReservation(guest, acc);
         var bla = await recommendationService.GetRecommendedAccommodations(guest);
-        _logger.LogInformation(@"Recomendeeeeeeeeed {}",bla.ToString());
+        // _logger.LogInformation(@"Recommendeeeeeeeeed {}",bla.ToString());
         await Task.CompletedTask;
     }
 }
