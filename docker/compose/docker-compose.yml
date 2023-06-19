@@ -154,6 +154,10 @@ services:
       - lodge-spot-go-net
     depends_on:
       - users-db
+  api-gw:
+    image: ${YOUR_REGISTRY-}users-service:1.0.0
+    container_name: user-service
+    build: ../../lodge-spot-go-be/src/ApiGateway/
   
 volumes:
   accommodation-db-data:
