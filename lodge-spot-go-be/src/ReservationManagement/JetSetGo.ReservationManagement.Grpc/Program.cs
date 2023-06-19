@@ -15,8 +15,20 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using OpenTelemetry.Trace;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddOpenTelemetry()
+    .WithTracing(services =>
+    { services
+            .AddSource(ReservationService.ServiceName)
+            .SetResourceBuilder(TracingResourceBuilder.ReservationServiceResource());
+        services
+            .AddAspNetCoreInstrumentation()
+            .AddGrpcClientInstrumentation()
+            .AddJaegerExporter()
+            .SetSampler(new AlwaysOnSampler());
+    });
 builder.Services.AddGrpc(options =>
 {
     options.Interceptors.Add<ExceptionInterceptor>();

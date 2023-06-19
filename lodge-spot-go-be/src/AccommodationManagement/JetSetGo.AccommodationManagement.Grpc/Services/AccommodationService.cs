@@ -19,7 +19,7 @@ public class AccommodationService : AccommodationApp.AccommodationAppBase
     private readonly IMapper _mapper;
     private readonly IEventBus _bus;
     public const string ServiceName = "AccommodationService";
-    public static readonly ActivitySource ActivitySource = new(ServiceName);
+    public static readonly ActivitySource ActivitySource = new("Accommodation activity");
 
 
     public AccommodationService(
