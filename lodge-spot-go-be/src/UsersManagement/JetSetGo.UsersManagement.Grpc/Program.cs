@@ -1,5 +1,3 @@
-using System.Diagnostics;
-using System.Runtime.InteropServices.JavaScript;
 using JetSetGo.UsersManagement.Grpc;
 using JetSetGo.UsersManagement.Grpc.Endpoints;
 using JetSetGo.UsersManagement.Grpc.Services;
@@ -9,7 +7,6 @@ using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 
 var builder = WebApplication.CreateBuilder(args);
