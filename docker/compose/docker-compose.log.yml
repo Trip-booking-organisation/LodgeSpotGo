@@ -1,0 +1,45 @@
+﻿version: '3.8'
+name: monitoring
+services:
+  loki:
+    image: grafana/loki:latest
+    networks:
+      - monitoring
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    environment:
+      GF_RENDERING_SERVER_URL: http://renderer:8081/render
+      GF_RENDERING_CALLBACK_URL: http://grafana:3000/
+      GF_LOG_FILTERS: rendering:debug
+    networks:
+      - monitoring
+  
+  renderer:
+    image: grafana/grafana-image-renderer:3.4.2
+    environment:
+      ENABLE_METRICS: "true"
+    networks:
+      - monitoring
+  fluent-bit:
+    image: grafana/fluent-bit-plugin-loki:latest
+    environment:
+      - LOKI_URL=http://loki:3100/loki/api/v1/push
+      - FLUENT_LOG_LEVEL=info
+      - FLUENT_FLUSH=1
+      - FLUENT_DAEMON=off
+      - INPUT_NAME=forward
+      - INPUT_LISTEN=0.0.0.0
+      - INPUT_PORT=24224
+      - LOG_PATH=./fluent-bit.log
+    ports:
+      - "24224:24224"
+      - "24224:24224/udp"
+    volumes:
+      - ./fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
+    networks:
+      - monitoring
+networks:
+  monitoring:
+    name: monitoring
