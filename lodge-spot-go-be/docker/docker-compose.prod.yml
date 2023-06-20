@@ -121,6 +121,8 @@ services:
       - env/shared.env
     networks:
       - lodge-spot-net-prod
+    volumes:
+      - ../certs/certificate.pfx:/app/certificate.pfx
     depends_on:
       lodge-spot-mq:
         condition: service_healthy
@@ -150,8 +152,8 @@ services:
       - "7230:80"
     environment:
       MongoDatabaseSettings:ConnectionString: mongodb://lodge1312:lodge420@search-db:27017
-      AccommodationUrl: https://accommodation-service:443
-      ReservationUrl: https://reservation-service:443
+      AccommodationUrl: http://accommodation-service:80
+      ReservationUrl: http://reservation-service:80
     env_file:
       - env/shared.env
     networks:
@@ -159,6 +161,8 @@ services:
     depends_on:
       lodge-spot-mq:
         condition: service_healthy
+    volumes:
+      - ../certs/certificate.pfx:/app/certificate.pfx
   users-db:
     image: mongo
     restart: always
@@ -191,12 +195,14 @@ services:
     depends_on:
       lodge-spot-mq:
         condition: service_healthy
+    volumes:
+      - ../certs/certificate.pfx:/app/certificate.pfx
   api-gw:
     image: ${YOUR_REGISTRY-}api-gw:1.0.0
     container_name: api-gw
     build: ../../lodge-spot-go-be/src/ApiGateway/
     environment:
-      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_ENVIRONMENT: Container
     env_file:
       - env/shared.env
     ports:
@@ -204,6 +210,8 @@ services:
       - "7000:443"
     networks:
      - lodge-spot-net-prod
+    volumes:
+      - ../certs/certificate.pfx:/app/certificate.pfx
 volumes:
   accommodation-db-data-prod:
     driver: local

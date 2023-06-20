@@ -1,3 +1,4 @@
+using System.Reflection;
 using JetSetGo.AccommodationManagement.Application;
 using JetSetGo.AccommodationManagement.Grpc;
 using JetSetGo.AccommodationManagement.Grpc.Services;
@@ -6,6 +7,7 @@ using JetSetGo.AccommodationManagement.Infrastructure;
 using JetSetGo.AccommodationManagement.Infrastructure.MessageBroker.Settings;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
