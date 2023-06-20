@@ -55,6 +55,8 @@ public class CreateReservationHandler
             throw new NotFound("Accommodation not found");
         }
         var reservation = CreateReservation(request, user);
+        _logger.LogInformation(
+            @"Reservation Id {}" , reservation.Id);
         var isLap = await CheckOverlapping(reservation);
         if (isLap)
         {

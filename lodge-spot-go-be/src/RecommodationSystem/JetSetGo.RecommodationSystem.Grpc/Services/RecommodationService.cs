@@ -11,6 +11,8 @@ public class RecommodationService : ReccomodationApp.ReccomodationAppBase
 {
     private readonly RecommendationService _recommendationService;
     private readonly IMapper _mapper;
+    public const string ServiceName = "RecommodationService";
+    public static readonly ActivitySource ActivitySource = new("Recommendation activity");
 
     public RecommodationService(RecommendationService recommendationService, IMapper mapper)
     {
@@ -20,11 +22,16 @@ public class RecommodationService : ReccomodationApp.ReccomodationAppBase
 
     public override async Task<GetRecommodationsResponse> GetRecommodations(GetRecommodationReqest request, ServerCallContext context)
     {
+        var activity = ActivitySource.StartActivity();
+        activity?.SetTag("UserName", request.User.Name);
         var guest = new Guest
         {
             Name = request.User.Name
         };
 
+        var guests = await _recommendationService.GetRecommendedAccommodations(guest);
+        activity?.Stop();
+        return new getRecommodationsResponse()
         var accommodations = await _recommendationService.GetRecommendedAccommodations(guest);
         return new GetRecommodationsResponse()
         {

@@ -15,24 +15,10 @@ using OpenTelemetry.Trace;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenTelemetry()
     .WithTracing(services =>
-{
-    services
-        /*.*//*AddSource(UserEndpoints.GetUserService)
-        .SetResourceBuilder(TracingResourceBuilder.GetUserServiceResource())
-        .AddSource(UserEndpoints.BuyTicketsService)
-        .SetResourceBuilder(TracingResourceBuilder.BuyTicketsServiceResource())
-        .AddSource(UserEndpoints.DeleteGradeService)
-        .SetResourceBuilder(TracingResourceBuilder.DeleteGradeServiceResource())*/
-        .AddSource(UserEndpoints.GetOutstandingHostService)
-        .SetResourceBuilder(TracingResourceBuilder.GetOutstandingHostServiceResource())
-        /*.AddSource(UserEndpoints.UpdateGradeService)
-        .SetResourceBuilder(TracingResourceBuilder.BuyTicketsServiceResource())
-        .AddSource(UserEndpoints.GetGradesByHostService)
-        .SetResourceBuilder(TracingResourceBuilder.GetGradesByHostServiceResource())
-        .AddSource(FilterService.FilterUserService)
-        .SetResourceBuilder(TracingResourceBuilder.FiletServiceResource())
-        .AddSource(GetUserService.UserService)*/
-        /*.SetResourceBuilder(TracingResourceBuilder.UserServiceResource())*/
+    { services
+        .AddSource(UserEndpoints.UserService)
+        .SetResourceBuilder(TracingResourceBuilder.GetUserServiceResource());
+        services
         .AddAspNetCoreInstrumentation()
         .AddHttpClientInstrumentation()
         .AddJaegerExporter()
@@ -106,7 +92,7 @@ builder.Services.AddMassTransit(busConfigurator =>
     busConfigurator.UsingRabbitMq((context, configurator) =>
     {
         var messageBrokerSettings = context.GetRequiredService<MessageBrokerSettings>();
-        configurator.Host(new Uri(messageBrokerSettings.Host), hostConfigurator =>
+        configurator.Host(messageBrokerSettings.Host, hostConfigurator =>
         {
             hostConfigurator.Username(messageBrokerSettings.Username);   
             hostConfigurator.Password(messageBrokerSettings.Password);   

@@ -23,7 +23,7 @@ public class GradeService : GradeApp.GradeAppBase
     private readonly IGetUserClient _userClient;
     private readonly IEventBus _eventBus;
     public const string ServiceName = "GradesService";
-    public static readonly ActivitySource ActivitySource = new(ServiceName);
+    public static readonly ActivitySource ActivitySource = new("GradeActivity");
 
 
     public GradeService(IGradeRepository gradeRepository, 

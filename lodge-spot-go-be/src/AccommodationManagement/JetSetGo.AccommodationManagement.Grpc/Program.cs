@@ -1,7 +1,5 @@
 using JetSetGo.AccommodationManagement.Application;
 using JetSetGo.AccommodationManagement.Grpc;
-using JetSetGo.AccommodationManagement.Grpc.Clients.Reservations;
-using JetSetGo.AccommodationManagement.Grpc.Clients.Users;
 using JetSetGo.AccommodationManagement.Grpc.Services;
 using JetSetGo.AccommodationManagement.Grpc.Services.Grades;
 using JetSetGo.AccommodationManagement.Infrastructure;
@@ -20,22 +18,8 @@ var builder = WebApplication.CreateBuilder(args);
         .WithTracing(services =>
         {
             services
-                .AddSource(GradeService.ServiceName)
-                .SetResourceBuilder(TracingResourceBuilder.GradeServiceResource())
-               .AddSource(AccommodationService.ServiceName)
+                .AddSource(AccommodationService.ServiceName)
                 .SetResourceBuilder(TracingResourceBuilder.AccommodationServiceResource())
-                .AddSource(GetAccommodationService.ServiceName)
-               .SetResourceBuilder(TracingResourceBuilder.GetAccommodationServiceResource())
-               .AddSource(HostAccommodationService.ServiceName)
-               .SetResourceBuilder(TracingResourceBuilder.HostAccommodationServiceResource())
-               .AddSource(SearchAccommodationService.ServiceName)
-               .SetResourceBuilder(TracingResourceBuilder.SearchAccommodationServiceResource())
-               .AddSource(FilterGrades.ServiceName)
-               .SetResourceBuilder(TracingResourceBuilder.FilterGradesServiceResource())
-               .AddSource(ReservationClient.ServiceName)
-               .SetResourceBuilder(TracingResourceBuilder.ReservationClientResource())
-               .AddSource(UserClient.ServiceName)
-               .SetResourceBuilder(TracingResourceBuilder.UserClientResource())
                 .AddAspNetCoreInstrumentation()
                 .AddGrpcClientInstrumentation()
                 .AddJaegerExporter()
@@ -43,8 +27,6 @@ var builder = WebApplication.CreateBuilder(args);
                 
             
         });
-    builder.Services.AddSingleton<IMetricServer>(provider => new MetricServer(port: 1234));
-
     builder.Services.AddGrpc().AddJsonTranscoding();
     builder.Configuration
         .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
@@ -149,7 +131,7 @@ var builder = WebApplication.CreateBuilder(args);
         busConfigurator.UsingRabbitMq((context, configurator) =>
         {
             var messageBrokerSettings = context.GetRequiredService<MessageBrokerSettings>();
-            configurator.Host(new Uri(messageBrokerSettings.Host), hostConfigurator =>
+            configurator.Host(messageBrokerSettings.Host, hostConfigurator =>
             {
                 hostConfigurator.Username(messageBrokerSettings.Username);   
                 hostConfigurator.Password(messageBrokerSettings.Password);   
@@ -170,9 +152,12 @@ var app = builder.Build();
         c.OAuthAppName("KEYCLOAK");
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "AccommodationManagementMicroservice v1");
     });
+    app.UseHttpsRedirection();
     app.UseCors("AllowOrigin");
     
     app.UseMetricServer();
+    app.UseAuthentication();
+    app.UseAuthorization();
     app.MapGrpcService<GreeterService>()/*.RequireAuthorization()*/;
     app.MapGrpcService<AccommodationService>();
     app.MapGrpcService<GetAccommodationService>();
@@ -180,8 +165,6 @@ var app = builder.Build();
     app.MapGrpcService<GradeService>();
     app.MapGrpcService<FilterGrades>();
     app.MapGrpcService<HostAccommodationService>();
-    app.UseAuthentication();
-    app.UseAuthorization();
     app.MapGet("/",
         () =>
             "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, " +

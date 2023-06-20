@@ -7,8 +7,20 @@ using LodgeSpotGo.RecommodationSystem.Infrastructure.MessageBroker.Settings;
 using MassTransit;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using OpenTelemetry.Trace;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddOpenTelemetry()
+    .WithTracing(services =>
+    { services
+            .AddSource(RecommodationService.ServiceName)
+            .SetResourceBuilder(TracingResourceBuilder.RecommendationServiceResource());
+        services
+            .AddAspNetCoreInstrumentation()
+            .AddGrpcClientInstrumentation()
+            .AddJaegerExporter()
+            .SetSampler(new AlwaysOnSampler());
+    });
 builder.Configuration
     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
     .AddEnvironmentVariables();

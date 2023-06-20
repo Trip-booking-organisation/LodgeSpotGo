@@ -1,5 +1,7 @@
 using EmailService;
+using EmailService.MessageBroker.Consumers;
 using EmailService.MessageBroker.Settings;
+using EmailService.Service;
 using MassTransit;
 using Microsoft.Extensions.Options;
 
@@ -8,14 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-var app = builder.Build();
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+builder.Services.AddScoped<IEmailService, SendEmailService>();
 // #### mass transit ####
 builder.Services.Configure<MessageBrokerSettings>
     (builder.Configuration.GetSection(MessageBrokerSettings.SectionName));
@@ -24,7 +19,8 @@ builder.Services.AddSingleton(provider =>
 builder.Services.AddMassTransit(busConfigurator =>
 {
     var assembly = typeof(IMarker).Assembly;
-    busConfigurator.AddConsumers(assembly);
+    busConfigurator.AddConsumer<NotificationCreatedConsumer>()
+        .Endpoint(e => e.Name = "email-status");
     busConfigurator.AddSagaStateMachines(assembly);
     busConfigurator.AddSagas(assembly);
     busConfigurator.AddActivities(assembly);
@@ -40,8 +36,15 @@ builder.Services.AddMassTransit(busConfigurator =>
         configurator.ConfigureEndpoints(context, KebabCaseEndpointNameFormatter.Instance);
     });
 });
+var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+//app.UseAuthorization();
 
 app.Run();

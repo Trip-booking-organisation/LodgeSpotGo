@@ -8,8 +8,7 @@ public class FilterService :FilterOutstandingHostApp.FilterOutstandingHostAppBas
 {
     private readonly ILogger<FilterService> _logger;
     private readonly HostService _hostService;
-    public const string FilterUserService = "FilterUser";
-    public static ActivitySource Activity = new(FilterUserService);
+    public static ActivitySource Activity = new("FilterUserActivity");
 
     public FilterService(ILogger<FilterService> logger, HostService hostService)
     {

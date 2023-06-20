@@ -1,6 +1,4 @@
 ﻿using Google.Protobuf.Collections;
-using Grpc.Core;
-using JetSetGo.UserManagement.Grpc;
 using JetSetGo.UsersManagement.Application.Common.Persistence;
 using JetSetGo.UsersManagement.Domain.HostGrade.Entities;
 using JetSetGo.UsersManagement.Grpc.Client;

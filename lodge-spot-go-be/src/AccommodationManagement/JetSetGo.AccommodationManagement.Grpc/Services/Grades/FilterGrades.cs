@@ -9,7 +9,7 @@ public class FilterGrades : FilterGradeApp.FilterGradeAppBase
 {
     private readonly IGradeRepository _gradeRepository;
     public const string ServiceName = "FilterGradesService";
-    public static readonly ActivitySource ActivitySource = new(ServiceName);
+    public static readonly ActivitySource ActivitySource = new("FilterGradesActivity");
     public FilterGrades(IGradeRepository gradeRepository)
     {
         _gradeRepository = gradeRepository;

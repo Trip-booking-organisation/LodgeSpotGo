@@ -5,10 +5,10 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["src/Notification/LodgeSpotGo.Notifications.Api/LodgeSpotGo.Notifications.Api.csproj", "src/Notification/LodgeSpotGo.Notifications.Api/"]
-RUN dotnet restore "src/Notification/LodgeSpotGo.Notifications.Api/LodgeSpotGo.Notifications.Api.csproj"
+COPY ["Notification/LodgeSpotGo.Notifications.Api/LodgeSpotGo.Notifications.Api.csproj", "Notification/LodgeSpotGo.Notifications.Api/"]
+RUN dotnet restore "Notification/LodgeSpotGo.Notifications.Api/LodgeSpotGo.Notifications.Api.csproj"
 COPY . .
-WORKDIR "/src/src/Notification/LodgeSpotGo.Notifications.Api"
+WORKDIR "/src/Notification/LodgeSpotGo.Notifications.Api"
 RUN dotnet build "LodgeSpotGo.Notifications.Api.csproj" -c Release -o /app/build
 
 FROM build AS publish

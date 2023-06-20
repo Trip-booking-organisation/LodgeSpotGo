@@ -27,7 +27,16 @@
         <PackageReference Include="Neo4j.Driver" Version="5.9.0" />
         <PackageReference Include="Neo4jClient" Version="5.1.11" />
         <PackageReference Include="prometheus-net.AspNetCore" Version="8.0.0" />
+        <PackageReference Include="OpenTelemetry.Exporter.Jaeger" Version="1.5.0" />
+        <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.5.0" />
+        <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.5.0-beta.1" />
+        <PackageReference Include="OpenTelemetry.Instrumentation.GrpcNetClient" Version="1.5.0-beta.1" />
     </ItemGroup>
+        <PackageReference Include="OpenTelemetry.Exporter.Jaeger" Version="1.5.0" />
+        <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.5.0" />
+        <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.5.0-beta.1" />
+        <PackageReference Include="OpenTelemetry.Instrumentation.GrpcNetClient" Version="1.5.0-beta.1" />
+        <PackageReference Include="prometheus-net.AspNetCore" Version="8.0.0" />
 
     <ItemGroup>
       <Content Include="..\..\..\.dockerignore">

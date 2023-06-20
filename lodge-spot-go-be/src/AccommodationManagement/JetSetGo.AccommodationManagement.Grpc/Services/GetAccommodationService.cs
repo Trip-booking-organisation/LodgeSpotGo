@@ -10,8 +10,7 @@ public class GetAccommodationService : GetAccommodationApp.GetAccommodationAppBa
     private readonly ILogger<GetAccommodationService> _logger;
     private readonly IAccommodationRepository _accommodationRepository;
     private readonly IMappingToGrpcResponse _mappingToGrpcResponse;
-    public const string ServiceName = "GetAccommodationService";
-    public static readonly ActivitySource ActivitySource = new(ServiceName);
+    public static readonly ActivitySource ActivitySource = new("GetAccommodationActivity");
 
     public GetAccommodationService(ILogger<GetAccommodationService> logger, IAccommodationRepository accommodationRepository, IMappingToGrpcResponse mappingToGrpcResponse)
     {

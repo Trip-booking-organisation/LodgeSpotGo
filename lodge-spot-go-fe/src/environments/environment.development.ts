@@ -2,9 +2,9 @@ export const environment = {
   production: false,
   apiGateway : 'http://localhost:5294/',
   keycloak: {
-    url: 'http://localhost:8080',
+    url: 'https://login-keycloak.azurewebsites.net/auth',
     realm: 'booking-app',
     clientId: 'booking-app-client',
-    accountUrl: 'http://localhost:8080/realms/booking-app/account/#/personal-info'
+    accountUrl: 'https://login-keycloak.azurewebsites.net/auth/booking-app/account/#/personal-info'
   }
 };
