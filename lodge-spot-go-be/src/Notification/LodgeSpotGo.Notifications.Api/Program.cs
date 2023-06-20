@@ -1,18 +1,19 @@
 using LodgeSpotGo.Notifications.Api;
+using LodgeSpotGo.Notifications.Api.Consumers;
 using LodgeSpotGo.Notifications.Api.Endpoints;
 using LodgeSpotGo.Notifications.Api.Hubs;
 using LodgeSpotGo.Notifications.Core;
 using LodgeSpotGo.Notifications.Infrastructure;
 using LodgeSpotGo.Notifications.Infrastructure.MessageBroker.Settings;
+using LodgeSpotGo.Shared.Events.Reservation;
 using MassTransit;
 using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 var configuration = builder.Configuration;
-services.
-    AddCore().
-    AddInfrastructure(configuration);
+services.AddCore()
+        .AddInfrastructure(configuration);
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
 builder.Services
@@ -34,7 +35,13 @@ services.AddSingleton(provider =>
 services.AddMassTransit(busConfigurator =>
 {
     var assembly = typeof(IAssemblyMarkerApi).Assembly;
-    busConfigurator.AddConsumers(typeof(IAssemblyMarkerApi).Assembly);
+    busConfigurator.AddConsumer<CreatedAccommodationGradeConsumer>();
+    busConfigurator.AddConsumer<CanceledReservationConsumer>();
+    busConfigurator.AddConsumer<HostGradeCreatedConsumer>();
+    busConfigurator.AddConsumer<OutstandingHostStatus>();
+    busConfigurator.AddConsumer<ReservationStateChangedConsumer>();
+    busConfigurator.AddConsumer<CreateReservationCommandConsumer>()
+        .Endpoint(e => e.Name = "notification-status");
     busConfigurator.AddSagaStateMachines(assembly);
     busConfigurator.AddSagas(assembly);
     busConfigurator.AddActivities(assembly);

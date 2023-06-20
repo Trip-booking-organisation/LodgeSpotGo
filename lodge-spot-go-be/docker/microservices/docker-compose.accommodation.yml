@@ -1,0 +1,38 @@
+﻿services:
+  lodge-spot-mq:
+    image: rabbitmq:3.11.7-management
+    container_name: lodge-spot-mq
+    hostname: lodge-spot-mq
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: user
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - mq-lodge-data-prod:/var/lib/rabbitmq
+      - mq-lodge-log-prod:/var/log/rabbitmq
+    networks:
+      net:
+  accommodation-service:
+    image: ${YOUR_REGISTRY-}accommodation-service:1.0.0
+    container_name: accommodation-service
+    build:
+      context: ../../src/
+      dockerfile: AccommodationManagement/Dockerfile
+    ports:
+      - "7120:443"
+      - "7132:80"
+    environment:
+      MongoDatabaseSettings:ConnectionString: mongodb://lodge1312:lodge420@accommodation-db:27017
+    env_file:
+      - ./../env/shared.env
+    networks: 
+      net:
+volumes:
+  mq-lodge-data-prod:
+    driver: local
+  mq-lodge-log-prod:
+    driver: local
+networks:
+  net: 

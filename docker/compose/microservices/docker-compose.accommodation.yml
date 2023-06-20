@@ -1,0 +1,16 @@
+﻿services:
+  accommodation-service:
+    image: ${YOUR_REGISTRY-}accommodation-service:1.0.0
+    container_name: accommodation-service
+    build: 
+      context: ../../../lodge-spot-go-be/src/
+      dockerfile: ../../../lodge-spot-go-be/src/AccommodationManagement/
+    ports:
+      - "7120:443"
+      - "7132:80"
+    environment:
+      MongoDatabaseSettings:ConnectionString: mongodb://lodge1312:lodge420@accommodation-db:27017
+      Jwt:Authority: http://host.docker.internal:8080/realms/booking-app
+      Jwt:AuthorizationUrl: http://host.docker.internal:8080/realms/booking-app/protocol/openid-connect/auth
+      Jwt:TokenUrl: http://host.docker.internal:8080/realms/booking-app/protocol/openid-connect/token
+      MessageBroker:Host: amqp://lodge-spot-mq:5672

@@ -5,13 +5,18 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["LodgeSpotGo.SearchAndFilter.Grpc/LodgeSpotGo.SearchAndFilter.Grpc.csproj", "LodgeSpotGo.SearchAndFilter.Grpc/"]
-COPY ["JetSetGo.SearchAndFilter.Domain/JetSetGo.SearchAndFilter.Domain.csproj", "JetSetGo.SearchAndFilter.Domain/"]
-COPY ["JetSetGo.SearchAndFilter.Application/JetSetGo.SearchAndFilter.Application.csproj", "JetSetGo.SearchAndFilter.Application/"]
-COPY ["JetSetGo.SearchAndFilter.Infrastructure/JetSetGo.SearchAndFilter.Infrastructure.csproj", "JetSetGo.SearchAndFilter.Infrastructure/"]
-RUN dotnet restore "LodgeSpotGo.SearchAndFilter.Grpc/LodgeSpotGo.SearchAndFilter.Grpc.csproj"
-COPY . .
-WORKDIR "/src/LodgeSpotGo.SearchAndFilter.Grpc"
+COPY ["SearchAndFilter/LodgeSpotGo.SearchAndFilter.Grpc/LodgeSpotGo.SearchAndFilter.Grpc.csproj", "SearchAndFilter/LodgeSpotGo.SearchAndFilter.Grpc/"]
+COPY ["SearchAndFilter/JetSetGo.SearchAndFilter.Domain/JetSetGo.SearchAndFilter.Domain.csproj", "SearchAndFilter/JetSetGo.SearchAndFilter.Domain/"]
+COPY ["SearchAndFilter/JetSetGo.SearchAndFilter.Application/JetSetGo.SearchAndFilter.Application.csproj", "SearchAndFilter/JetSetGo.SearchAndFilter.Application/"]
+COPY ["SearchAndFilter/JetSetGo.SearchAndFilter.Infrastructure/JetSetGo.SearchAndFilter.Infrastructure.csproj", "SearchAndFilter/JetSetGo.SearchAndFilter.Infrastructure/"]
+RUN dotnet restore "SearchAndFilter/LodgeSpotGo.SearchAndFilter.Grpc/LodgeSpotGo.SearchAndFilter.Grpc.csproj"
+
+COPY SearchAndFilter/LodgeSpotGo.SearchAndFilter.Grpc/ SearchAndFilter/LodgeSpotGo.SearchAndFilter.Grpc/
+COPY SearchAndFilter/JetSetGo.SearchAndFilter.Domain/ SearchAndFilter/JetSetGo.SearchAndFilter.Domain/
+COPY SearchAndFilter/JetSetGo.SearchAndFilter.Application/ SearchAndFilter/JetSetGo.SearchAndFilter.Application/
+COPY SearchAndFilter/JetSetGo.SearchAndFilter.Infrastructure/ SearchAndFilter/JetSetGo.SearchAndFilter.Infrastructure/
+
+WORKDIR "/src/SearchAndFilter/LodgeSpotGo.SearchAndFilter.Grpc"
 RUN dotnet build "LodgeSpotGo.SearchAndFilter.Grpc.csproj" -c Release -o /app/build
 
 FROM build AS publish
