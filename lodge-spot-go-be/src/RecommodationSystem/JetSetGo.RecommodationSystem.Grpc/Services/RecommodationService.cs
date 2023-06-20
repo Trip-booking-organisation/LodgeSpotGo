@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Diagnostics;
+using AutoMapper;
 using Grpc.Core;
 using LodgeSpotGo.RecommodationSystem.Core.Model;
 using LodgeSpotGo.RecommodationSystem.Core.Services;
@@ -31,7 +32,6 @@ public class RecommodationService : ReccomodationApp.ReccomodationAppBase
 
         var guests = await _recommendationService.GetRecommendedAccommodations(guest);
         activity?.Stop();
-        return new getRecommodationsResponse()
         var accommodations = await _recommendationService.GetRecommendedAccommodations(guest);
         return new GetRecommodationsResponse()
         {

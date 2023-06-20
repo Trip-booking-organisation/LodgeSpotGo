@@ -22,8 +22,6 @@ public class SearchAccommodationService : SearchAccommodationApp.SearchAccommoda
     public static readonly ActivitySource ActivitySource = new("SearchAccommodationActivity");
     private readonly IRecommendationClient _recommendationClient;
     private readonly IAccommodationRepository _accommodationRepository;
-    public const string ServiceName = "GradesService";
-    public static readonly ActivitySource ActivitySource = new(ServiceName);
     private readonly IGradeRepository _gradeRepository;
 
     public SearchAccommodationService(ILogger<SearchAccommodationService> logger, ISender sender, IMapper mapper, IMappingToGrpcResponse mappingToGrpcResponse, IRecommendationClient recommendationClient, IAccommodationRepository accommodationRepository, IGradeRepository gradeRepository)

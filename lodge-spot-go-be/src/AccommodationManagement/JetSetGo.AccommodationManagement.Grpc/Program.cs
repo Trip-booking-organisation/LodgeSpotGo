@@ -3,7 +3,7 @@ using JetSetGo.AccommodationManagement.Grpc;
 using JetSetGo.AccommodationManagement.Grpc.Services;
 using JetSetGo.AccommodationManagement.Grpc.Services.Grades;
 using JetSetGo.AccommodationManagement.Infrastructure;
-using JetSetGo.ReservationManagement.Infrastructure.MessageBroker.Settings;
+using JetSetGo.AccommodationManagement.Infrastructure.MessageBroker.Settings;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
@@ -114,7 +114,8 @@ var builder = WebApplication.CreateBuilder(args);
         c.AddSecurityDefinition(securityScheme.Reference.Id, securityScheme);
         c.AddSecurityRequirement(new OpenApiSecurityRequirement{{securityScheme, new string[] { }}});
     });
-    
+    builder.Services.AddSingleton<IMetricServer>(provider => new MetricServer(port: 7120));
+
 // #### mass transit ####
     builder.Services.Configure<MessageBrokerSettings>
         (builder.Configuration.GetSection(MessageBrokerSettings.SectionName));

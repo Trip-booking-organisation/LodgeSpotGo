@@ -16,14 +16,7 @@
           <OutputDir>obj\Debug\net7.0\</OutputDir>
           <Generator>MSBuild:Compile</Generator>
         </Protobuf>
-        <Protobuf Include="Protos\recommodation.proto">
-          <GrpcServices>Server</GrpcServices>
-          <Access>Public</Access>
-          <ProtoCompile>True</ProtoCompile>
-          <CompileOutputs>True</CompileOutputs>
-          <OutputDir>obj\Debug\net7.0\</OutputDir>
-          <Generator>MSBuild:Compile</Generator>
-        </Protobuf>
+        
         <Protobuf Include="Routes\greet.proto" GrpcServices="Server" />
         <Protobuf Include="Dto\accommodation.proto" GrpcServices="None" />
         <Protobuf Include="Dto\grade.proto" GrpcServices="None" />
