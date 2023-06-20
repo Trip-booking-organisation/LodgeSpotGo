@@ -26,6 +26,7 @@
         <PackageReference Include="Microsoft.AspNetCore.Grpc.Swagger" Version="0.3.5" />
         <PackageReference Include="Neo4j.Driver" Version="5.9.0" />
         <PackageReference Include="Neo4jClient" Version="5.1.11" />
+        <PackageReference Include="prometheus-net.AspNetCore" Version="8.0.0" />
     </ItemGroup>
 
     <ItemGroup>

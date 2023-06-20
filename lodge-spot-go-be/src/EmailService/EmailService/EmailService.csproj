@@ -11,6 +11,7 @@
         <PackageReference Include="MassTransit" Version="8.1.0-develop.1397" />
         <PackageReference Include="MassTransit.RabbitMQ" Version="8.1.0-develop.1397" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.5" />
+        <PackageReference Include="prometheus-net.AspNetCore" Version="8.0.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     </ItemGroup>
 

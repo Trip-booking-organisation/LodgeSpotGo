@@ -18,6 +18,23 @@
       ]
     },
     {
+      "UpstreamPathTemplate": "/api/accommodations/get-recommended",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "DownstreamPathTemplate": "/api/v1/accommodations/get-recommended",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7132
+        }
+      ]
+    },
+    {
       "UpstreamPathTemplate": "/api/accommodations/{everything}",
       "UpstreamHttpMethod": [
         "GET",

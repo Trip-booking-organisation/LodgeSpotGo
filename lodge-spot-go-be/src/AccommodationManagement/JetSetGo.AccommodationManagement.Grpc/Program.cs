@@ -12,6 +12,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using OpenTelemetry.Trace;
+using Prometheus;
 
 var builder = WebApplication.CreateBuilder(args);
 {
@@ -39,7 +40,11 @@ var builder = WebApplication.CreateBuilder(args);
                 .AddGrpcClientInstrumentation()
                 .AddJaegerExporter()
                 .SetSampler(new AlwaysOnSampler());
+                
+            
         });
+    builder.Services.AddSingleton<IMetricServer>(provider => new MetricServer(port: 1234));
+
     builder.Services.AddGrpc().AddJsonTranscoding();
     builder.Configuration
         .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
@@ -166,6 +171,8 @@ var app = builder.Build();
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "AccommodationManagementMicroservice v1");
     });
     app.UseCors("AllowOrigin");
+    
+    app.UseMetricServer();
     app.MapGrpcService<GreeterService>()/*.RequireAuthorization()*/;
     app.MapGrpcService<AccommodationService>();
     app.MapGrpcService<GetAccommodationService>();

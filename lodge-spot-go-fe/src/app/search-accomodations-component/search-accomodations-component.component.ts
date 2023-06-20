@@ -12,6 +12,7 @@ import {IAccommodationDto} from "../common/model/accommodation-dto";
 import {RecommendationService} from "../common/services/recommendation.service";
 import {AuthService} from "../core/keycloak/auth.service";
 import {User} from "../core/keycloak/user";
+import {GetRecommenedRequest} from "../core/model/GetRecommenedRequest";
 
 
 @Component({
@@ -40,21 +41,26 @@ export class SearchAccomodationsComponentComponent implements OnInit {
               private searchService: SearchAndFilterService){}
 
   ngOnInit(): void {
-    this.accommodationService.getAllAccommodations().subscribe({
-      next: response =>{
-        console.log(response.accommodations)
-        this.recommendationResults = response.accommodations
-      }
-    })
-   /* this.getRecommendedAccommodations();*/
+    // this.accommodationService.getAllAccommodations().subscribe({
+    //   next: response =>{
+    //     console.log(response.accommodations)
+    //     this.recommendationResults = response.accommodations
+    //   }
+    // })
+   this.getRecommendedAccommodations();
     this.mapFilterTo()
   }
 
   private getRecommendedAccommodations() {
     this.user = this.auth.getUser()
-    this.recommendationService.getRecommendedAccommodations(this.user.email).subscribe({
+    let request:GetRecommenedRequest={
+      Name:this.user.email
+    }
+    this.recommendationService.getRecommendedAccommodations(request).subscribe({
       next: response => {
-        this.recommendationResults = response.recommendationResults
+        console.log(response)
+        this.recommendationResults = response.accommodations
+
       }
     })
   }
