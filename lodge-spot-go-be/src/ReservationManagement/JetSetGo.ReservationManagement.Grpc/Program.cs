@@ -1,3 +1,5 @@
+using Grpc.Core;
+using Grpc.Net.Client;
 using JetSetGo.ReservationManagement.Application;
 using JetSetGo.ReservationManagement.Grpc;
 using JetSetGo.ReservationManagement.Grpc.Interceptors;
@@ -7,11 +9,11 @@ using JetSetGo.ReservationManagement.Grpc.Saga.States;
 using JetSetGo.ReservationManagement.Grpc.Services;
 using JetSetGo.ReservationManagement.Infrastructure;
 using JetSetGo.ReservationManagement.Infrastructure.MessageBroker.Settings;
-using LodgeSpotGo.Shared.Events.Email;
 using LodgeSpotGo.Shared.Events.Notification;
 using LodgeSpotGo.Shared.Events.Reservation;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -33,6 +35,7 @@ builder.Services.AddGrpc(options =>
 {
     options.Interceptors.Add<ExceptionInterceptor>();
     options.Interceptors.Add<LoggingInterceptor>();
+    options.EnableDetailedErrors = true;
 }).AddJsonTranscoding();
 builder.Configuration
     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
@@ -59,6 +62,13 @@ builder.Services.AddGrpcSwagger().AddSwaggerGen(c =>
         Version= "v1",
         Description = "Reservation Management Microservice"
     });
+});
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenLocalhost(80, o => o.Protocols =
+        HttpProtocols.Http2);
+    options.ListenLocalhost(443, o => o.Protocols =
+        HttpProtocols.Http1);
 });
 // #### mass transit ####
 builder.Services.Configure<MessageBrokerSettings>
@@ -119,7 +129,6 @@ builder.Services.AddAuthentication(options =>
     };
 });
 builder.Services.AddAuthorization();
-builder.Services.AddTransient<ExceptionMiddleware>();
 var app = builder.Build();
 {
     app.UseSwagger().UseSwaggerUI(c =>
