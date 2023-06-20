@@ -92,7 +92,7 @@ builder.Services.AddMassTransit(busConfigurator =>
     busConfigurator.UsingRabbitMq((context, configurator) =>
     {
         var messageBrokerSettings = context.GetRequiredService<MessageBrokerSettings>();
-        configurator.Host(new Uri(messageBrokerSettings.Host), hostConfigurator =>
+        configurator.Host(messageBrokerSettings.Host, hostConfigurator =>
         {
             hostConfigurator.Username(messageBrokerSettings.Username);   
             hostConfigurator.Password(messageBrokerSettings.Password);   

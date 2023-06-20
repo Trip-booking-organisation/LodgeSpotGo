@@ -348,9 +348,14 @@
     "AdministrationPath": null
   },
   "HttpHandlerOptions": {
-    "AllowAutoRedirect": true,
+    "AllowAutoRedirect": false,
     "UseCookieContainer": true,
     "UseTracing": true,
     "MaxConnectionsPerServer": 100
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Debug"
+    }
   }
 }

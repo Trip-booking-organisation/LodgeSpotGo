@@ -78,7 +78,7 @@ builder.Services.AddMassTransit(busConfigurator =>
     busConfigurator.UsingRabbitMq((context, configurator) =>
     {
         var messageBrokerSettings = context.GetRequiredService<MessageBrokerSettings>();
-        configurator.Host(new Uri(messageBrokerSettings.Host), hostConfigurator =>
+        configurator.Host(messageBrokerSettings.Host, hostConfigurator =>
         {
             hostConfigurator.Username(messageBrokerSettings.Username);   
             hostConfigurator.Password(messageBrokerSettings.Password);   
@@ -129,14 +129,16 @@ var app = builder.Build();
 }
 
 // Configure the HTTP request pipeline.
+app.UseHttpsRedirection();
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapGrpcService<GreeterService>();
 app.MapGrpcService<ReservationService>();
 app.MapGrpcService<SearchReservationService>();
 app.MapGrpcService<UserReservationService>();
 app.MapGrpcService<GetReservationByAccomAndGuestService>();
 app.MapGrpcService<ReservationAccommodationHost>();
-app.UseAuthentication();
-app.UseAuthorization();
 app.MapGet("/",
     () =>
         "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");

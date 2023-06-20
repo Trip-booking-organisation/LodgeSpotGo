@@ -1,11 +1,9 @@
 using JetSetGo.AccommodationManagement.Application;
 using JetSetGo.AccommodationManagement.Grpc;
-using JetSetGo.AccommodationManagement.Grpc.Clients.Reservations;
-using JetSetGo.AccommodationManagement.Grpc.Clients.Users;
 using JetSetGo.AccommodationManagement.Grpc.Services;
 using JetSetGo.AccommodationManagement.Grpc.Services.Grades;
 using JetSetGo.AccommodationManagement.Infrastructure;
-using JetSetGo.ReservationManagement.Infrastructure.MessageBroker.Settings;
+using JetSetGo.AccommodationManagement.Infrastructure.MessageBroker.Settings;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
@@ -130,7 +128,7 @@ var builder = WebApplication.CreateBuilder(args);
         busConfigurator.UsingRabbitMq((context, configurator) =>
         {
             var messageBrokerSettings = context.GetRequiredService<MessageBrokerSettings>();
-            configurator.Host(new Uri(messageBrokerSettings.Host), hostConfigurator =>
+            configurator.Host(messageBrokerSettings.Host, hostConfigurator =>
             {
                 hostConfigurator.Username(messageBrokerSettings.Username);   
                 hostConfigurator.Password(messageBrokerSettings.Password);   
@@ -151,7 +149,10 @@ var app = builder.Build();
         c.OAuthAppName("KEYCLOAK");
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "AccommodationManagementMicroservice v1");
     });
+    app.UseHttpsRedirection();
     app.UseCors("AllowOrigin");
+    app.UseAuthentication();
+    app.UseAuthorization();
     app.MapGrpcService<GreeterService>()/*.RequireAuthorization()*/;
     app.MapGrpcService<AccommodationService>();
     app.MapGrpcService<GetAccommodationService>();
@@ -159,8 +160,6 @@ var app = builder.Build();
     app.MapGrpcService<GradeService>();
     app.MapGrpcService<FilterGrades>();
     app.MapGrpcService<HostAccommodationService>();
-    app.UseAuthentication();
-    app.UseAuthorization();
     app.MapGet("/",
         () =>
             "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, " +

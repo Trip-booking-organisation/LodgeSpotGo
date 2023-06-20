@@ -1,4 +1,4 @@
-﻿namespace JetSetGo.ReservationManagement.Infrastructure.MessageBroker.Settings;
+﻿namespace JetSetGo.AccommodationManagement.Infrastructure.MessageBroker.Settings;
 
 public class MessageBrokerSettings
 {

@@ -12,9 +12,8 @@ using Microsoft.Extensions.Options;
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 var configuration = builder.Configuration;
-services.
-    AddCore().
-    AddInfrastructure(configuration);
+services.AddCore()
+        .AddInfrastructure(configuration);
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
 builder.Services

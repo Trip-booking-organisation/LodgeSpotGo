@@ -24,7 +24,6 @@ public class ReservationService : ReservationApp.ReservationAppBase
     private readonly ISender _sender;
     private readonly IGetAccommodationClient _accommodationClient;
     private readonly IEventBus _bus;
-    private readonly CreateReservationHandler _createReservationHandler;
     public const string ServiceName = "ReservationService";
     public static readonly ActivitySource ActivitySource = new("Reservation activity");
 
@@ -39,7 +38,6 @@ public class ReservationService : ReservationApp.ReservationAppBase
         IMapToGrpcResponse mapToGrpcResponse, 
         IGetAccommodationClient accommodationClient, 
         IEventBus bus,
-        CreateReservationHandler createReservationHandler,
         ReservationSagaOrchestrator sagaOrchestrator)
     {
         _logger = logger;
@@ -49,7 +47,6 @@ public class ReservationService : ReservationApp.ReservationAppBase
         _mapToGrpcResponse = mapToGrpcResponse;
         _accommodationClient = accommodationClient;
         _bus = bus;
-        _createReservationHandler = createReservationHandler;
         _sagaOrchestrator = sagaOrchestrator;
     }
     /*[Authorize(Roles = "host,guest")]*/
