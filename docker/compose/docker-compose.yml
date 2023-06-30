@@ -1,5 +1,26 @@
 version: "3.8"
+name: lodge-spot-prod
 services:
+  ## broker ##
+  lodge-spot-mq:
+    image: rabbitmq:3.11.7-management
+    container_name: lodge-spot-mq
+    hostname: "lodge-spot-mq"
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: user
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+      - "15692:15692"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      timeout: 5s
+      interval: 5s
+      retries: 10
+    volumes:
+      - mq-lodge-data-prod:/var/lib/rabbitmq
+      - mq-lodge-log-prod:/var/log/rabbitmq
   keycloak-db:
     image: postgres
     restart: always
@@ -25,7 +46,7 @@ services:
       KC_DB_USERNAME: admin
       KC_DB_PASSWORD: admin1312
       KC_FEATURES: declarative-user-profile
-    entrypoint: [ "/opt/keycloak/bin/kc.sh", "start-dev" ]
+    entrypoint: ["/opt/keycloak/bin/kc.sh", "start-dev"]
     ports:
       - "8080:8080"
     depends_on: 
@@ -59,10 +80,12 @@ services:
       Jwt:Authority: http://host.docker.internal:8080/realms/booking-app
       Jwt:AuthorizationUrl: http://host.docker.internal:8080/realms/booking-app/protocol/openid-connect/auth
       Jwt:TokenUrl: http://host.docker.internal:8080/realms/booking-app/protocol/openid-connect/token
+      MessageBroker:Host: amqp://lodge-spot-mq:5672
     networks:
       - lodge-spot-go-net
     depends_on:
-      - accommodation-db
+      lodge-spot-mq:
+        condition: service_healthy
   ####  reservation service ####
   reservation-db:
     image: mongo
@@ -90,10 +113,12 @@ services:
       Jwt:Authority: http://host.docker.internal:8080/realms/booking-app
       Jwt:AuthorizationUrl: http://host.docker.internal:8080/realms/booking-app/protocol/openid-connect/auth
       Jwt:TokenUrl: http://host.docker.internal:8080/realms/booking-app/protocol/openid-connect/token
+      MessageBroker:Host: amqp://lodge-spot-mq:5672
     networks:
       - lodge-spot-go-net
     depends_on:
-      - reservation-db
+      lodge-spot-mq:
+        condition: service_healthy
     ####  search and filter service ####
   search-db:
     image: mongo
@@ -146,15 +171,23 @@ services:
       - "7169:80"
     environment:
       MongoDatabaseSettings:ConnectionString: mongodb://lodge1312:lodge420@users-db:27017
-      Jwt:Authority: http://host.docker.internal:8080/realms/booking-app
-      Jwt:AuthorizationUrl: http://host.docker.internal:8080/realms/booking-app/protocol/openid-connect/auth
-      Jwt:TokenUrl: http://host.docker.internal:8080/realms/booking-app/protocol/openid-connect/token
-      KeycloakAuth:BaseUrl: http://host.docker.internal:8080
+      MessageBroker:Host: amqp://lodge-spot-mq:5672
     networks:
       - lodge-spot-go-net
     depends_on:
-      - users-db
-  
+      lodge-spot-mq:
+        condition: service_healthy
+  api-gw:
+    image: ${YOUR_REGISTRY-}users-service:1.0.0
+    container_name: user-service
+    build: ../../lodge-spot-go-be/src/ApiGateway/
+    environment:
+      ASPNETCORE_ENVIRONMENT : Container
+    ports:
+      - "5294:80"
+      - "7120:443"
+    networks: 
+      lodge-spot-go-net:
 volumes:
   accommodation-db-data:
     driver: local
@@ -165,6 +198,10 @@ volumes:
   search-db-data:
     driver: local
   keycloak-db-data:
+    driver: local
+  mq-lodge-data-prod:
+    driver: local
+  mq-lodge-log-prod:
     driver: local
 networks:
   lodge-spot-go-net:

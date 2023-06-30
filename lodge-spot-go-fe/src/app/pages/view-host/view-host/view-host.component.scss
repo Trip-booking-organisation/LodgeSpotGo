@@ -1,0 +1,26 @@
+.view-host{
+  text-align: center;
+  padding: 15rem 5rem 5rem 5rem;
+}
+.row{
+  padding-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+  width: 20%;
+}
+.host-info{
+  padding-left: 2rem;
+}
+.grades-title{
+  padding: 0 0 1rem 0;
+  border-bottom-width:1px ;
+  border-bottom-color: #005e80 ;
+  border-bottom-style: solid;
+}
+.grades{
+  padding-top: 3rem;
+  padding-right: 15rem;
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 1rem;
+}

@@ -1,0 +1,12 @@
+﻿syntax = "proto3";
+import "google/api/annotations.proto";
+import "Dto/user.proto";
+option csharp_namespace = "JetSetGo.RecommodationSystem.Grpc";
+service UserApp{
+  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse){
+    option(google.api.http)={
+      post :"/api/v1/reccomodation/user",
+      body: "user"
+    };
+  }
+}

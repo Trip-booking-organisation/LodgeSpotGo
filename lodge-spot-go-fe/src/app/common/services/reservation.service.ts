@@ -28,7 +28,7 @@ export class ReservationService {
     return this.httpClient.get(`${this.reservationUrl + 'accommodation/' + id} ` , {headers : this.headers});
   }
   public updateReservationStatus(reservation: UpdateReservationStatusRequest):Observable<any>{
-    return this.httpClient.put<UpdateReservationStatusRequest>(`${this.reservationUrl} ` , reservation,{headers : this.headers});
+    return this.httpClient.put<UpdateReservationStatusRequest>(`${this.reservationUrl}`, reservation,{headers : this.headers});
   }
   public getDeletedReservationsCount(guestId: string):Observable<any>{
     return this.httpClient.get(`${this.reservationUrl+'deleted/'+ guestId } ` ,{headers : this.headers});

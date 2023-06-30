@@ -1,0 +1,19 @@
+﻿services:
+  lodge-spot-mq:
+    image: rabbitmq:3.11.7-management
+    container_name: lodge-spot-mq
+    hostname: lodge-spot-mq
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: user
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - mq-lodge-data-volume:/var/lib/rabbitmq
+      - mq-lodge-log-volume:/var/log/rabbitmq
+volumes:
+  mq-lodge-data-volume:
+    driver: local
+  mq-lodge-log-volume:
+    driver: local

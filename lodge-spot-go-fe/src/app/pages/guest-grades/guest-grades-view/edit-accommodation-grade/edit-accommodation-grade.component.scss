@@ -1,0 +1,23 @@
+@import "src/sass/variables";
+.cancel{
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  h2{
+    color: $text-color;
+    font-size: larger;
+    padding-left: 3rem;
+  }
+  .input-div{
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+  }
+  .space{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 1rem;
+  }
+}
+

@@ -9,6 +9,10 @@ import {SearchAndFilterService} from "../common/services/search-and-filter.servi
 import {flightsAutoComplete} from "./data-access/cityAndCountryData";
 import {Accommodation} from "../common/model/accommodation";
 import {IAccommodationDto} from "../common/model/accommodation-dto";
+import {RecommendationService} from "../common/services/recommendation.service";
+import {AuthService} from "../core/keycloak/auth.service";
+import {User} from "../core/keycloak/user";
+import {GetRecommenedRequest} from "../core/model/GetRecommenedRequest";
 
 
 @Component({
@@ -19,6 +23,7 @@ import {IAccommodationDto} from "../common/model/accommodation-dto";
 export class SearchAccomodationsComponentComponent implements OnInit {
 
   searchResults: IAccommodationDto[] = [];
+ recommendationResults: IAccommodationDto[] = [];
   flightsAddresses = flightsAutoComplete;
   filteredLocations!: Observable<Address[]>;
   location = new FormControl()
@@ -28,13 +33,38 @@ export class SearchAccomodationsComponentComponent implements OnInit {
   isLoading: boolean;
   country: any;
   city: any
-
-  constructor(private accomodationService: AccommodationService,
+  isRecommended = true
+  user : User | null;
+  constructor(private accommodationService: AccommodationService,
+              private recommendationService: RecommendationService,
+              private auth : AuthService,
               private searchService: SearchAndFilterService){}
 
   ngOnInit(): void {
+    // this.accommodationService.getAllAccommodations().subscribe({
+    //   next: response =>{
+    //     console.log(response.accommodations)
+    //     this.recommendationResults = response.accommodations
+    //   }
+    // })
+   this.getRecommendedAccommodations();
     this.mapFilterTo()
   }
+
+  private getRecommendedAccommodations() {
+    this.user = this.auth.getUser()
+    let request:GetRecommenedRequest={
+      Name:this.user.email
+    }
+    this.recommendationService.getRecommendedAccommodations(request).subscribe({
+      next: response => {
+        console.log(response)
+        this.recommendationResults = response.accommodations
+
+      }
+    })
+  }
+
   private mapFilterTo() {
     this.filteredLocations = this.location.valueChanges
       .pipe(
@@ -52,6 +82,7 @@ export class SearchAccomodationsComponentComponent implements OnInit {
   }
 
   searchAccommodations() {
+    this.isRecommended = false;
     const numberOfGuests = this.numberOfGuests.value
     const startDate = Math.floor(new Date(this.from.value).getTime() / 1000)
     const endDate = Math.floor(new Date(this.to.value).getTime() / 1000)
@@ -60,10 +91,16 @@ export class SearchAccomodationsComponentComponent implements OnInit {
     const country = array[1]
     this.searchService.searchAccommodations(numberOfGuests,startDate,endDate,city,country).subscribe({
       next: response => {
+        if(response.accommodations.length===0)
+          this.isRecommended = true
         const accommodations = response.accommodations
         this.searchResults = [...accommodations]
         console.log(this.searchResults)
       }
     })
+  }
+
+  onFilter($event: IAccommodationDto[]) {
+    this.searchResults = $event
   }
 }

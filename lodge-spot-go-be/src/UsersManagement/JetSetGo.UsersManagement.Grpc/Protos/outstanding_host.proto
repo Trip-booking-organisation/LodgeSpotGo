@@ -1,0 +1,13 @@
+﻿syntax = "proto3";
+option csharp_namespace = "JetSetGo.UserManagement.Grpc";
+
+message OutstandingHostRequest {
+  string id = 1;
+}
+message OutstandingHostResponse {
+  bool isOutstanding = 1;
+}
+service OutstandingHostApp {
+  rpc GetOutstandingHost(OutstandingHostRequest) returns (OutstandingHostResponse){
+  }
+}

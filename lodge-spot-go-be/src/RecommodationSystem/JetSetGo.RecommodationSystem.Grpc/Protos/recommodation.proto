@@ -1,0 +1,13 @@
+﻿syntax = "proto3";
+import "google/api/annotations.proto";
+import "Dto/reccomodationDto.proto";
+option csharp_namespace = "JetSetGo.RecommodationSystem.Grpc";
+service ReccomodationApp{
+  rpc GetRecommodations(GetRecommodationReqest) returns (GetRecommodationsResponse){
+    option(google.api.http)={
+      post :"/api/v1/reccomodation",
+      body: "user"
+    };
+  }
+}
+

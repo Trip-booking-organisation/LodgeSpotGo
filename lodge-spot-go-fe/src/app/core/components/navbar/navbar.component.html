@@ -46,12 +46,12 @@
         </a>
       </div>
       </div>
-      <button class="btn btn-one flex">
-        Contact
+      <button class="btn btn-one flex" (click)="navigateToNotifications()">
+        Notifications
       </button>
     </div>
-    <button class="btn btn-two flex">
-      Contact
+    <button class="btn btn-two flex" (click)="navigateToNotifications()">
+      <mat-icon>notifications_none</mat-icon>
     </button>
     <div class="toggle-icon" (click)="showNavBar()">
       <mat-icon class="icon">menu</mat-icon>

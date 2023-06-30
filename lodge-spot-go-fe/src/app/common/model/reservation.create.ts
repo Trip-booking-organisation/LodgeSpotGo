@@ -7,4 +7,5 @@ export interface ReservationCreate {
   status: string;
   numberOfGuests: number;
   guestId: string;
+  guestEmail: string;
 }

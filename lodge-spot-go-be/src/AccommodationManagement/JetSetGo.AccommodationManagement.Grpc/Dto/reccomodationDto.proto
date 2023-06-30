@@ -1,0 +1,18 @@
+﻿syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "JetSetGo.RecommodationSystem.Grpc";
+
+message UserRecDto
+{
+  string Name =1;
+}
+
+message RecAccommodationResponse{
+  string name = 1;
+  string id = 2;
+}
+
+message GetRecommodationReqest{UserRecDto user =1;}
+message GetRecommodationsResponse{ repeated RecAccommodationResponse response =1;}

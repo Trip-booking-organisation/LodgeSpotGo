@@ -1,4 +1,4 @@
-﻿using JetSetGo.AccommodationManagement.Domain.Accommodation;
+﻿using JetSetGo.AccommodationManagement.Domain.Accommodations;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.IdGenerators;
 

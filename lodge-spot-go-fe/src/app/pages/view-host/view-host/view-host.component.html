@@ -1,0 +1,50 @@
+<div class="view-host">
+  <div class="host-info" *ngIf="host">
+    <div class="row">
+      <div class="info">
+        Name:
+      </div>
+      <div class="value">
+        {{host.firstName}}
+      </div>
+    </div>
+    <div class="row">
+      <div class="info">
+        Last name:
+      </div>
+      <div class="value">
+        {{host.lastName}}
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="info">
+        Email:
+      </div>
+      <div class="value">
+        {{host.email}}
+      </div>
+    </div>
+    <div class="row">
+      <div class="info">
+        Outstanding:
+      </div>
+      <div class="value" *ngIf="isOutstandingHost | async as out">
+        {{out.isOutstanding ? "yes" : "no"}}
+      </div>
+    </div>
+  </div>
+  <div class="host-grades">
+    <div class="grades-title">
+      Hosts grades:
+    </div>
+    <div class="grades" *ngIf="(hostGrades$ | async) as hs">
+      <div *ngFor="let grade of hs.hostGrades">
+        <div>
+          <app-grade-host-card  [hostGrade]="grade"/>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

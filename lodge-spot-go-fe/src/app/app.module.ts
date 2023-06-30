@@ -20,6 +20,11 @@ import { AccommodationCardComponent } from './search-accomodations-component/acc
 import {HomeModule} from "./pages/home/home.module";
 import {AllAccommodationsModule} from "./pages/all-accommodations/all-accommodations.module";
 import {ViewAccommodationModule} from "./pages/view-accommodation/view-accommodation.module";
+import {GradeAccommodationModule} from "./pages/grade-accommodation/grade-accommodation.module";
+import {GuestGradesModule} from "./pages/guest-grades/guest-grades.module";
+import {ViewHostModule} from "./pages/view-host/view-host.module";
+import {FlightsModule} from "./pages/flights/flights.module";
+import {NotificationsModule} from "./pages/notifications/notifications.module";
 
 @NgModule({
     declarations: [
@@ -34,13 +39,19 @@ import {ViewAccommodationModule} from "./pages/view-accommodation/view-accommoda
         BrowserAnimationsModule,
         CommonModule,
         MatInputModule,
+        FlightsModule,
+        GradeAccommodationModule,
+        GuestGradesModule,
         HostsAccomodationsModule,
         MatIconModule,
         AccommodationCreateModule,
         ToastrModule.forRoot(),
         HomeModule,
         AllAccommodationsModule,
-        ViewAccommodationModule
+        ViewAccommodationModule,
+        ViewHostModule,
+        ViewAccommodationModule,
+        NotificationsModule
     ],
     providers: [{
         provide: APP_INITIALIZER,
@@ -49,5 +60,6 @@ import {ViewAccommodationModule} from "./pages/view-accommodation/view-accommoda
         deps: [KeycloakService]
     }],
     bootstrap: [AppComponent]
+
 })
 export class AppModule { }

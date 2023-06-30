@@ -11,12 +11,20 @@
       <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
       <PackageReference Include="Google.Protobuf" Version="3.23.0" />
       <PackageReference Include="MediatR" Version="12.0.1" />
+      <PackageReference Include="prometheus-net.AspNetCore" Version="8.0.0" />
     </ItemGroup>
     
     
 
     <ItemGroup>
+      <ProjectReference Include="..\..\SharedEvents\LodgeSpotGo.Shared.Events\LodgeSpotGo.Shared.Events.csproj" />
       <ProjectReference Include="..\JetSetGo.ReservationManagement.Domain\JetSetGo.ReservationManagement.Domain.csproj" />
+    </ItemGroup>
+    
+    
+
+    <ItemGroup>
+      <Folder Include="Dto\" />
     </ItemGroup>
 
 </Project>

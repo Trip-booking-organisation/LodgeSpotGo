@@ -1,0 +1,28 @@
+﻿version: '3.8'
+services: 
+  neo4j:
+    image: neo4j:5.8.0-community
+    ports:
+      - "7888:7474"
+      - "7999:7687"
+    restart: unless-stopped
+    environment:
+      - NEO4J_AUTH=neo4j/password
+    volumes:
+      - neo4j-data:/data
+      - neo4j-conf:/conf
+      - neo4j-logs:/logs
+      - neo4j-plugins:/plugins
+volumes: 
+  neo4j-data:
+    driver: local
+  neo4j-conf:
+    driver: local
+  neo4j-logs:
+    driver: local
+  neo4j-plugins:
+    driver: local
+  
+  
+      
+    

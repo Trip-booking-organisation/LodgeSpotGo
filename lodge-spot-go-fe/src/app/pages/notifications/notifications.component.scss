@@ -1,0 +1,12 @@
+.notifications-container{
+  padding-top: 12rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+.notifications{
+  padding-top: 2rem;
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 1rem;
+  padding-bottom: 2rem;
+}

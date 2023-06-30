@@ -5,15 +5,15 @@ namespace JetSetGo.ReservationManagement.Infrastructure.MessageBroker.EventBus;
 
 public class EventBus: IEventBus
 {
-    private readonly IBus _bus;
+    private readonly IPublishEndpoint _publishEndpoint;
 
-    public EventBus(IBus bus)
+    public EventBus(IPublishEndpoint publishEndpoint)
     {
-        _bus = bus;
+        _publishEndpoint = publishEndpoint;
     }
 
     public Task PublishAsync<T>(T message, CancellationToken cancellationToken = default) where T : class
     {
-        return _bus.Publish(message, cancellationToken);
+        return _publishEndpoint.Publish(message, cancellationToken);
     }
 }

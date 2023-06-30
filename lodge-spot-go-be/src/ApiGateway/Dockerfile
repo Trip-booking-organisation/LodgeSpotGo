@@ -7,8 +7,10 @@ FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 COPY ["LodgeSpotGo.ApiGateway/LodgeSpotGo.ApiGateway.csproj", "LodgeSpotGo.ApiGateway/"]
 RUN dotnet restore "LodgeSpotGo.ApiGateway/LodgeSpotGo.ApiGateway.csproj"
+
 COPY . .
-WORKDIR "/src/ApiGateway/LodgeSpotGo.ApiGateway"
+
+WORKDIR "/src/LodgeSpotGo.ApiGateway"
 RUN dotnet build "LodgeSpotGo.ApiGateway.csproj" -c Release -o /app/build
 
 FROM build AS publish

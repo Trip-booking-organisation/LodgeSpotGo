@@ -1,8 +1,26 @@
 using JetSetGo.UsersManagement.Grpc;
+using JetSetGo.UsersManagement.Grpc.Endpoints;
+using JetSetGo.UsersManagement.Grpc.Services;
+using JetSetGo.UsersManagement.Infrastructure;
+using JetSetGo.UsersManagement.Infrastructure.MessageBroker.Settings;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using OpenTelemetry.Trace;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddOpenTelemetry()
+    .WithTracing(services =>
+    { services
+        .AddSource(UserEndpoints.UserService)
+        .SetResourceBuilder(TracingResourceBuilder.GetUserServiceResource());
+        services
+        .AddAspNetCoreInstrumentation()
+        .AddHttpClientInstrumentation()
+        .AddJaegerExporter()
+        .SetSampler(new AlwaysOnSampler());
+});
 builder.Configuration
     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
     .AddEnvironmentVariables();
@@ -10,10 +28,10 @@ builder.Services.AddPresentation(builder.Configuration);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddInfrastructure(builder.Configuration);
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
-builder.Services
-    .AddCors(options =>
+builder.Services.AddCors(options =>
     {
         options.AddPolicy("AllowOrigin",
             b =>
@@ -54,8 +72,31 @@ builder.Services.AddAuthentication(options =>
         }
     };
 });
-//builder.Services.AddKeycloakAuthentication(builder.Configuration, KeycloakAuthenticationOptions.Section);
 builder.Services.AddAuthorization();
+// #### mass transit ####
+builder.Services.Configure<MessageBrokerSettings>
+    (builder.Configuration.GetSection(MessageBrokerSettings.SectionName));
+builder.Services.AddSingleton(provider => 
+    provider.GetRequiredService<IOptions<MessageBrokerSettings>>().Value);
+builder.Services.AddMassTransit(busConfigurator =>
+{
+    var assembly = typeof(IMarker).Assembly;
+    busConfigurator.AddConsumers(assembly);
+    busConfigurator.AddSagaStateMachines(assembly);
+    busConfigurator.AddSagas(assembly);
+    busConfigurator.AddActivities(assembly);
+    busConfigurator.SetKebabCaseEndpointNameFormatter();
+    busConfigurator.UsingRabbitMq((context, configurator) =>
+    {
+        var messageBrokerSettings = context.GetRequiredService<MessageBrokerSettings>();
+        configurator.Host(messageBrokerSettings.Host, hostConfigurator =>
+        {
+            hostConfigurator.Username(messageBrokerSettings.Username);   
+            hostConfigurator.Password(messageBrokerSettings.Password);   
+        });
+        configurator.ConfigureEndpoints(context, KebabCaseEndpointNameFormatter.Instance);
+    });
+});
 
 var app = builder.Build();
 
@@ -67,7 +108,9 @@ if (app.Environment.IsDevelopment())
 }
 app.UseHttpsRedirection();
 app.UseCors("AllowOrigin");
-
+app.MapGrpcService<GetUserService>();
+app.MapGrpcService<FilterService>();
+app.MapGrpcService<GetUserInfoService>();
 app.UseAuthentication();
 app.UseAuthorization();
 

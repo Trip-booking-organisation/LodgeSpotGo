@@ -8,6 +8,7 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {MatInputModule} from "@angular/material/input";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatButtonModule} from "@angular/material/button";
+import {GradeCardModule} from "../grade-card/grade-card.module";
 
 
 @NgModule({
@@ -15,14 +16,15 @@ import {MatButtonModule} from "@angular/material/button";
     ViewAccommodationComponent,
     CreateReservationComponent
   ],
-  imports: [
-    CommonModule,
-    MatCardModule,
-    MatDialogModule,
-    ReactiveFormsModule,
-    MatInputModule,
-    MatDatepickerModule,
-    MatButtonModule,
-  ]
+    imports: [
+        CommonModule,
+        MatCardModule,
+        MatDialogModule,
+        ReactiveFormsModule,
+        MatInputModule,
+        MatDatepickerModule,
+        MatButtonModule,
+        GradeCardModule,
+    ]
 })
 export class ViewAccommodationModule { }

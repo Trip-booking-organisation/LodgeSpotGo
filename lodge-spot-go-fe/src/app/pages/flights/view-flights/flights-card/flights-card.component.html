@@ -1,0 +1,37 @@
+<div class="flight-card">
+  <div class="content-flight">
+    <div class="flight-details">
+      <div class="flight-info">
+        <div class="flight-time">
+          <p class="time">{{flight.departureTime}}</p>
+          <p class="date">{{flight.departureDate}}</p>
+          <p class="place">{{flight.departureAddress.city}}, {{flight.departureAddress.country}}</p>
+          <p class="place">{{flight.departureAddress.airportName}}</p>
+
+        </div>
+      </div>
+      <div class="flight-divider">
+        <div class="divider-line"></div>
+        <img src="assets/images/mail.png" alt="Plane Icon">
+        <div class="divider-line"></div>
+      </div>
+      <div class="flight-info">
+        <img src="assets/images/arrivals.png" alt="Arrival Icon">
+        <div class="flight-time">
+          <p class="time">{{flight.arrivalTime}}</p>
+          <p class="date">{{flight.arrivalDate}}</p>
+          <p class="place">{{flight.arrivalAddress.city}}, {{flight.arrivalAddress.country}}</p>
+          <p class="place">{{flight.arrivalAddress.airportName}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="total-price">
+    <h4 class="price-h">Price</h4>
+    <div class="total">
+      <p class="price-text">Total price for all passengers <span class="price">{{price}}€</span></p>
+    </div>
+    <button *ngIf="token != undefined" class="btn book" (click)="onBook()">Book Now</button>
+  </div>
+</div>

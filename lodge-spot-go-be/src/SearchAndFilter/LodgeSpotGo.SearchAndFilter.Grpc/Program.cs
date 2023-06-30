@@ -3,8 +3,20 @@ using LodgeSpotGo.SearchAndFilter.Grpc.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using OpenTelemetry.Trace;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddOpenTelemetry()
+    .WithTracing(services =>
+    { services
+            .AddSource(SearchAndFilterService.ServiceName)
+            .SetResourceBuilder(TracingResourceBuilder.SearchAndFilterServiceResource());
+        services
+            .AddAspNetCoreInstrumentation()
+            .AddGrpcClientInstrumentation()
+            .AddJaegerExporter()
+            .SetSampler(new AlwaysOnSampler());
+    });
 builder.Services.AddGrpc().AddJsonTranscoding();
 builder.Services.AddPresentation();
 builder.Configuration
@@ -69,6 +81,7 @@ app.UseRouting();
 app.UseCors("AllowOrigin");
 // Configure the HTTP request pipeline.
 app.MapGrpcService<GreeterService>();
+app.MapGrpcService<FilterService>();
 app.MapGrpcService<SearchAndFilterService>();
 app.UseSwagger().UseSwaggerUI(c =>
 {

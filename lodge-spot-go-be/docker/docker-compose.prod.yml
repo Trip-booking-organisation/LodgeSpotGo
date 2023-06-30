@@ -1,0 +1,232 @@
+﻿version: "3.8"
+name: lodge-spot-prod
+services:
+  ## broker ##
+  lodge-spot-mq:
+    image: rabbitmq:3.11.7-management
+    container_name: lodge-spot-mq
+    hostname: lodge-spot-mq
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: user
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - mq-lodge-data-prod:/var/lib/rabbitmq
+      - mq-lodge-log-prod:/var/log/rabbitmq
+    healthcheck:
+      test: [ "CMD", "rabbitmq-diagnostics", "ping" ]
+      interval: 5s
+      retries: 10
+      timeout: 10s
+    networks:
+      - lodge-spot-net-prod
+#  keycloak-db:
+#    image: postgres
+#    restart: always
+#    ports:
+#      - "5431:5432"
+#    environment:
+#      POSTGRES_USER: admin
+#      POSTGRES_PASSWORD: admin1312
+#      POSTGRES_DB: keycloak
+#      POSTGRES_SCHEMA: keycloak
+#    volumes:
+#      - keycloak-db-data-prod:/var/lib/postgresql/data
+#    networks:
+#      - lodge-spot-net-prod
+#  keycloak:
+#    image: quay.io/keycloak/keycloak:21.1.1
+#    container_name: keycloak
+#    environment:
+#      KEYCLOAK_ADMIN: admin
+#      KEYCLOAK_ADMIN_PASSWORD: admin
+#      KC_DB: postgres
+#      KC_DB_URL: jdbc:postgresql://keycloak-db:5432/keycloak
+#      KC_DB_USERNAME: admin
+#      KC_DB_PASSWORD: admin1312
+#      KC_FEATURES: declarative-user-profile
+#    entrypoint: [ "/opt/keycloak/bin/kc.sh", "start-dev" ]
+#    ports:
+#      - "8080:8080"
+#    depends_on:
+#      - keycloak-db
+#    networks:
+#      - lodge-spot-net-prod
+  ####  accommodation service ####
+  accommodation-db:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: lodge1312
+      MONGO_INITDB_ROOT_PASSWORD: lodge420
+      MONGO_INITDB_DATABASE: accommodation-db
+    ports:
+      - "27101:27017"
+    volumes:
+      - accommodation-db-data-prod:/data/db
+      - ../entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    networks:
+      - lodge-spot-net-prod
+  accommodation-service:
+    image: ${YOUR_REGISTRY-}accommodation-service:1.0.0
+    container_name: accommodation-service
+    build: 
+      context: ./../src/
+      dockerfile: AccommodationManagement/Dockerfile
+    ports:
+      - "7120:443"
+      - "7132:80"
+    environment:
+      MongoDatabaseSettings:ConnectionString: mongodb://lodge1312:lodge420@accommodation-db:27017
+      ReservationUrl: http://reservation-service:80
+      UserUrl: http://users-service:80
+    env_file:
+      - env/shared.env
+    networks:
+      - lodge-spot-net-prod
+    depends_on:
+      lodge-spot-mq:
+        condition: service_healthy
+  ####  reservation service ####
+  reservation-db:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: lodge1312
+      MONGO_INITDB_ROOT_PASSWORD: lodge420
+      MONGO_INITDB_DATABASE: reservation-db
+    ports:
+      - "27018:27017"
+    volumes:
+      - reservation-db-data-prod:/data/db
+      - ../entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    networks:
+      - lodge-spot-net-prod
+  reservation-service:
+    image: ${YOUR_REGISTRY-}reservation-service:1.0.0
+    container_name: reservation-service
+    build:
+      context: ./../src/
+      dockerfile: ReservationManagement/Dockerfile
+    ports:
+      - "7105:443"
+      - "7106:80"
+    environment:
+      MongoDatabaseSettings:ConnectionString: mongodb://lodge1312:lodge420@accommodation-db:27017
+      AccommodationUrl: http://accommodation-service:80
+      UsersUrl: http://users-sevice:80
+    env_file:
+      - env/shared.env
+    networks:
+      - lodge-spot-net-prod
+    volumes:
+      - ../certs/certificate.pfx:/app/certificate.pfx
+    depends_on:
+      lodge-spot-mq:
+        condition: service_healthy
+    ####  search and filter service ####
+  search-db:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: lodge1312
+      MONGO_INITDB_ROOT_PASSWORD: lodge420
+      MONGO_INITDB_DATABASE: search-db
+    ports:
+      - "27100:27017"
+    volumes:
+      - search-db-data-prod:/data/db
+      - ../entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    networks:
+      - lodge-spot-net-prod
+  search-service:
+    image: ${YOUR_REGISTRY-}search-service:1.0.0
+    container_name: search-service
+    build:
+      context: ./../src/
+      dockerfile: SearchAndFilter/Dockerfile
+    ports:
+      - "7231:443"
+      - "7230:80"
+    environment:
+      MongoDatabaseSettings:ConnectionString: mongodb://lodge1312:lodge420@search-db:27017
+      AccommodationUrl: http://accommodation-service:80
+      ReservationUrl: http://reservation-service:80
+    env_file:
+      - env/shared.env
+    networks:
+      - lodge-spot-net-prod
+    depends_on:
+      lodge-spot-mq:
+        condition: service_healthy
+    volumes:
+      - ../certs/certificate.pfx:/app/certificate.pfx
+  users-db:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: lodge1312
+      MONGO_INITDB_ROOT_PASSWORD: lodge420
+      MONGO_INITDB_DATABASE: user-db
+    ports:
+      - "27019:27017"
+    volumes:
+      - user-db-data-prod:/data/db
+      - ../entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    networks:
+      - lodge-spot-net-prod
+  users-service:
+    image: ${YOUR_REGISTRY-}users-service:1.0.0
+    container_name: user-service
+    build:
+      context: ./../src/
+      dockerfile: UsersManagement/Dockerfile
+    ports:
+      - "7170:443"
+      - "7169:80"
+    environment:
+      MongoDatabaseSettings:ConnectionString: mongodb://lodge1312:lodge420@users-db:27017
+    env_file:
+      - env/shared.env
+    networks:
+      - lodge-spot-net-prod
+    depends_on:
+      lodge-spot-mq:
+        condition: service_healthy
+    volumes:
+      - ../certs/certificate.pfx:/app/certificate.pfx
+  api-gw:
+    image: ${YOUR_REGISTRY-}api-gw:1.0.0
+    container_name: api-gw
+    build: ../../lodge-spot-go-be/src/ApiGateway/
+    environment:
+      ASPNETCORE_ENVIRONMENT: Container
+    env_file:
+      - env/shared.env
+    ports:
+      - "5294:80"
+      - "7000:443"
+    networks:
+     - lodge-spot-net-prod
+    volumes:
+      - ../certs/certificate.pfx:/app/certificate.pfx
+volumes:
+  accommodation-db-data-prod:
+    driver: local
+  reservation-db-data-prod:
+    driver: local
+  user-db-data-prod:
+    driver: local
+  search-db-data-prod:
+    driver: local
+  keycloak-db-data-prod:
+    driver: local
+  mq-lodge-data-prod:
+    driver: local
+  mq-lodge-log-prod:
+    driver: local
+networks:
+  lodge-spot-net-prod:
+    driver: bridge

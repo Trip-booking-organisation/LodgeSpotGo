@@ -9,11 +9,28 @@
         "DELETE"
       ],
       "DownstreamPathTemplate": "/api/v1/accommodations",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5020
+          "Port": 7132
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/accommodations/get-recommended",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "DownstreamPathTemplate": "/api/v1/accommodations/get-recommended",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7132
         }
       ]
     },
@@ -26,11 +43,113 @@
         "DELETE"
       ],
       "DownstreamPathTemplate": "/api/v1/accommodations/{everything}",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5020
+          "Port": 7132
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/users/gradeHost",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "DownstreamPathTemplate": "/api/v1/users/gradeHost",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7169
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/users/getUser",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "DownstreamPathTemplate": "/api/v1/users/getUser",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7169
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/users/getGradesByHost",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "DownstreamPathTemplate": "/api/v1/users/getGradesByHost",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7169
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/users/getGradesByGuest",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "DownstreamPathTemplate": "/api/v1/users/getGradesByGuest",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7169
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/users/deleteGrade",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "DownstreamPathTemplate": "/api/v1/users/deleteGrade",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7169
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/users/updateGrade",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "DownstreamPathTemplate": "/api/v1/users/updateGrade",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7169
         }
       ]
     },
@@ -44,11 +163,11 @@
         "DELETE"
       ],
       "DownstreamPathTemplate": "/api/v1/accommodations/host/{hostId}",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5020
+          "Port": 7132
         }
       ]
     },
@@ -70,6 +189,40 @@
       ]
     },
     {
+      "UpstreamPathTemplate": "/api/users/tickets",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "DownstreamPathTemplate": "/api/v1/users/tickets",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7169
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/users/getUser/{id}",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "DownstreamPathTemplate": "/api/v1/users/getUser/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7169
+        }
+      ]
+    },
+    {
       "UpstreamPathTemplate": "/api/reservations",
       "UpstreamHttpMethod": [
         "GET",
@@ -79,11 +232,11 @@
         "OPTIONS"
       ],
       "DownstreamPathTemplate": "/api/v1/reservations",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7105
+          "Port": 5064
         }
       ]
     },
@@ -130,6 +283,75 @@
         "DELETE"
       ],
       "DownstreamPathTemplate": "/api/v1/search",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7231
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/grades",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "DownstreamPathTemplate": "/api/v1/grades",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7132
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/grades/guest/{guestId}",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "DownstreamPathTemplate": "/api/v1/grades/guest/{guestId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7132
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/grades/{guestId}",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "DownstreamPathTemplate": "/api/v1/grades/{guestId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7132
+        }
+      ]
+    }
+  ,
+    {
+      "UpstreamPathTemplate": "/api/filter",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "DownstreamPathTemplate": "/api/v1/filter",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {

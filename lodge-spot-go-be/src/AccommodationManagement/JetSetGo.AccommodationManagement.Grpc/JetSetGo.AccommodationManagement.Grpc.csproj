@@ -8,10 +8,28 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Protobuf Include="Dto\reccomodationDto.proto">
+          <GrpcServices>None</GrpcServices>
+          <Access>Public</Access>
+          <ProtoCompile>True</ProtoCompile>
+          <CompileOutputs>True</CompileOutputs>
+          <OutputDir>obj\Debug\net7.0\</OutputDir>
+          <Generator>MSBuild:Compile</Generator>
+        </Protobuf>
+        
         <Protobuf Include="Routes\greet.proto" GrpcServices="Server" />
         <Protobuf Include="Dto\accommodation.proto" GrpcServices="None" />
+        <Protobuf Include="Dto\grade.proto" GrpcServices="None" />
         <Protobuf Include="Routes\routes.proto" GrpcServices="Server" />
+        <Protobuf Include="Routes\grades.proto" GrpcServices="Server" />
         <Protobuf Include="Routes\get_accommodation.proto" GrpcServices="Server" />
+        
+        <Protobuf Include="Protos\recommodation.proto" GrpcServices="Client" />
+        
+        <Protobuf Include="Routes\get_reservations.proto" GrpcServices="Client" />
+        <Protobuf Include="Routes\get_accommodation_grades.proto" GrpcServices="Server" />
+        <Protobuf Include="Routes\get_host_accommodation.proto" GrpcServices="Server" />
+        <Protobuf Include="Routes\get_user.proto" GrpcServices="Client" />
         <Protobuf Include="Routes\search_accommodation.proto" GrpcServices="Server">
           <GrpcServices>Server</GrpcServices>
           <Access>Public</Access>
@@ -20,6 +38,7 @@
           <OutputDir>obj\Debug\net7.0\</OutputDir>
           <Generator>MSBuild:Compile</Generator>
         </Protobuf>
+        <Protobuf Include="Protos\get_user_keycloak.proto" GrpcServices="Client" />
     </ItemGroup>
 
     <ItemGroup>
@@ -31,6 +50,13 @@
         <PackageReference Include="Keycloak.AuthServices.Authorization" Version="1.5.1" />
         <PackageReference Include="Microsoft.AspNetCore.Grpc.JsonTranscoding" Version="7.0.5" />
         <PackageReference Include="Microsoft.AspNetCore.Grpc.Swagger" Version="0.3.5" />
+        <PackageReference Include="OpenTelemetry.Exporter.Jaeger" Version="1.5.0" />
+        <PackageReference Include="OpenTelemetry.Exporter.Zipkin" Version="1.5.0" />
+        <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.5.0" />
+        <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.5.0-beta.1" />
+        <PackageReference Include="OpenTelemetry.Instrumentation.GrpcNetClient" Version="1.5.0-beta.1" />
+        <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.5.0-beta.1" />
+        <PackageReference Include="prometheus-net.AspNetCore" Version="8.0.0" />
     </ItemGroup>
 
     <ItemGroup>

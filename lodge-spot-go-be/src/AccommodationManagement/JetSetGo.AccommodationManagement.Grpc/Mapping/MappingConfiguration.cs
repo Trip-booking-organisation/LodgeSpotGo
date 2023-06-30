@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
 using JetSetGo.AccommodationManagement.Application.SearchAccommodation;
 using Google.Protobuf.WellKnownTypes;
-using JetSetGo.AccommodationManagement.Domain.Accommodation;
-using JetSetGo.AccommodationManagement.Domain.Accommodation.ValueObjects;
+using JetSetGo.AccommodationManagement.Domain.Accommodations;
+using JetSetGo.AccommodationManagement.Domain.Accommodations.Entities;
+using JetSetGo.AccommodationManagement.Domain.Accommodations.ValueObjects;
 
 namespace JetSetGo.AccommodationManagement.Grpc.Mapping;
 
@@ -32,5 +33,6 @@ public class MappingConfiguration : Profile
             .ForMember(dest => dest.Photos, opt => opt.MapFrom(src => src.Photos.Select(photo => photo.Photo)))
             .ForMember(dest => dest.SpecialPrices, opt => opt.MapFrom(src => src.SpecalPrices));;
         CreateMap<Accommodation, GetAccommodationResponse>();
+        CreateMap<Grade, GradeDto>();
     }
 }

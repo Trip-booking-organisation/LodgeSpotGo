@@ -1,0 +1,14 @@
+﻿syntax = "proto3";
+option csharp_namespace = "JetSetGo.ReservationManagement.Grpc";
+
+message GetUserResponseKeycloak{
+  string id = 1;
+  string name = 2;
+  string lastName = 3;
+  string mail = 4;
+}
+message GetUserRequestKeycloak { string id = 1;}
+service GetUserKeycloakService{
+  rpc GetUserInfo(GetUserRequestKeycloak) returns( GetUserResponseKeycloak ){
+  }
+}

@@ -1,4 +1,4 @@
-﻿using JetSetGo.AccommodationManagement.Domain.Accommodation.ValueObjects;
+﻿using JetSetGo.AccommodationManagement.Domain.Accommodations.ValueObjects;
 
 namespace JetSetGo.AccommodationManagement.Grpc.Mapping;
 

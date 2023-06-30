@@ -12,6 +12,9 @@
         <Protobuf Include="Dto\search.proto" GrpcServices="None" />
         <Protobuf Include="Routes\routes.proto" GrpcServices="Server" />
         <Protobuf Include="Routes\search_reservation.proto" GrpcServices="Client" />
+        <Protobuf Include="Routes\filter_accommodations.proto" GrpcServices="Server" />
+        <Protobuf Include="Routes\filter_outstanding_host.proto" GrpcServices="Client" />
+        <Protobuf Include="Routes\get_accommodation_grades.proto" GrpcServices="Client" />
         <Protobuf Include="Routes\search_accommodation.proto" GrpcServices="Client">
           <GrpcServices>Client</GrpcServices>
           <Access>Public</Access>
@@ -34,6 +37,12 @@
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.5" />
         <PackageReference Include="Microsoft.AspNetCore.Grpc.JsonTranscoding" Version="7.0.5" />
         <PackageReference Include="Microsoft.AspNetCore.Grpc.Swagger" Version="0.3.5" />
+        <PackageReference Include="prometheus-net.AspNetCore" Version="8.0.0" />
+        <PackageReference Include="prometheus-net.AspNetCore" Version="8.0.0" />
+        <PackageReference Include="OpenTelemetry.Exporter.Jaeger" Version="1.5.0" />
+        <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.5.0" />
+        <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.5.0-beta.1" />
+        <PackageReference Include="OpenTelemetry.Instrumentation.GrpcNetClient" Version="1.5.0-beta.1" />
     </ItemGroup>
 
     <ItemGroup>
@@ -45,10 +54,6 @@
     <ItemGroup>
       <ProjectReference Include="..\JetSetGo.SearchAndFilter.Application\JetSetGo.SearchAndFilter.Application.csproj" />
       <ProjectReference Include="..\JetSetGo.SearchAndFilter.Domain\JetSetGo.SearchAndFilter.Domain.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Dto\Responses" />
     </ItemGroup>
 
 </Project>

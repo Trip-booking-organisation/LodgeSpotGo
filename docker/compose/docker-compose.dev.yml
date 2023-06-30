@@ -1,6 +1,18 @@
-﻿version: '3.8'
+﻿x-logging: &fluent-bit
+  driver: fluentd
+  options:
+    fluentd-address: fluent-bit:24224
+version: '3.8'
 name: lodge-spot-dev
 services:
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "16686:16686"
+      - "6831:6831/udp"
+    networks:
+      - lodge-spot-go
+      - monitoring
   keycloak-db:
     image: postgres
     restart: always
@@ -13,6 +25,10 @@ services:
       POSTGRES_SCHEMA: keycloak
     volumes:
       - keycloak-db-data:/var/lib/postgresql/data
+    networks:
+      - lodge-spot-go
+      - monitoring
+    
   keycloak:
     image: quay.io/keycloak/keycloak:21.1.1
     container_name: keycloak
@@ -27,6 +43,14 @@ services:
     entrypoint: [ "/opt/keycloak/bin/kc.sh", "start-dev" ]
     ports:
       - "8080:8080"
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: 172.29.0.5:24224
+        fluentd-async: 'true'
+    networks:
+      - lodge-spot-go
+      - monitoring
   mongo-express:
     image: mongo-express
     container_name: mongo-express
@@ -49,6 +73,14 @@ services:
     volumes:
       - accommodation-db-data:/data/db
       - ../entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    logging:
+        driver: fluentd
+        options:
+          fluentd-address: 172.29.0.5:24224
+          fluentd-async: 'true'
+    networks:
+      - lodge-spot-go
+      - monitoring
   reservation-db:
     image: mongo
     restart: always
@@ -61,6 +93,14 @@ services:
     volumes:
       - reservation-db-data:/data/db
       - ../entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: 172.29.0.5:24224
+        fluentd-async: 'true'
+    networks:
+      - lodge-spot-go
+      - monitoring
   user-db:
     image: mongo
     restart: always
@@ -73,6 +113,14 @@ services:
     volumes:
       - user-db-data:/data/db
       - ../entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    networks:
+      - lodge-spot-go
+      - monitoring
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: 172.29.0.5:24224
+        fluentd-async: 'true'
   notification-db:
     image: mongo
     restart: always
@@ -85,6 +133,14 @@ services:
     volumes:
       - notification-db-data:/data/db
       - ../entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: 172.29.0.5:24224
+        fluentd-async: 'true'
+    networks:
+      - lodge-spot-go
+      - monitoring
   search-db:
     image: mongo
     restart: always
@@ -97,10 +153,13 @@ services:
     volumes:
       - search-db-data:/data/db
       - ../entrypoint-initdb.d:/docker-entrypoint-initdb.d
-  we-do-mq:
+    networks:
+      - lodge-spot-go
+      - monitoring
+  lodge-spot-mq:
     image: rabbitmq:3.11.7-management
-    container_name: lodge-mq
-    hostname: lodge-queue
+    container_name: lodge-spot-mq
+    hostname: lodge-spot-mq
     environment:
       RABBITMQ_DEFAULT_USER: user
       RABBITMQ_DEFAULT_PASS: user
@@ -127,3 +186,8 @@ volumes:
     driver: local
   notification-db-data:
     driver: local
+networks:
+  lodge-spot-go:
+    name: lodge-spot-go
+  monitoring:
+  

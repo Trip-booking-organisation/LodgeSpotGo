@@ -14,6 +14,10 @@ import {MatDialog} from "@angular/material/dialog";
 import {
   CreateReservationComponent
 } from "../../pages/view-accommodation/create-reservation/create-reservation.component";
+import {
+  GradeAccommodationDialogComponent
+} from "../../pages/grade-accommodation/grade-accommodation-dialog/grade-accommodation-dialog.component";
+import {CancelReservationComponent} from "../../pages/reservation/cancel-reservation/cancel-reservation.component";
 
 @Component({
   selector: 'app-accommodation-card',
@@ -30,12 +34,14 @@ export class AccommodationCardComponent implements OnInit{
   pricePerPersonInTotal = 0
   priceInTotalOneNight = 0
   priceInTotalInTotal = 0
-  constructor(private authService: AuthService, private currentService:AccommodationCurrentService,
+  constructor(private authService: AuthService,
+              private currentService:AccommodationCurrentService,
               private router:Router, private dialog: MatDialog) {
   }
   ngOnInit(): void {
     this.user = this.authService.getUser()
     this.findCurrentPrice()
+    console.log(this.accommodation.id)
   }
 
   onBook() {
@@ -69,5 +75,14 @@ export class AccommodationCardComponent implements OnInit{
         this.pricePerPersonInTotal = (daysDiff * a.price)
       }
     })
+  }
+
+  onGrade() {
+    this.currentService.accommodation = this.accommodation
+    this.dialog.open(GradeAccommodationDialogComponent, {
+      width: '400px',
+      height:'300px',
+      data: { accommodation: this.accommodation, text : 'accommodation' }
+    });
   }
 }

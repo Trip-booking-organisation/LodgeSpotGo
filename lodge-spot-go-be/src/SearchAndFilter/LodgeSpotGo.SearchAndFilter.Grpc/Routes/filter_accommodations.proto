@@ -1,0 +1,34 @@
+﻿syntax = "proto3";
+import "Dto/search.proto";
+import "google/api/annotations.proto";
+option csharp_namespace = "LodgeSpotGo.SearchAndFilter.Grpc";
+package routes;
+message FilterAccommodations{
+  repeated AccommodationDto accommodations = 1;
+  repeated string amenities = 2;
+  int32 minGrade= 3;
+  int32 maxGrade= 4;
+  bool outstandingHost = 5;
+}
+message ReservationFilterRequest{
+  FilterAccommodations filter = 1;
+}
+message FilterReservationDto{
+  string id = 1;
+  string accommodationId = 2;
+  DateRangeDto dateRange =3;
+  string status = 4;
+  int32 numberOfGuest = 5;
+  string guestId = 6;
+  bool deleted = 7;
+}
+message FilterReservationListResponse{repeated AccommodationDto accommodations = 1;}
+
+service FilterApp{
+  rpc Filter(ReservationFilterRequest) returns (FilterReservationListResponse){
+    option(google.api.http) = {
+      post: "/api/v1/filter",
+      body: "filter"
+    };
+  }
+}

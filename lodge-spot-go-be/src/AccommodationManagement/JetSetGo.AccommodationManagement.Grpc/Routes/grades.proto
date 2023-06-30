@@ -1,0 +1,40 @@
+﻿syntax = "proto3";
+import "google/api/annotations.proto";
+import "Dto/grade.proto";
+option csharp_namespace = "JetSetGo.AccommodationManagement.Grpc";
+package routes;
+service GradeApp {
+ 
+  rpc CreateGradeForAccommodation(CreateGradeRequest) returns (CreateGradeResponse){
+    option (google.api.http) = {
+      post: "/api/v1/grades",
+      body: "grade"
+    };
+  }
+  rpc UpdateGradeForAccommodation(UpdateGradeRequest) returns (UpdateGradeResponse){
+    option (google.api.http) = {
+      put: "/api/v1/grades",
+      body: "grade"
+    };
+  }
+  rpc GetAllGrades(GetAllGradesRequest) returns (GetAllGradesResponse){
+    option (google.api.http) = {
+      get: "/api/v1/grades"
+    };
+  }
+  rpc DeleteGrade(DeleteGradeRequest) returns(DeleteGradeResponse){
+    option(google.api.http) = {
+      delete : "/api/v1/grades/{id}",
+    };
+  }
+  rpc GetGradesByAccommodation(GetGradesByAccommodationRequest) returns(GetGradesByAccommodationResponse){
+    option(google.api.http) = {
+      get : "/api/v1/grades/{accommodationId}",
+    };
+  }
+  rpc GetGradesByGuest(GetGradesByGuestRequest) returns(GetGradesByGuestResponse){
+    option(google.api.http) = {
+      get : "/api/v1/grades/guest/{guestId}",
+    };
+  }
+}
